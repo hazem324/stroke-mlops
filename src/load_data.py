@@ -23,6 +23,7 @@ class PatientData:
 
     is_valid: bool
 
+
 class ISLESDatasetLoader:
 
     def __init__(self, dataset_root: str):
@@ -54,49 +55,76 @@ class ISLESDatasetLoader:
         patient_ids = []
 
         for patient_dir in sorted(self.rawdata_dir.iterdir()):
-            if patient_dir.is_dir():
+
+            if (
+                patient_dir.is_dir()
+                and patient_dir.name.startswith("sub-")
+            ):
                 patient_ids.append(patient_dir.name)
 
         print(f"\nPatients discovered : {len(patient_ids)}")
+
         return patient_ids
 
-    def build_patient_paths(self, patient_id: str) -> Dict[str, Path]:
-        """
-        Build all expected file paths for one patient.
-        """
+    def find_file(self, folder: Path, pattern: str) -> Optional[Path]:
+
+        files = list(folder.glob(pattern))
+
+        return files[0] if files else None
+
+    def build_patient_paths(self, patient_id: str) -> Dict[str, Optional[Path]]:
 
         session = "ses-0001"
 
         raw_patient = self.rawdata_dir / patient_id / session
-        derivatives_patient = self.derivatives_dir / patient_id / session
+
+        derivatives_patient = (
+            self.derivatives_dir
+            / patient_id
+            / session
+        )
 
         paths = {
-            "flair": raw_patient / "anat" / f"{patient_id}_{session}_FLAIR.nii.gz",
-            "adc": raw_patient / "dwi" / f"{patient_id}_{session}_adc.nii.gz",
-            "dwi": raw_patient / "dwi" / f"{patient_id}_{session}_dwi.nii.gz",
-            "mask": derivatives_patient / f"{patient_id}_{session}_msk.nii.gz",
+
+            "flair":
+                self.find_file(
+                    raw_patient / "anat",
+                    "*FLAIR.nii.gz"
+                ),
+
+            "adc":
+                self.find_file(
+                    raw_patient / "dwi",
+                    "*adc.nii.gz"
+                ),
+
+            "dwi":
+                self.find_file(
+                    raw_patient / "dwi",
+                    "*dwi.nii.gz"
+                ),
+
+            "mask":
+                self.find_file(
+                    derivatives_patient,
+                    "*msk.nii.gz"
+                )
+
         }
 
         return paths
 
-    def validate_modalities(self, paths: Dict[str, Path]) -> bool:
-        """
-        Check that all expected modalities are present.
-        """
-
-        required_modalities = [
-            "flair",
-            "adc",
-            "dwi",
-            "mask"
-        ]
+    # Check that all expected modalities are present
+    def validate_modalities(self, paths):
 
         valid = True
 
-        for modality in required_modalities:
+        for modality, path in paths.items():
 
-            if modality not in paths:
-                print(f"[ERROR] Missing modality entry: {modality}")
+            if path is None:
+
+                print(f"[MISSING] {modality.upper()}")
+
                 valid = False
 
         return valid
@@ -154,6 +182,9 @@ class ISLESDatasetLoader:
 
         for modality, file_path in paths.items():
 
+            if file_path is None:
+                continue
+
             image = nib.load(str(file_path))
             header = image.header
 
@@ -180,7 +211,32 @@ class ISLESDatasetLoader:
             print(f"Voxel spacing  : {info['voxel_spacing']}")
             print(f"Data type      : {info['dtype']}")
             print()
-        
+
+    def load_patient(self, patient_id: str) -> PatientData:
+
+        paths = self.build_patient_paths(patient_id)
+
+        valid = (
+            self.validate_modalities(paths)
+            and self.validate_files_exist(paths)
+            and self.validate_nifti_files(paths)
+        )
+
+        metadata = {}
+
+        if valid:
+            metadata = self.extract_metadata(paths)
+
+        return PatientData(
+            patient_id=patient_id,
+            flair_path=paths["flair"],
+            adc_path=paths["adc"],
+            dwi_path=paths["dwi"],
+            mask_path=paths["mask"],
+            metadata=metadata,
+            is_valid=valid
+        )
+
 
 # # Dataset root
 # DATASET_ROOT = Path("data/ISLES-2022")
@@ -298,11 +354,17 @@ class ISLESDatasetLoader:
 
 if __name__ == "__main__":
     dataset_path = "data/ISLES-2022"   # adapte ce chemin si nécessaire
-
     loader = ISLESDatasetLoader(dataset_path)
-
     loader.validate_dataset_path()
-
     patients = loader.discover_patients()
 
-    print(patients)
+    for patient in patients:
+        print("=" * 60)
+        print(patient)
+
+        patient_data = loader.load_patient(patient)
+
+        if patient_data.is_valid:
+            loader.print_metadata(patient_data.metadata)
+
+        loader.patients.append(patient_data)
