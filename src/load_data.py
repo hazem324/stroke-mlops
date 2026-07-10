@@ -1,8 +1,7 @@
 from pathlib import Path
 from dataclasses import dataclass
-from pathlib import Path
-from dataclasses import dataclass
 from typing import Optional, List, Dict
+
 import nibabel as nib
 from nibabel.filebasedimages import ImageFileError
 
@@ -28,7 +27,7 @@ class ISLESDatasetLoader:
 
     def __init__(self, dataset_root: str):
         self.dataset_root = Path(dataset_root)
-        self.rawdata_dir = self.dataset_root / "rawdata"
+        self.rawdata_dir = self.dataset_root
         self.derivatives_dir = self.dataset_root / "derivatives"
         self.patients: List[PatientData] = []
 
@@ -37,7 +36,7 @@ class ISLESDatasetLoader:
 
         if not self.dataset_root.exists():
             raise FileNotFoundError(
-                f"Dataset not found : {self.dataset_root}"
+                f"Dataset not found: {self.dataset_root}"
             )
 
         if not self.rawdata_dir.exists():
@@ -61,202 +60,126 @@ class ISLESDatasetLoader:
         print(f"\nPatients discovered : {len(patient_ids)}")
         return patient_ids
 
-
-def build_patient_paths(self, patient_id: str) -> Dict[str, Path]:
-    """
-    Build all expected file paths for one patient.
-
-    Parameters
-    ----------
-    patient_id : str
-        Example: sub-strokecase0001
-
-    Returns
-    -------
-    Dict[str, Path]
-        Dictionary containing all expected paths.
-    """
-
-    session = "ses-0001"
-
-    raw_patient = self.rawdata_dir / patient_id / session
-
-    derivatives_patient = self.derivatives_dir / patient_id / session
-
-    paths = {
-        "flair": raw_patient / "anat" / f"{patient_id}_{session}_FLAIR.nii.gz",
-
-        "adc": raw_patient / "dwi" / f"{patient_id}_{session}_adc.nii.gz",
-
-        "dwi": raw_patient / "dwi" / f"{patient_id}_{session}_dwi.nii.gz",
-
-        "mask": derivatives_patient / f"{patient_id}_{session}_msk.nii.gz"
-    }
-
-    return paths
-
-def validate_modalities(self, paths: Dict[str, Path]) -> bool:
-    """
-    Check that all expected modalities are present.
-
-    Returns
-    -------
-    bool
-        True if every modality exists.
-    """
-
-    required_modalities = [
-        "flair",
-        "adc",
-        "dwi",
-        "mask"
-    ]
-
-    valid = True
-
-    for modality in required_modalities:
-
-        if modality not in paths:
-
-            print(f"[ERROR] Missing modality entry : {modality}")
-
-            valid = False
-
-    return valid
-
-def validate_files_exist(self, paths: Dict[str, Path]) -> bool:
-    """
-    Verify that every expected file exists.
-
-    Parameters
-    ----------
-    paths : Dict[str, Path]
-
-    Returns
-    -------
-    bool
-    """
-
-    valid = True
-
-    for modality, file_path in paths.items():
-
-        if file_path.exists():
-
-            print(f"[OK] {modality.upper()}")
-
-        else:
-
-            print(f"[MISSING] {modality.upper()}")
-
-            print(f"          {file_path}")
-
-            valid = False
-
-    return valid
-
-
-def validate_nifti_files(self, paths: Dict[str, Path]) -> bool:
-    """
-    Validate that every NIfTI file can be opened.
-
-    Parameters
-    ----------
-    paths : Dict[str, Path]
-
-    Returns
-    -------
-    bool
-    """
-
-    valid = True
-
-    for modality, file_path in paths.items():
-
-        if modality == "snapshot":
-            continue
-
-        try:
-
-            nib.load(str(file_path))
-
-            print(f"[READABLE] {modality.upper()}")
-
-        except ImageFileError as e:
-
-            print(f"[INVALID NIFTI] {modality.upper()}")
-
-            print(e)
-
-            valid = False
-
-        except Exception as e:
-
-            print(f"[ERROR] {modality.upper()}")
-
-            print(e)
-
-            valid = False
-
-    return valid
-
-def extract_metadata(self, paths: Dict[str, Path]) -> Dict:
-    """
-    Extract metadata from every modality.
-
-    Parameters
-    ----------
-    paths : Dict[str, Path]
-
-    Returns
-    -------
-    Dict
-    """
-
-    metadata = {}
-
-    for modality, file_path in paths.items():
-
-        if modality == "snapshot":
-            continue
-
-        image = nib.load(str(file_path))
-
-        header = image.header
-
-        metadata[modality] = {
-
-            "shape": image.shape,
-
-            "dtype": str(header.get_data_dtype()),
-
-            "voxel_spacing": tuple(header.get_zooms()),
-
-            "affine": image.affine
-
+    def build_patient_paths(self, patient_id: str) -> Dict[str, Path]:
+        """
+        Build all expected file paths for one patient.
+        """
+
+        session = "ses-0001"
+
+        raw_patient = self.rawdata_dir / patient_id / session
+        derivatives_patient = self.derivatives_dir / patient_id / session
+
+        paths = {
+            "flair": raw_patient / "anat" / f"{patient_id}_{session}_FLAIR.nii.gz",
+            "adc": raw_patient / "dwi" / f"{patient_id}_{session}_adc.nii.gz",
+            "dwi": raw_patient / "dwi" / f"{patient_id}_{session}_dwi.nii.gz",
+            "mask": derivatives_patient / f"{patient_id}_{session}_msk.nii.gz",
         }
 
-    return metadata
+        return paths
 
-def print_metadata(self, metadata: Dict) -> None:
-    """
-    Display metadata.
-    """
+    def validate_modalities(self, paths: Dict[str, Path]) -> bool:
+        """
+        Check that all expected modalities are present.
+        """
 
-    print("\n========== METADATA ==========\n")
+        required_modalities = [
+            "flair",
+            "adc",
+            "dwi",
+            "mask"
+        ]
 
-    for modality, info in metadata.items():
+        valid = True
 
-        print(f"{modality.upper()}")
+        for modality in required_modalities:
 
-        print(f"Shape          : {info['shape']}")
+            if modality not in paths:
+                print(f"[ERROR] Missing modality entry: {modality}")
+                valid = False
 
-        print(f"Voxel spacing  : {info['voxel_spacing']}")
+        return valid
 
-        print(f"Data type      : {info['dtype']}")
+    def validate_files_exist(self, paths: Dict[str, Path]) -> bool:
+        """
+        Verify that every expected file exists.
+        """
 
-        print()
+        valid = True
 
+        for modality, file_path in paths.items():
+
+            if file_path.exists():
+                print(f"[OK] {modality.upper()}")
+
+            else:
+                print(f"[MISSING] {modality.upper()}")
+                print(f"          {file_path}")
+                valid = False
+
+        return valid
+
+    def validate_nifti_files(self, paths: Dict[str, Path]) -> bool:
+        """
+        Validate that every NIfTI file can be opened.
+        """
+
+        valid = True
+
+        for modality, file_path in paths.items():
+
+            try:
+                nib.load(str(file_path))
+                print(f"[READABLE] {modality.upper()}")
+
+            except ImageFileError as e:
+                print(f"[INVALID NIFTI] {modality.upper()}")
+                print(e)
+                valid = False
+
+            except Exception as e:
+                print(f"[ERROR] {modality.upper()}")
+                print(e)
+                valid = False
+
+        return valid
+
+    def extract_metadata(self, paths: Dict[str, Path]) -> Dict:
+        """
+        Extract metadata from every modality.
+        """
+
+        metadata = {}
+
+        for modality, file_path in paths.items():
+
+            image = nib.load(str(file_path))
+            header = image.header
+
+            metadata[modality] = {
+                "shape": image.shape,
+                "dtype": str(header.get_data_dtype()),
+                "voxel_spacing": tuple(header.get_zooms()),
+                "affine": image.affine
+            }
+
+        return metadata
+
+    def print_metadata(self, metadata: Dict) -> None:
+        """
+        Display metadata.
+        """
+
+        print("\n========== METADATA ==========\n")
+
+        for modality, info in metadata.items():
+
+            print(f"{modality.upper()}")
+            print(f"Shape          : {info['shape']}")
+            print(f"Voxel spacing  : {info['voxel_spacing']}")
+            print(f"Data type      : {info['dtype']}")
+            print()
         
 
 # # Dataset root
