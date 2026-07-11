@@ -50,32 +50,22 @@ def select_sample_patients(
 # ----------------------------------------------------------------------
 # 2. Chargement des volumes image + masque d'un patient
 # ----------------------------------------------------------------------
-def load_volumes(paths: Dict[str, Optional[Path]], modality: str = "flair"):
+def load_volumes(paths: Dict[str, Optional[Path]]) -> Dict[str, np.ndarray]:
     """
-    Charge le volume image (modalité choisie) et le volume masque.
-
-    Rôle :
-    - Retourne (None, None) si l'un des deux fichiers est absent,
-      pour que le script suivant sache qu'il doit sauter ce patient.
+    Charge toutes les modalités disponibles d'un patient.
     """
 
-    image_path = paths.get(modality)
-    mask_path = paths.get("mask")
+    volumes = {}
 
-    if image_path is None or mask_path is None:
-        return None, None
+    for modality, path in paths.items():
 
-    if not image_path.exists() or not mask_path.exists():
-        return None, None
+        if path is None or not path.exists():
+            print(f"[MISSING] {modality.upper()}")
+            continue
 
-    image = nib.load(str(image_path)).get_fdata()
-    mask = nib.load(str(mask_path)).get_fdata()
+        volumes[modality] = nib.load(str(path)).get_fdata()
 
-    if image.shape != mask.shape:
-        print(f"[WARNING] shape mismatch image {image.shape} vs mask {mask.shape}")
-        return None, None
-
-    return image, mask
+    return volumes
 
 
 # ----------------------------------------------------------------------
@@ -120,50 +110,55 @@ def get_slice(volume: np.ndarray, axis: int, index: int) -> np.ndarray:
 # ----------------------------------------------------------------------
 # 5. Génération de l'image overlay (3 plans) pour un patient
 # ----------------------------------------------------------------------
-def plot_patient_overlay(
+def plot_patient_modalities(
     patient_id: str,
-    image: np.ndarray,
-    mask: np.ndarray,
+    volumes: Dict[str, np.ndarray],
     output_dir: Path,
 ) -> None:
     """
-    Génère une figure à 3 sous-graphiques (axial, coronal, sagittal),
-    chacun montrant l'image en niveaux de gris avec le masque de
-    lésion superposé en rouge transparent, puis sauvegarde en PNG.
-
-    Rôle :
-    - Un seul coup d'œil suffit pour juger l'alignement image/masque
-      et la cohérence de la lésion sur les 3 plans anatomiques.
+    Affiche FLAIR, ADC, DWI et MASK côte à côte.
     """
 
-    plane_names = ["Sagittal", "Coronal", "Axial"]
+    modalities = [
+        ("flair", "FLAIR"),
+        ("adc", "ADC"),
+        ("dwi", "DWI"),
+        ("mask", "Ground Truth Mask"),
+    ]
 
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+    fig, axes = plt.subplots(2, 2, figsize=(10, 10))
 
-    for axis, (ax, name) in enumerate(zip(axes, plane_names)):
-        slice_idx = find_best_slice(mask, axis)
+    axes = axes.flatten()
 
-        img_slice = get_slice(image, axis, slice_idx)
-        mask_slice = get_slice(mask, axis, slice_idx)
+    for ax, (key, title) in zip(axes, modalities):
 
-        ax.imshow(img_slice.T, cmap="gray", origin="lower")
-        ax.imshow(
-            np.ma.masked_where(mask_slice.T == 0, mask_slice.T),
-            cmap="Reds",
-            alpha=0.5,
-            origin="lower",
-        )
-        ax.set_title(f"{name} (slice {slice_idx})")
+        if key not in volumes:
+            ax.set_title(f"{title}\nMissing")
+            ax.axis("off")
+            continue
+
+        volume = volumes[key]
+
+        slice_idx = volume.shape[2] // 2
+
+        ax.imshow(volume[:, :, slice_idx].T,
+                  cmap="gray",
+                  origin="lower")
+
+        ax.set_title(title)
         ax.axis("off")
 
     fig.suptitle(patient_id)
+
     plt.tight_layout()
 
-    output_path = output_dir / f"{patient_id}_overlay.png"
-    fig.savefig(output_path, dpi=150)
+    output_file = output_dir / f"{patient_id}.png"
+
+    fig.savefig(output_file, dpi=150)
+
     plt.close(fig)
 
-    print(f"[SAVED] {output_path}")
+    print(f"[SAVED] {output_file}")
 
 
 # ----------------------------------------------------------------------
@@ -192,13 +187,13 @@ def run_visualization(
     for patient_id in sample_ids:
         paths = loader.build_patient_paths(patient_id)
 
-        image, mask = load_volumes(paths, modality=modality)
+        volumes = load_volumes(paths)
 
-        if image is None:
-            print(f"[SKIP] {patient_id} : fichiers manquants ou incohérents")
+        if len(volumes) == 0:
+            print(f"[SKIP] {patient_id}")
             continue
 
-        plot_patient_overlay(patient_id, image, mask, output_path)
+        plot_patient_modalities(patient_id, volumes, output_path,)
 
 
 # ----------------------------------------------------------------------
@@ -216,8 +211,7 @@ def main():
         patient_ids,
         output_dir="reports/visualizations",
         n_samples=10,
-        modality="adc",
-    )
+     )
 
 
 if __name__ == "__main__":
