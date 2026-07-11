@@ -1,0 +1,1603 @@
+
+Checking dataset structure...
+
+Dataset found.
+Root        : data/ISLES-2022
+Raw data    : data/ISLES-2022
+Derivatives : data/ISLES-2022/derivatives
+
+Patients discovered : 241
+
+========== sub-strokecase0001 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0002 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0003 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0004 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0006 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0007 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0008 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0009 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0010 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0011 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0012 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0013 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0014 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0015 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0016 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0017 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0018 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0019 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0020 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0021 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0022 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0024 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0025 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0026 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0027 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0028 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0029 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0030 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0031 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0032 ==========
+[MISSING] FLAIR (fichier non trouvé)
+[OK] ADC
+[OK] DWI
+[OK] MASK
+[SKIP] sub-strokecase0032
+
+========== sub-strokecase0033 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0034 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0035 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0036 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0037 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0038 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0039 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0040 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0042 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0043 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0044 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0045 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0046 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0047 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0048 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0049 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0050 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0051 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0052 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0053 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0054 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0055 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0056 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0057 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0058 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0059 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0060 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0061 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0062 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0063 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0064 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0065 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0066 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0067 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0068 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0069 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0070 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0071 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0072 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0073 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0074 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0075 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0076 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0077 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0078 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0079 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0080 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0081 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0082 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0083 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0084 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0085 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0086 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0087 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0088 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0089 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0090 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0091 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0092 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0093 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0094 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0095 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0096 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0097 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0098 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0099 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0100 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0101 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0102 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0103 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0105 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0106 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0107 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0108 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0109 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0110 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0111 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0112 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0113 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0114 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0115 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0116 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0117 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0118 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0119 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0120 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0121 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0123 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0124 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0125 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0126 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0127 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0128 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0129 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0130 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0131 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0132 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0133 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0134 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0135 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0136 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0137 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0138 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0139 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0141 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0142 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0143 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0144 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0145 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0146 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0147 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0148 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0149 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0150 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0151 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0152 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0153 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0154 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0155 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0156 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0157 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0158 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0159 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0160 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0161 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0162 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0163 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0164 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0165 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0166 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0167 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0168 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0169 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0170 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0171 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0172 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0173 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0174 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0175 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0176 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0177 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0178 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0179 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0180 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0181 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0182 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0183 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0184 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0185 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0186 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0187 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0188 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0189 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0190 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0191 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0192 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0193 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0194 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0195 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0196 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0197 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0198 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0199 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0200 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0201 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0202 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0204 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0205 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0206 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0207 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0208 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0209 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0210 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0211 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0212 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0213 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0214 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0215 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0216 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0217 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0218 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0219 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0220 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0222 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0223 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0224 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0225 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0226 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0227 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0228 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0229 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0231 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0232 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0233 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0234 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0235 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0236 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0237 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0238 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0239 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0240 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0241 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0242 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0243 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0244 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0245 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0246 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0247 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0248 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0249 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0250 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== RÉSUMÉ DU DATASET ==========
+
+Nombre de lignes (patient x modalité) : 960
+Nombre de patients uniques            : 240
+Modalités présentes                    : ['adc', 'dwi', 'flair', 'mask']
+
+--- Shapes les plus fréquentes par modalité ---
+modality                 
+adc       (112, 112, 72)      91
+          (112, 112, 73)      85
+          (128, 128, 25)      27
+dwi       (112, 112, 72)      91
+          (112, 112, 73)      85
+          (128, 128, 25)      27
+flair     (281, 352, 352)    110
+          (224, 256, 24)      29
+          (512, 512, 29)      28
+mask      (112, 112, 72)      91
+          (112, 112, 73)      85
+          (128, 128, 25)      27
+Name: shape, dtype: int64
+
+--- Spacing (min / max / moyenne) par modalité ---
+
+spacing_x
+               min  max      mean
+modality                         
+adc       0.875000  2.0  1.884949
+dwi       0.875000  2.0  1.884949
+flair     0.234375  1.0  0.662102
+mask      0.875000  2.0  1.884949
+
+spacing_y
+               min  max      mean
+modality                         
+adc       0.875000  2.0  1.884949
+dwi       0.875000  2.0  1.884949
+flair     0.234375  1.0  0.662938
+mask      0.875000  2.0  1.884949
+
+spacing_z
+               min  max      mean
+modality                         
+adc       2.000000  5.0  2.617500
+dwi       2.000000  5.0  2.617500
+flair     0.681818  9.6  2.532471
+mask      2.000000  5.0  2.617500
+
+--- Dtypes rencontrés ---
+modality  dtype  
+adc       float64    182
+          int16       58
+dwi       float64    182
+          int16       58
+flair     float32    182
+          int16       58
+mask      uint16     173
+          int16       46
+          float64     21
+Name: count, dtype: int64
+
+========== DISTRIBUTION DES SHAPES ==========
+
+
+ADC
+(112, 112, 72) : 91 patients
+(112, 112, 73) : 85 patients
+(128, 128, 25) : 27 patients
+(192, 192, 30) : 22 patients
+(128, 128, 72) : 2 patients
+(256, 256, 73) : 2 patients
+(115, 115, 75) : 1 patients
+(115, 115, 28) : 1 patients
+(130, 130, 65) : 1 patients
+(170, 170, 33) : 1 patients
+(112, 112, 74) : 1 patients
+(112, 112, 75) : 1 patients
+(115, 115, 70) : 1 patients
+(112, 112, 76) : 1 patients
+(128, 128, 27) : 1 patients
+(122, 122, 63) : 1 patients
+(128, 128, 30) : 1 patients
+
+DWI
+(112, 112, 72) : 91 patients
+(112, 112, 73) : 85 patients
+(128, 128, 25) : 27 patients
+(192, 192, 30) : 22 patients
+(128, 128, 72) : 2 patients
+(256, 256, 73) : 2 patients
+(115, 115, 75) : 1 patients
+(115, 115, 28) : 1 patients
+(130, 130, 65) : 1 patients
+(170, 170, 33) : 1 patients
+(112, 112, 74) : 1 patients
+(112, 112, 75) : 1 patients
+(115, 115, 70) : 1 patients
+(112, 112, 76) : 1 patients
+(128, 128, 27) : 1 patients
+(122, 122, 63) : 1 patients
+(128, 128, 30) : 1 patients
+
+FLAIR
+(281, 352, 352) : 110 patients
+(224, 256, 24) : 29 patients
+(512, 512, 29) : 28 patients
+(464, 512, 30) : 21 patients
+(352, 352, 230) : 16 patients
+(253, 336, 336) : 10 patients
+(352, 352, 29) : 6 patients
+(1024, 1024, 230) : 3 patients
+(240, 320, 31) : 2 patients
+(320, 320, 29) : 2 patients
+(192, 256, 256) : 2 patients
+(267, 336, 336) : 1 patients
+(281, 336, 336) : 1 patients
+(384, 384, 230) : 1 patients
+(560, 560, 33) : 1 patients
+(528, 528, 29) : 1 patients
+(240, 320, 33) : 1 patients
+(352, 230, 352) : 1 patients
+(400, 400, 29) : 1 patients
+(512, 512, 31) : 1 patients
+(464, 512, 15) : 1 patients
+(255, 320, 320) : 1 patients
+
+MASK
+(112, 112, 72) : 91 patients
+(112, 112, 73) : 85 patients
+(128, 128, 25) : 27 patients
+(192, 192, 30) : 22 patients
+(128, 128, 72) : 2 patients
+(256, 256, 73) : 2 patients
+(115, 115, 75) : 1 patients
+(115, 115, 28) : 1 patients
+(130, 130, 65) : 1 patients
+(170, 170, 33) : 1 patients
+(112, 112, 74) : 1 patients
+(112, 112, 75) : 1 patients
+(115, 115, 70) : 1 patients
+(112, 112, 76) : 1 patients
+(128, 128, 27) : 1 patients
+(122, 122, 63) : 1 patients
+(128, 128, 30) : 1 patients
+
+[SAVED] reports/exploration_dataset.csv

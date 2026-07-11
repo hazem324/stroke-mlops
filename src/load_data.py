@@ -138,9 +138,13 @@ class ISLESDatasetLoader:
 
         for modality, file_path in paths.items():
 
+            if file_path is None:
+                print(f"[MISSING] {modality.upper()} (fichier non trouvé)")
+                valid = False
+                continue
+
             if file_path.exists():
                 print(f"[OK] {modality.upper()}")
-
             else:
                 print(f"[MISSING] {modality.upper()}")
                 print(f"          {file_path}")
@@ -173,45 +177,6 @@ class ISLESDatasetLoader:
 
         return valid
 
-    def extract_metadata(self, paths: Dict[str, Path]) -> Dict:
-        """
-        Extract metadata from every modality.
-        """
-
-        metadata = {}
-
-        for modality, file_path in paths.items():
-
-            if file_path is None:
-                continue
-
-            image = nib.load(str(file_path))
-            header = image.header
-
-            metadata[modality] = {
-                "shape": image.shape,
-                "dtype": str(header.get_data_dtype()),
-                "voxel_spacing": tuple(header.get_zooms()),
-                "affine": image.affine
-            }
-
-        return metadata
-
-    def print_metadata(self, metadata: Dict) -> None:
-        """
-        Display metadata.
-        """
-
-        print("\n========== METADATA ==========\n")
-
-        for modality, info in metadata.items():
-
-            print(f"{modality.upper()}")
-            print(f"Shape          : {info['shape']}")
-            print(f"Voxel spacing  : {info['voxel_spacing']}")
-            print(f"Data type      : {info['dtype']}")
-            print()
-
     def load_patient(self, patient_id: str) -> PatientData:
 
         paths = self.build_patient_paths(patient_id)
@@ -233,127 +198,13 @@ class ISLESDatasetLoader:
             adc_path=paths["adc"],
             dwi_path=paths["dwi"],
             mask_path=paths["mask"],
-            metadata=metadata,
+            metadata={},
             is_valid=valid
         )
 
 
-# # Dataset root
-# DATASET_ROOT = Path("data/ISLES-2022")
-
-# DERIVATIVES = DATASET_ROOT / "derivatives"
-
-
-# def print_separator():
-#     print("=" * 10)
-
-# #Verify that the dataset exists.
-# def check_dataset():
-
-#     print_separator()
-#     print("Checking dataset...")
-#     print_separator()
-
-#     if not DATASET_ROOT.exists():
-#         raise FileNotFoundError(f"Dataset not found: {DATASET_ROOT}")
-
-#     print(f"Dataset found : {DATASET_ROOT.resolve()}")
-#     print()
-
-
-# def get_patients():
-
-#     patients = sorted(
-#         [
-#             folder
-#             for folder in DERIVATIVES.iterdir()
-#             if folder.is_dir()
-#         ]
-#     )
-
-#     return patients
-
-
-# def dataset_summary(patients):
-
-#     print_separator()
-#     print("DATASET SUMMARY")
-#     print_separator()
-
-#     print(f"Total patients : {len(patients)}")
-#     print()
-
-
-# def explore_patient(patient_folder):
-
-#     session = patient_folder / "ses-0001"
-
-#     print(f"Patient : {patient_folder.name}")
-
-#     if not session.exists():
-#         print("   Session not found\n")
-#         return
-
-#     files = sorted(session.iterdir())
-
-#     for file in files:
-#         print(f"   - {file.name}")
-
-#     print()
-
-
-# def count_files(patients):
-
-#     total_masks = 0
-#     total_png = 0
-
-#     for patient in patients:
-
-#         session = patient / "ses-0001"
-
-#         if not session.exists():
-#             continue
-
-#         for file in session.iterdir():
-
-#             if file.suffix == ".png":
-#                 total_png += 1
-
-#             if file.name.endswith("_msk.nii.gz"):
-#                 total_masks += 1
-
-#     print_separator()
-#     print("FILES SUMMARY")
-#     print_separator()
-
-#     print(f"Masks      : {total_masks}")
-#     print(f"Snapshots  : {total_png}")
-#     print()
-
-
-# def main():
-
-#     check_dataset()
-
-#     patients = get_patients()
-
-#     dataset_summary(patients)
-
-#     print_separator()
-#     print("FIRST 5 PATIENTS")
-#     print_separator()
-
-#     for patient in patients[:5]:
-#         explore_patient(patient)
-
-#     count_files(patients)
-
-
-# if __name__ == "__main__":
-#     main()
-
 if __name__ == "__main__":
-    dataset_path = "data/ISLES-2022"   # adapte ce chemin si nécessaire
+    dataset_path = "data/ISLES-2022"
     loader = ISLESDatasetLoader(dataset_path)
     loader.validate_dataset_path()
     patients = loader.discover_patients()
@@ -361,10 +212,5 @@ if __name__ == "__main__":
     for patient in patients:
         print("=" * 60)
         print(patient)
-
         patient_data = loader.load_patient(patient)
-
-        if patient_data.is_valid:
-            loader.print_metadata(patient_data.metadata)
-
         loader.patients.append(patient_data)
