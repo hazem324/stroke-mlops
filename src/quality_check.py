@@ -174,6 +174,8 @@ def check_patient(patient_id: str, paths: Dict[str, Optional[Path]]) -> Dict:
 
     # Vérification du masque
     problems += check_nan_inf(mask, "mask")
+    problems += check_volume_dimension(mask, "mask")
+    problems += check_mask_labels(mask)
     problems += check_empty_mask(mask)
 
    
@@ -192,6 +194,7 @@ def check_patient(patient_id: str, paths: Dict[str, Optional[Path]]) -> Dict:
 
         # Contrôles valables pour toutes les modalités
         problems += check_nan_inf(image, modality)
+        problems += check_volume_dimension(image, modality)
         problems += check_intensity_range(image, modality)
 
         # Contrôles géométriques uniquement pour ADC et DWI
@@ -271,7 +274,107 @@ def export_qc_report(df: pd.DataFrame, output_dir: str) -> None:
 
     print(f"\nRésumé : {n_ok} patients OK, {n_ko} patients avec au moins un problème")
 
+def check_mask_labels(mask: np.ndarray) -> List[str]:
+    """
+    Vérifie que le masque contient uniquement les labels 0 et 1.
+    """
 
+    problems = []
+
+    labels = np.unique(mask)
+
+    invalid_labels = []
+
+    for value in labels:
+
+        if not (np.isclose(value, 0.0) or np.isclose(value, 1.0)):
+            invalid_labels.append(value)
+
+    if invalid_labels:
+        problems.append(
+            f"labels inattendus dans le masque : {invalid_labels}"
+        )
+
+    return problems
+
+def check_volume_dimension(volume: np.ndarray, label: str) -> List[str]:
+    """
+    Vérifie que le volume est en 3D.
+
+    Rôle :
+    - Les modèles de segmentation 3D (U-Net, nnU-Net)
+      attendent des volumes 3D.
+    """
+
+    problems = []
+
+    if volume.ndim != 3:
+        problems.append(
+            f"{label}: volume {volume.ndim}D au lieu de 3D"
+        )
+
+    return problems
+
+
+def analyze_lesions(
+    loader: ISLESDatasetLoader,
+    patient_ids: List[str]
+) -> pd.DataFrame:
+    """
+    Analyse les masques de segmentation.
+
+    Pour chaque patient :
+    - calcule le nombre de voxels appartenant à la lésion
+    - indique si une lésion est présente
+
+    Retourne un DataFrame contenant les résultats.
+    """
+
+    rows = []
+
+    for patient_id in patient_ids:
+
+        paths = loader.build_patient_paths(patient_id)
+
+        mask_path = paths.get("mask")
+
+        if mask_path is None or not mask_path.exists():
+            continue
+
+        mask = nib.load(str(mask_path)).get_fdata()
+
+        lesion_size = int(np.sum(mask > 0))
+
+        rows.append({
+            "patient_id": patient_id,
+            "lesion_voxels": lesion_size,
+            "has_lesion": lesion_size > 0
+        })
+
+    df = pd.DataFrame(rows)
+
+    print("\n========== ANALYSE DES LÉSIONS ==========\n")
+
+    n_patients = len(df)
+    n_positive = df["has_lesion"].sum()
+    n_negative = n_patients - n_positive
+
+    print(f"Nombre total de patients : {n_patients}")
+    print(f"Patients avec lésion     : {n_positive}")
+    print(f"Patients sans lésion     : {n_negative}")
+
+    if n_positive > 0:
+
+        lesions = df[df["has_lesion"]]["lesion_voxels"]
+
+        print("\nTaille des lésions (voxels)")
+
+        print(f"Minimum : {lesions.min()}")
+        print(f"Maximum : {lesions.max()}")
+        print(f"Moyenne : {lesions.mean():.2f}")
+        print(f"Médiane : {lesions.median():.2f}")
+
+    return df 
 
 # 9. Point d'entrée
 
@@ -284,6 +387,8 @@ def main():
     patient_ids = loader.discover_patients()
 
     df = run_quality_check(loader, patient_ids)
+    lesion_df = analyze_lesions(loader, patient_ids)
+    lesion_df.to_csv("reports/lesion_statistics.csv", index=False)
     export_qc_report(df, output_dir)
 
 
