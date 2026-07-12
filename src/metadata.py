@@ -198,20 +198,20 @@ def export_reports(df: pd.DataFrame, output_dir: str):
 
 #  Point d'entrée
 
-def main():
-    dataset_path = "data/ISLES-2022"
-    output_dir = "reports"
+# def main():
+#     dataset_path = "data/ISLES-2022"
+#     output_dir = "reports"
 
-    loader = ISLESDatasetLoader(dataset_path)
-    loader.validate_dataset_path()
-    patient_ids = loader.discover_patients()
+#     loader = ISLESDatasetLoader(dataset_path)
+#     loader.validate_dataset_path()
+#     patient_ids = loader.discover_patients()
 
-    df = build_metadata_dataframe(loader, patient_ids)
+#     df = build_metadata_dataframe(loader, patient_ids)
 
-    summarize_dataset(df)
-    show_shape_distribution(df)
-    export_reports(df, output_dir)
+#     summarize_dataset(df)
+#     show_shape_distribution(df)
+#     export_reports(df, output_dir)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

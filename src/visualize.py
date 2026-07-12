@@ -238,20 +238,20 @@ def run_visualization(
 # ----------------------------------------------------------------------
 # 7. Point d'entrée
 # ----------------------------------------------------------------------
-def main():
-    dataset_path = "data/ISLES-2022"
+# def main():
+#     dataset_path = "data/ISLES-2022"
 
-    loader = ISLESDatasetLoader(dataset_path)
-    loader.validate_dataset_path()
-    patient_ids = loader.discover_patients()
+#     loader = ISLESDatasetLoader(dataset_path)
+#     loader.validate_dataset_path()
+#     patient_ids = loader.discover_patients()
 
-    run_visualization(
-        loader,
-        patient_ids,
-        output_dir="reports/visualizations",
-        n_samples=10,
-     )
+#     run_visualization(
+#         loader,
+#         patient_ids,
+#         output_dir="reports/visualizations",
+#         n_samples=10,
+#      )
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

@@ -378,19 +378,19 @@ def analyze_lesions(
 
 # 9. Point d'entrée
 
-def main():
-    dataset_path = "data/ISLES-2022"
-    output_dir = "reports"
+# def main():
+#     dataset_path = "data/ISLES-2022"
+#     output_dir = "reports"
 
-    loader = ISLESDatasetLoader(dataset_path)
-    loader.validate_dataset_path()
-    patient_ids = loader.discover_patients()
+#     loader = ISLESDatasetLoader(dataset_path)
+#     loader.validate_dataset_path()
+#     patient_ids = loader.discover_patients()
 
-    df = run_quality_check(loader, patient_ids)
-    lesion_df = analyze_lesions(loader, patient_ids)
-    lesion_df.to_csv("reports/lesion_statistics.csv", index=False)
-    export_qc_report(df, output_dir)
+#     df = run_quality_check(loader, patient_ids)
+#     lesion_df = analyze_lesions(loader, patient_ids)
+#     lesion_df.to_csv("reports/lesion_statistics.csv", index=False)
+#     export_qc_report(df, output_dir)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
