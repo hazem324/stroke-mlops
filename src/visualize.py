@@ -116,18 +116,54 @@ def plot_patient_modalities(
     output_dir: Path,
 ) -> None:
     """
-    Affiche FLAIR, ADC, DWI et MASK côte à côte.
+    Affiche FLAIR, ADC, DWI et MASK.
+    Si le masque contient une lésion, affiche une coupe avec la lésion.
+    Sinon affiche la coupe centrale.
     """
 
     modalities = [
-        ("flair", "FLAIR"),
         ("adc", "ADC"),
         ("dwi", "DWI"),
         ("mask", "Ground Truth Mask"),
     ]
 
-    fig, axes = plt.subplots(2, 2, figsize=(10, 10))
+    # -------------------------------------------------
+    # Choix de la coupe à afficher
+    # -------------------------------------------------
 
+    if "mask" in volumes:
+
+        mask = volumes["mask"]
+
+        # Chercher toutes les coupes contenant une lésion
+        lesion_slices = []
+
+        for i in range(mask.shape[2]):
+            if np.sum(mask[:, :, i]) > 0:
+                lesion_slices.append(i)
+
+        if len(lesion_slices) > 0:
+            # Choisir la coupe centrale parmi celles contenant la lésion
+            slice_idx = lesion_slices[len(lesion_slices) // 2]
+
+            print(f"{patient_id} -> lésion trouvée (slice {slice_idx})")
+
+        else:
+            # Aucun voxel annoté
+            slice_idx = mask.shape[2] // 2
+
+            print(f"{patient_id} -> masque vide, coupe centrale ({slice_idx})")
+
+    else:
+        # Si le masque est absent
+        first_volume = next(iter(volumes.values()))
+        slice_idx = first_volume.shape[2] // 2
+
+    # -------------------------------------------------
+    # Affichage
+    # -------------------------------------------------
+
+    fig, axes = plt.subplots(1, 3, figsize=(10, 10))
     axes = axes.flatten()
 
     for ax, (key, title) in zip(axes, modalities):
@@ -139,13 +175,16 @@ def plot_patient_modalities(
 
         volume = volumes[key]
 
-        slice_idx = volume.shape[2] // 2
+        # Si les profondeurs sont différentes (ex: FLAIR)
+        idx = min(slice_idx, volume.shape[2] - 1)
 
-        ax.imshow(volume[:, :, slice_idx].T,
-                  cmap="gray",
-                  origin="lower")
+        ax.imshow(
+            volume[:, :, idx].T,
+            cmap="gray",
+            origin="lower",
+        )
 
-        ax.set_title(title)
+        ax.set_title(f"{title}\nSlice {idx}")
         ax.axis("off")
 
     fig.suptitle(patient_id)
