@@ -233,25 +233,3 @@ def run_visualization(
             continue
 
         plot_patient_modalities(patient_id, volumes, output_path,)
-
-
-# ----------------------------------------------------------------------
-# 7. Point d'entrée
-# ----------------------------------------------------------------------
-# def main():
-#     dataset_path = "data/ISLES-2022"
-
-#     loader = ISLESDatasetLoader(dataset_path)
-#     loader.validate_dataset_path()
-#     patient_ids = loader.discover_patients()
-
-#     run_visualization(
-#         loader,
-#         patient_ids,
-#         output_dir="reports/visualizations",
-#         n_samples=10,
-#      )
-
-
-# if __name__ == "__main__":
-#     main()
