@@ -19,10 +19,7 @@ import nibabel as nib
 
 from load_data import ISLESDatasetLoader
 
-
-# ----------------------------------------------------------------------
 # 1. Extraction des metadonnees d'un patient
-# ----------------------------------------------------------------------
 def extract_metadata(paths: Dict) -> Dict:
     """
     Extrait les metadonnees (shape, dtype, spacing, affine) de chaque
@@ -48,10 +45,7 @@ def extract_metadata(paths: Dict) -> Dict:
 
     return metadata
 
-
-# ----------------------------------------------------------------------
 # 2. Affichage des metadonnees d'un patient
-# ----------------------------------------------------------------------
 def print_metadata(metadata: Dict) -> None:
     """
     Affiche dans la console les metadonnees d'un patient.
@@ -66,10 +60,7 @@ def print_metadata(metadata: Dict) -> None:
         print(f"Data type      : {info['dtype']}")
         print()
 
-
-# ----------------------------------------------------------------------
 # 3. Construction du tableau de metadonnees pour tout le dataset
-# ----------------------------------------------------------------------
 def build_metadata_dataframe(
     loader: ISLESDatasetLoader, patient_ids: List[str]
 ) -> pd.DataFrame:
@@ -109,10 +100,7 @@ def build_metadata_dataframe(
 
     return pd.DataFrame(rows)
 
-
-# ----------------------------------------------------------------------
 # 4. Resume statistique du dataset
-# ----------------------------------------------------------------------
 def summarize_dataset(df: pd.DataFrame) -> None:
     """
     Affiche un resume synthetique : shapes/spacing les plus frequents
@@ -137,10 +125,7 @@ def summarize_dataset(df: pd.DataFrame) -> None:
     print("\n--- Dtypes rencontres ---")
     print(df.groupby("modality")["dtype"].value_counts())
 
-
-# ----------------------------------------------------------------------
 # 5. Distribution des shapes par modalite
-# ----------------------------------------------------------------------
 def show_shape_distribution(df: pd.DataFrame) -> None:
     """
     Affiche la distribution des shapes pour chaque modalite.
@@ -159,10 +144,7 @@ def show_shape_distribution(df: pd.DataFrame) -> None:
         for shape, count in shape_counts.items():
             print(f"{shape} : {count} patients")
 
-
-# ----------------------------------------------------------------------
 # 6. Export des rapports CSV
-# ----------------------------------------------------------------------
 def export_reports(df: pd.DataFrame, output_dir: str) -> None:
     """
     Sauvegarde le detail complet en CSV.

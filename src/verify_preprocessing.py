@@ -1,14 +1,3 @@
-"""
-verify_preprocessing.py
-
-Verifie que les donnees pretraitees (data/preprocessed/) sont
-coherentes : shapes correctes, pas de NaN, masque binaire, stats
-d'intensite plausibles. A lancer APRES preprocessing.py.
-
-Usage :
-    python src/verify_preprocessing.py
-"""
-
 from pathlib import Path
 import numpy as np
 import pandas as pd

@@ -1,17 +1,3 @@
-"""
-quality_check.py
-
-Role : controle qualite automatise, execute sur l'ensemble du dataset,
-pour detecter les anomalies exploitables par du code : NaN/Inf,
-incoherences dimensionnelles, masques vides, labels invalides,
-valeurs d'intensite suspectes, desalignement image/masque.
-
-Depend de load_data.py pour :
-- la construction des chemins de fichiers
-
-Pas de bloc main() ici : ce module est appele depuis main.py.
-"""
-
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -22,13 +8,8 @@ import pandas as pd
 from load_data import ISLESDatasetLoader
 
 
-# ----------------------------------------------------------------------
 # 1. Verification des valeurs manquantes / infinies
-# ----------------------------------------------------------------------
 def check_nan_inf(volume: np.ndarray, label: str) -> List[str]:
-    """
-    Detecte la presence de NaN ou Inf dans un volume.
-    """
 
     problems = []
 
@@ -41,14 +22,8 @@ def check_nan_inf(volume: np.ndarray, label: str) -> List[str]:
     return problems
 
 
-# ----------------------------------------------------------------------
 # 2. Verification de la dimensionnalite du volume
-# ----------------------------------------------------------------------
 def check_volume_dimension(volume: np.ndarray, label: str) -> List[str]:
-    """
-    Verifie que le volume est bien en 3D (attendu par U-Net/nnU-Net).
-    """
-
     problems = []
 
     if volume.ndim != 3:
@@ -56,16 +31,10 @@ def check_volume_dimension(volume: np.ndarray, label: str) -> List[str]:
 
     return problems
 
-
-# ----------------------------------------------------------------------
 # 3. Verification de la coherence des shapes image/masque
-# ----------------------------------------------------------------------
 def check_shape_consistency(
     image: np.ndarray, mask: np.ndarray, label: str
 ) -> List[str]:
-    """
-    Verifie que l'image et son masque ont exactement la meme shape.
-    """
 
     problems = []
 
@@ -77,14 +46,9 @@ def check_shape_consistency(
     return problems
 
 
-# ----------------------------------------------------------------------
 # 4. Verification des labels du masque
-# ----------------------------------------------------------------------
 def check_mask_labels(mask: np.ndarray) -> List[str]:
-    """
-    Verifie que le masque contient uniquement les labels 0 et 1.
-    """
-
+    
     problems = []
 
     labels = np.unique(mask)
@@ -95,16 +59,8 @@ def check_mask_labels(mask: np.ndarray) -> List[str]:
 
     return problems
 
-
-# ----------------------------------------------------------------------
 # 5. Verification que le masque n'est pas vide
-# ----------------------------------------------------------------------
 def check_empty_mask(mask: np.ndarray) -> List[str]:
-    """
-    Signale si le masque ne contient aucune lesion annotee.
-    Ce n'est pas une erreur bloquante, juste une information a tracer.
-    """
-
     problems = []
 
     if mask.sum() == 0:
@@ -112,14 +68,8 @@ def check_empty_mask(mask: np.ndarray) -> List[str]:
 
     return problems
 
-
-# ----------------------------------------------------------------------
 # 6. Verification de la plage de valeurs d'intensite
-# ----------------------------------------------------------------------
 def check_intensity_range(volume: np.ndarray, label: str) -> List[str]:
-    """
-    Verifie qu'un volume n'est pas constant (signe de corruption).
-    """
 
     problems = []
 
@@ -132,17 +82,11 @@ def check_intensity_range(volume: np.ndarray, label: str) -> List[str]:
     return problems
 
 
-# ----------------------------------------------------------------------
 # 7. Verification de la coherence de l'affine
-# ----------------------------------------------------------------------
 def check_affine_consistency(
     image_affine: np.ndarray, mask_affine: np.ndarray, label: str, tol: float = 1e-3
 ) -> List[str]:
-    """
-    Verifie que l'image et son masque partagent la meme matrice affine
-    (meme orientation, origine, spacing dans l'espace reel).
-    """
-
+    
     problems = []
 
     if not np.allclose(image_affine, mask_affine, atol=tol):
@@ -150,24 +94,8 @@ def check_affine_consistency(
 
     return problems
 
-
-# ----------------------------------------------------------------------
 # 8. Controle qualite complet pour un patient
-# ----------------------------------------------------------------------
 def check_patient(patient_id: str, paths: Dict[str, Optional[Path]]) -> Dict:
-    """
-    Execute tous les controles qualite pour un patient.
-
-    Controles effectues :
-    - presence du masque
-    - NaN / Inf
-    - dimensionnalite
-    - labels du masque
-    - masque vide
-    - intensites
-    - shape et affine (uniquement pour ADC et DWI, qui partagent
-      nativement la meme grille que le masque dans ISLES)
-    """
 
     problems = []
 
@@ -214,15 +142,10 @@ def check_patient(patient_id: str, paths: Dict[str, Optional[Path]]) -> Dict:
     }
 
 
-# ----------------------------------------------------------------------
 # 9. Execution du controle qualite sur tout le dataset
-# ----------------------------------------------------------------------
 def run_quality_check(
     loader: ISLESDatasetLoader, patient_ids: List[str]
 ) -> pd.DataFrame:
-    """
-    Applique check_patient() a tous les patients du dataset.
-    """
 
     rows = []
 
@@ -237,17 +160,11 @@ def run_quality_check(
     return pd.DataFrame(rows)
 
 
-# ----------------------------------------------------------------------
 # 10. Analyse des lesions
-# ----------------------------------------------------------------------
 def analyze_lesions(
     loader: ISLESDatasetLoader, patient_ids: List[str]
 ) -> pd.DataFrame:
-    """
-    Pour chaque patient : calcule le nombre de voxels de lesion et
-    indique si une lesion est presente.
-    """
-
+    
     rows = []
 
     for patient_id in patient_ids:
@@ -290,14 +207,9 @@ def analyze_lesions(
     return df
 
 
-# ----------------------------------------------------------------------
 # 11. Export du rapport
-# ----------------------------------------------------------------------
 def export_qc_report(df: pd.DataFrame, output_dir: str) -> None:
-    """
-    Sauvegarde le rapport de controle qualite en CSV.
-    """
-
+    
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 

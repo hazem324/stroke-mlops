@@ -14,20 +14,6 @@ TRAIN_SIZE = 0.70
 VALID_SIZE = 0.15
 TEST_SIZE = 0.15
 
-# Découvre tous les patients prétraités.
-# def discover_patients():
-
-#     patient_ids = []
-
-#     for patient_dir in sorted(PREPROCESSED_DIR.iterdir()):
-
-#         if patient_dir.is_dir():
-#             patient_ids.append(patient_dir.name)
-
-#     print(f"Patients trouvés : {len(patient_ids)}")
-
-#     return patient_ids
-
 # Vérifie si le masque contient au moins une lésion.
 def has_lesion(preprocessed_dir: Path, patient_id: str):
 

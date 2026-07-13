@@ -1,20 +1,3 @@
-"""
-preprocessing.py
-
-Role : transformer les volumes bruts (ADC, DWI, FLAIR, masque) en
-volumes standardises prets pour l'entrainement :
-- resampling vers l'espace de reference (ADC)
-- recadrage sur le cerveau (crop foreground)
-- normalisation d'intensite (z-score sur les voxels non nuls)
-- redimensionnement vers une taille fixe (TARGET_SHAPE)
-- sauvegarde en .npy
-
-Depend de load_data.py pour :
-- la construction des chemins de fichiers
-
-Pas de bloc main() ici : ce module est appele depuis main.py.
-"""
-
 from pathlib import Path
 from typing import Dict, Optional, Tuple, List
 
@@ -30,9 +13,7 @@ OUTPUT_DIR = Path("data/preprocessed")
 CROP_MARGIN = 5  # voxels de marge autour du cerveau detecte
 
 
-# ----------------------------------------------------------------------
 # 1. Chargement des volumes d'un patient
-# ----------------------------------------------------------------------
 def load_volumes(paths: Dict[str, Optional[Path]]) -> Dict[str, sitk.Image]:
     """
     Charge tous les volumes disponibles d'un patient avec SimpleITK.
@@ -50,19 +31,10 @@ def load_volumes(paths: Dict[str, Optional[Path]]) -> Dict[str, sitk.Image]:
     return volumes
 
 
-# ----------------------------------------------------------------------
 # 2. Resampling vers une image de reference
-# ----------------------------------------------------------------------
 def resample_to_reference(
     moving: sitk.Image, reference: sitk.Image, is_mask: bool = False
 ) -> sitk.Image:
-    """
-    Reprojette 'moving' sur la grille spatiale de 'reference'.
-
-    Limite connue : suppose que 'moving' est deja correctement recale
-    dans le meme espace physique que 'reference' (via les affines des
-    headers NIfTI). Verifiez l'alignement FLAIR/ADC avec visualize.py.
-    """
 
     resampler = sitk.ResampleImageFilter()
     resampler.SetReferenceImage(reference)
@@ -73,17 +45,11 @@ def resample_to_reference(
     return resampler.Execute(moving)
 
 
-# ----------------------------------------------------------------------
 # 3. Recadrage sur le cerveau (crop foreground)
-# ----------------------------------------------------------------------
 def crop_to_foreground(
     volumes: Dict[str, np.ndarray], reference_key: str = "adc", margin: int = CROP_MARGIN
 ) -> Dict[str, np.ndarray]:
-    """
-    Recadre tous les volumes d'un patient sur la boite englobante du
-    cerveau (voxels non nuls de l'image de reference), avec une marge.
-    """
-
+    
     ref = volumes[reference_key]
     coords = np.argwhere(ref > 0)
 
@@ -98,15 +64,9 @@ def crop_to_foreground(
     return {key: vol[slices] for key, vol in volumes.items()}
 
 
-# ----------------------------------------------------------------------
 # 4. Normalisation d'intensite (z-score sur voxels non nuls)
-# ----------------------------------------------------------------------
 def normalize_volume(volume: np.ndarray) -> np.ndarray:
-    """
-    Normalise un volume IRM en z-score, calcule sur les voxels non
-    nuls (le cerveau). Le fond (initialement 0) reste a 0 apres
-    normalisation : seul le cerveau est transforme.
-    """
+    
     volume = volume.astype(np.float32)
     foreground_mask = volume > 0
     nonzero = volume[foreground_mask]
@@ -125,16 +85,10 @@ def normalize_volume(volume: np.ndarray) -> np.ndarray:
 
     return normalized
 
-
-# ----------------------------------------------------------------------
 # 5. Redimensionnement vers une taille fixe
-# ----------------------------------------------------------------------
 def resize_volume(
     volume: np.ndarray, target_shape: Tuple[int, int, int] = TARGET_SHAPE, is_mask: bool = False
 ) -> np.ndarray:
-    """
-    Redimensionne un volume vers target_shape.
-    """
 
     factors = [target_shape[i] / volume.shape[i] for i in range(3)]
     interpolation_order = 0 if is_mask else 1
@@ -149,10 +103,7 @@ def resize_volume(
 
     return resized
 
-
-# ----------------------------------------------------------------------
 # 6. Sauvegarde des volumes pretraites
-# ----------------------------------------------------------------------
 def save_patient(
     patient_id: str,
     adc: np.ndarray,
@@ -160,9 +111,6 @@ def save_patient(
     flair: np.ndarray,
     mask: np.ndarray,
 ) -> None:
-    """
-    Sauvegarde les 4 volumes pretraites d'un patient en .npy.
-    """
 
     patient_dir = OUTPUT_DIR / patient_id
     patient_dir.mkdir(parents=True, exist_ok=True)
@@ -175,15 +123,8 @@ def save_patient(
     print(f"[SAVED] {patient_dir}")
 
 
-# ----------------------------------------------------------------------
 # 7. Pretraitement complet d'un patient
-# ----------------------------------------------------------------------
 def preprocess_patient(patient_id: str, loader: ISLESDatasetLoader) -> bool:
-    """
-    Enchaine toutes les etapes de pretraitement pour un patient.
-    Retourne False si une modalite requise manque ou si les shapes
-    restent incoherentes apres resampling.
-    """
 
     paths = loader.build_patient_paths(patient_id)
     volumes = load_volumes(paths)
@@ -235,14 +176,8 @@ def preprocess_patient(patient_id: str, loader: ISLESDatasetLoader) -> bool:
     return True
 
 
-# ----------------------------------------------------------------------
 # 8. Pretraitement de tout le dataset
-# ----------------------------------------------------------------------
 def run_preprocessing(loader: ISLESDatasetLoader, patient_ids: List[str]) -> Dict:
-    """
-    Applique preprocess_patient() a tous les patients et compte
-    combien ont ete traites avec succes / ignores.
-    """
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -269,9 +204,7 @@ def run_preprocessing(loader: ISLESDatasetLoader, patient_ids: List[str]) -> Dic
     }
 
 
-# ----------------------------------------------------------------------
 # 9. Resume
-# ----------------------------------------------------------------------
 def print_summary(summary: Dict) -> None:
     """
     Affiche un resume final du pretraitement.

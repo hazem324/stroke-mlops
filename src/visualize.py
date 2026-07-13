@@ -1,18 +1,3 @@
-"""
-visualize.py
-
-Role : controle visuel des coupes IRM et de leurs masques de
-segmentation, pour detecter les anomalies invisibles aux metriques
-numeriques (mismatch image/masque, mauvaise sequence, artefact majeur).
-
-Depend de load_data.py pour :
-- la construction des chemins de fichiers
-
-Sortie : reports/visualizations/{patient_id}.png
-
-Pas de bloc main() ici : ce module est appele depuis main.py.
-"""
-
 import random
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -26,15 +11,10 @@ import matplotlib.pyplot as plt
 from load_data import ISLESDatasetLoader
 
 
-# ----------------------------------------------------------------------
 # 1. Selection d'un echantillon de patients a controler
-# ----------------------------------------------------------------------
 def select_sample_patients(
     patient_ids: List[str], n_samples: int = 10, seed: int = 42
 ) -> List[str]:
-    """
-    Selectionne un echantillon aleatoire de patients a visualiser.
-    """
 
     random.seed(seed)
     n_samples = min(n_samples, len(patient_ids))
@@ -42,9 +22,7 @@ def select_sample_patients(
     return random.sample(patient_ids, n_samples)
 
 
-# ----------------------------------------------------------------------
 # 2. Chargement des volumes d'un patient
-# ----------------------------------------------------------------------
 def load_volumes(paths: Dict[str, Optional[Path]]) -> Dict[str, np.ndarray]:
     """
     Charge toutes les modalites disponibles d'un patient.
@@ -63,19 +41,12 @@ def load_volumes(paths: Dict[str, Optional[Path]]) -> Dict[str, np.ndarray]:
     return volumes
 
 
-# ----------------------------------------------------------------------
 # 3. Generation de la figure (ADC / DWI / MASK) pour un patient
-# ----------------------------------------------------------------------
 def plot_patient_modalities(
     patient_id: str,
     volumes: Dict[str, np.ndarray],
     output_dir: Path,
 ) -> None:
-    """
-    Affiche ADC, DWI et le masque de verite terrain sur une coupe
-    axiale contenant la lesion (ou la coupe centrale si pas de lesion).
-    """
-
     modalities = [
         ("adc", "ADC"),
         ("dwi", "DWI"),
@@ -125,21 +96,13 @@ def plot_patient_modalities(
     print(f"[SAVED] {output_file}")
 
 
-# ----------------------------------------------------------------------
 # 4. Pipeline complet de visualisation
-# ----------------------------------------------------------------------
 def run_visualization(
     loader: ISLESDatasetLoader,
     patient_ids: List[str],
     output_dir: str = "reports/visualizations",
     n_samples: int = 10,
 ) -> None:
-    """
-    Orchestre tout le processus :
-    - selectionne un echantillon de patients
-    - charge les volumes disponibles
-    - genere et sauvegarde une figure par patient
-    """
 
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)

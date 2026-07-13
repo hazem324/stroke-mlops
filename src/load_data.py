@@ -222,16 +222,3 @@ class ISLESDatasetLoader:
             metadata={},
             is_valid=valid
         )
-
-
-# if __name__ == "__main__":
-#     dataset_path = "data/ISLES-2022"
-#     loader = ISLESDatasetLoader(dataset_path)
-#     loader.validate_dataset_path()
-#     patients = loader.discover_patients()
-
-#     for patient in patients:
-#         print("=" * 60)
-#         print(patient)
-#         patient_data = loader.load_patient(patient)
-#         loader.patients.append(patient_data)
