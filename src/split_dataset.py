@@ -1,25 +1,3 @@
-"""
-split_dataset.py
-
-Rôle :
-Créer une séparation reproductible du dataset en
-Train / Validation / Test.
-
-Entrée :
-    data/preprocessed/
-        sub-strokecaseXXXX/
-            adc.npy
-            dwi.npy
-            flair.npy
-            mask.npy
-
-Sortie :
-    data/splits/
-        train.csv
-        validation.csv
-        test.csv
-"""
-
 from pathlib import Path
 
 import numpy as np
@@ -28,7 +6,6 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-PREPROCESSED_DIR = Path("data/preprocessed")
 OUTPUT_DIR = Path("data/splits")
 
 RANDOM_STATE = 42
@@ -38,23 +15,24 @@ VALID_SIZE = 0.15
 TEST_SIZE = 0.15
 
 # Découvre tous les patients prétraités.
-def discover_patients():
+# def discover_patients():
 
-    patient_ids = []
+#     patient_ids = []
 
-    for patient_dir in sorted(PREPROCESSED_DIR.iterdir()):
+#     for patient_dir in sorted(PREPROCESSED_DIR.iterdir()):
 
-        if patient_dir.is_dir():
-            patient_ids.append(patient_dir.name)
+#         if patient_dir.is_dir():
+#             patient_ids.append(patient_dir.name)
 
-    print(f"Patients trouvés : {len(patient_ids)}")
+#     print(f"Patients trouvés : {len(patient_ids)}")
 
-    return patient_ids
+#     return patient_ids
 
 # Vérifie si le masque contient au moins une lésion.
-def has_lesion(patient_id):
+def has_lesion(preprocessed_dir: Path, patient_id: str):
+
     mask = np.load(
-        PREPROCESSED_DIR /
+        preprocessed_dir /
         patient_id /
         "mask.npy"
     )
@@ -62,17 +40,29 @@ def has_lesion(patient_id):
     return int(mask.sum() > 0)
 
 # Construit un DataFrame 
-def build_dataframe(patient_ids):
+def build_dataframe(preprocessed_dir: Path):
 
     rows = []
 
-    for patient in patient_ids:
+    patient_dirs = sorted(preprocessed_dir.iterdir())
+
+    print(f"Patients trouvés : {len(patient_dirs)}")
+
+    for patient_dir in patient_dirs:
+
+        if not patient_dir.is_dir():
+            continue
+
+        patient_id = patient_dir.name
 
         rows.append({
 
-            "patient_id": patient,
+            "patient_id": patient_id,
 
-            "has_lesion": has_lesion(patient)
+            "has_lesion": has_lesion(
+                preprocessed_dir,
+                patient_id,
+            )
 
         })
 
@@ -140,36 +130,3 @@ def print_statistics(train_df, valid_df, test_df):
     print(f"Validation  : {valid_df['has_lesion'].sum()}")
 
     print(f"Test        : {test_df['has_lesion'].sum()}")
-
-
-def main():
-
-    patient_ids = discover_patients()
-
-    df = build_dataframe(patient_ids)
-
-    train_df, valid_df, test_df = split_dataset(df)
-
-    save_split(
-
-        train_df,
-
-        valid_df,
-
-        test_df,
-
-    )
-
-    print_statistics(
-
-        train_df,
-
-        valid_df,
-
-        test_df,
-
-    )
-
-
-if __name__ == "__main__":
-    main()

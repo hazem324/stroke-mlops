@@ -104,7 +104,7 @@ def main():
     print("\nTrain / Validation / Test Split")
 
     split_df = build_dataframe(
-        preprocessing_summary["output"]
+       preprocessing_summary["output"]
     )
 
     train_df, valid_df, test_df = split_dataset(
