@@ -1,3 +1,14 @@
+"""
+load_data.py
+
+Role : validation de la structure du dataset, decouverte des patients,
+construction des chemins de fichiers, et verification que les fichiers
+NIfTI existent et sont lisibles.
+
+Ce module ne fait PAS d'extraction de metadonnees (voir metadata.py)
+ni de pretraitement (voir preprocessing.py).
+"""
+
 from pathlib import Path
 from dataclasses import dataclass
 from typing import Optional, List, Dict
@@ -68,6 +79,9 @@ class ISLESDatasetLoader:
 
     def find_file(self, folder: Path, pattern: str) -> Optional[Path]:
 
+        if not folder.exists():
+            return None
+
         files = list(folder.glob(pattern))
 
         return files[0] if files else None
@@ -114,8 +128,10 @@ class ISLESDatasetLoader:
 
         return paths
 
-    # Check that all expected modalities are present
-    def validate_modalities(self, paths):
+    def validate_modalities(self, paths: Dict[str, Optional[Path]]) -> bool:
+        """
+        Check that all expected modalities are present.
+        """
 
         valid = True
 
@@ -129,7 +145,7 @@ class ISLESDatasetLoader:
 
         return valid
 
-    def validate_files_exist(self, paths: Dict[str, Path]) -> bool:
+    def validate_files_exist(self, paths: Dict[str, Optional[Path]]) -> bool:
         """
         Verify that every expected file exists.
         """
@@ -139,7 +155,7 @@ class ISLESDatasetLoader:
         for modality, file_path in paths.items():
 
             if file_path is None:
-                print(f"[MISSING] {modality.upper()} (fichier non trouvé)")
+                print(f"[MISSING] {modality.upper()} (fichier non trouve)")
                 valid = False
                 continue
 
@@ -152,7 +168,7 @@ class ISLESDatasetLoader:
 
         return valid
 
-    def validate_nifti_files(self, paths: Dict[str, Path]) -> bool:
+    def validate_nifti_files(self, paths: Dict[str, Optional[Path]]) -> bool:
         """
         Validate that every NIfTI file can be opened.
         """
@@ -160,6 +176,9 @@ class ISLESDatasetLoader:
         valid = True
 
         for modality, file_path in paths.items():
+
+            if file_path is None or not file_path.exists():
+                continue
 
             try:
                 nib.load(str(file_path))
@@ -178,6 +197,13 @@ class ISLESDatasetLoader:
         return valid
 
     def load_patient(self, patient_id: str) -> PatientData:
+        """
+        Charge et valide un patient (existence + lisibilite des fichiers).
+
+        NOTE : l'extraction des metadonnees (shape, spacing, dtype...)
+        est geree separement dans metadata.py, pas ici. Ce module se
+        limite a la validation structurelle.
+        """
 
         paths = self.build_patient_paths(patient_id)
 
@@ -186,11 +212,6 @@ class ISLESDatasetLoader:
             and self.validate_files_exist(paths)
             and self.validate_nifti_files(paths)
         )
-
-        metadata = {}
-
-        if valid:
-            metadata = self.extract_metadata(paths)
 
         return PatientData(
             patient_id=patient_id,

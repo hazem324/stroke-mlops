@@ -1,33 +1,48 @@
+"""
+preprocessing.py
+
+Role : transformer les volumes bruts (ADC, DWI, FLAIR, masque) en
+volumes standardises prets pour l'entrainement :
+- resampling vers l'espace de reference (ADC)
+- recadrage sur le cerveau (crop foreground)
+- normalisation d'intensite (z-score sur les voxels non nuls)
+- redimensionnement vers une taille fixe (TARGET_SHAPE)
+- sauvegarde en .npy
+
+Depend de load_data.py pour :
+- la construction des chemins de fichiers
+
+Pas de bloc main() ici : ce module est appele depuis main.py.
+"""
+
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, Tuple, List
 
 import numpy as np
-import nibabel as nib
 import SimpleITK as sitk
+from scipy.ndimage import zoom
 
 from load_data import ISLESDatasetLoader
 
 
 TARGET_SHAPE = (128, 128, 64)
-
 OUTPUT_DIR = Path("data/preprocessed")
+CROP_MARGIN = 5  # voxels de marge autour du cerveau detecte
 
 
-# 1. Charge tous les volumes d'un patient.
-
-def load_volumes(
-    paths: Dict[str, Optional[Path]]
-) -> Dict[str, sitk.Image]:
-    
+# ----------------------------------------------------------------------
+# 1. Chargement des volumes d'un patient
+# ----------------------------------------------------------------------
+def load_volumes(paths: Dict[str, Optional[Path]]) -> Dict[str, sitk.Image]:
+    """
+    Charge tous les volumes disponibles d'un patient avec SimpleITK.
+    """
 
     volumes = {}
 
     for modality, path in paths.items():
 
-        if path is None:
-            continue
-
-        if not path.exists():
+        if path is None or not path.exists():
             continue
 
         volumes[modality] = sitk.ReadImage(str(path))
@@ -35,83 +50,122 @@ def load_volumes(
     return volumes
 
 
-# 2. Resampling
+# ----------------------------------------------------------------------
+# 2. Resampling vers une image de reference
+# ----------------------------------------------------------------------
+def resample_to_reference(
+    moving: sitk.Image, reference: sitk.Image, is_mask: bool = False
+) -> sitk.Image:
+    """
+    Reprojette 'moving' sur la grille spatiale de 'reference'.
 
-def resample_to_reference( moving: sitk.Image, reference: sitk.Image,is_mask: bool = False,) -> sitk.Image:
-    
+    Limite connue : suppose que 'moving' est deja correctement recale
+    dans le meme espace physique que 'reference' (via les affines des
+    headers NIfTI). Verifiez l'alignement FLAIR/ADC avec visualize.py.
+    """
 
     resampler = sitk.ResampleImageFilter()
-
     resampler.SetReferenceImage(reference)
-
-    if is_mask:
-
-        # Conserver uniquement les labels 0 / 1
-        resampler.SetInterpolator(
-            sitk.sitkNearestNeighbor
-        )
-
-    else:
-
-        # Images IRM
-        resampler.SetInterpolator(
-            sitk.sitkLinear
-        )
+    resampler.SetInterpolator(
+        sitk.sitkNearestNeighbor if is_mask else sitk.sitkLinear
+    )
 
     return resampler.Execute(moving)
 
 
-# 3. Normalisation Cela permet d'avoir toutes les IRM dans la même échelle
+# ----------------------------------------------------------------------
+# 3. Recadrage sur le cerveau (crop foreground)
+# ----------------------------------------------------------------------
+def crop_to_foreground(
+    volumes: Dict[str, np.ndarray], reference_key: str = "adc", margin: int = CROP_MARGIN
+) -> Dict[str, np.ndarray]:
+    """
+    Recadre tous les volumes d'un patient sur la boite englobante du
+    cerveau (voxels non nuls de l'image de reference), avec une marge.
+    """
 
+    ref = volumes[reference_key]
+    coords = np.argwhere(ref > 0)
+
+    if coords.size == 0:
+        return volumes
+
+    mins = np.maximum(coords.min(axis=0) - margin, 0)
+    maxs = np.minimum(coords.max(axis=0) + margin, ref.shape)
+
+    slices = tuple(slice(mn, mx) for mn, mx in zip(mins, maxs))
+
+    return {key: vol[slices] for key, vol in volumes.items()}
+
+
+# ----------------------------------------------------------------------
+# 4. Normalisation d'intensite (z-score sur voxels non nuls)
+# ----------------------------------------------------------------------
 def normalize_volume(volume: np.ndarray) -> np.ndarray:
-    
+    """
+    Normalise un volume IRM en z-score, calcule sur les voxels non
+    nuls (le cerveau). Le fond (initialement 0) reste a 0 apres
+    normalisation : seul le cerveau est transforme.
+    """
     volume = volume.astype(np.float32)
+    foreground_mask = volume > 0
+    nonzero = volume[foreground_mask]
 
-    mean = volume.mean()
+    if nonzero.size == 0:
+        return volume
 
-    std = volume.std()
+    mean = nonzero.mean()
+    std = nonzero.std()
 
     if std < 1e-8:
         return volume
 
-    volume = (volume - mean) / std
+    normalized = np.zeros_like(volume)
+    normalized[foreground_mask] = (volume[foreground_mask] - mean) / std
 
-    return volume
-
-
-from scipy.ndimage import zoom
+    return normalized
 
 
-# 4. Resize des volumes (Redimensionne un volume vers TARGET_SHAPE.)
+# ----------------------------------------------------------------------
+# 5. Redimensionnement vers une taille fixe
+# ----------------------------------------------------------------------
+def resize_volume(
+    volume: np.ndarray, target_shape: Tuple[int, int, int] = TARGET_SHAPE, is_mask: bool = False
+) -> np.ndarray:
+    """
+    Redimensionne un volume vers target_shape.
+    """
 
-def resize_volume(  volume: np.ndarray, target_shape=TARGET_SHAPE, is_mask: bool = False,) -> np.ndarray:
+    factors = [target_shape[i] / volume.shape[i] for i in range(3)]
+    interpolation_order = 0 if is_mask else 1
 
-    factors = [
-        target_shape[i] / volume.shape[i]
-        for i in range(3)
-    ]
+    resized = zoom(volume, zoom=factors, order=interpolation_order)
 
-    interpolation = 0 if is_mask else 1
+    if is_mask:
+        resized = np.round(resized).astype(np.float32)
+        resized = np.clip(resized, 0, 1)
+    else:
+        resized = resized.astype(np.float32)
 
-    resized = zoom(
-        volume,
-        zoom=factors,
-        order=interpolation,
-    )
-
-    return resized.astype(np.float32)
+    return resized
 
 
-# 5. Sauvegarde les volumes prétraités.
+# ----------------------------------------------------------------------
+# 6. Sauvegarde des volumes pretraites
+# ----------------------------------------------------------------------
+def save_patient(
+    patient_id: str,
+    adc: np.ndarray,
+    dwi: np.ndarray,
+    flair: np.ndarray,
+    mask: np.ndarray,
+) -> None:
+    """
+    Sauvegarde les 4 volumes pretraites d'un patient en .npy.
+    """
 
-def save_patient( patient_id: str, adc: np.ndarray, dwi: np.ndarray, flair: np.ndarray,mask: np.ndarray,):
-    
     patient_dir = OUTPUT_DIR / patient_id
-
-    patient_dir.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
+    patient_dir.mkdir(parents=True, exist_ok=True)
 
     np.save(patient_dir / "adc.npy", adc)
     np.save(patient_dir / "dwi.npy", dwi)
@@ -121,110 +175,76 @@ def save_patient( patient_id: str, adc: np.ndarray, dwi: np.ndarray, flair: np.n
     print(f"[SAVED] {patient_dir}")
 
 
-# 6. Prétraitement complet d'un patient
-
-def preprocess_patient( patient_id: str, loader: ISLESDatasetLoader,):
+# ----------------------------------------------------------------------
+# 7. Pretraitement complet d'un patient
+# ----------------------------------------------------------------------
+def preprocess_patient(patient_id: str, loader: ISLESDatasetLoader) -> bool:
+    """
+    Enchaine toutes les etapes de pretraitement pour un patient.
+    Retourne False si une modalite requise manque ou si les shapes
+    restent incoherentes apres resampling.
+    """
 
     paths = loader.build_patient_paths(patient_id)
-
     volumes = load_volumes(paths)
 
     required = ["adc", "dwi", "flair", "mask"]
-
     for modality in required:
-
         if modality not in volumes:
-
-            print(
-                f"[SKIP] {patient_id} : {modality} manquant"
-            )
-
+            print(f"[SKIP] {patient_id} : {modality} manquant")
             return False
-    # ADC = image de référence
 
     adc_img = volumes["adc"]
-
     dwi_img = volumes["dwi"]
-
     flair_img = volumes["flair"]
-
     mask_img = volumes["mask"]
 
-    # Resampling
+    flair_img = resample_to_reference(flair_img, adc_img, is_mask=False)
+    dwi_img = resample_to_reference(dwi_img, adc_img, is_mask=False)
+    mask_img = resample_to_reference(mask_img, adc_img, is_mask=True)
 
-    flair_img = resample_to_reference(
-        flair_img,
-        adc_img,
-        is_mask=False,
+    adc = np.transpose(sitk.GetArrayFromImage(adc_img), (2, 1, 0))
+    dwi = np.transpose(sitk.GetArrayFromImage(dwi_img), (2, 1, 0))
+    flair = np.transpose(sitk.GetArrayFromImage(flair_img), (2, 1, 0))
+    mask = np.transpose(sitk.GetArrayFromImage(mask_img), (2, 1, 0))
+
+    if not (adc.shape == dwi.shape == flair.shape == mask.shape):
+        print(
+            f"[SKIP] {patient_id} : shapes incoherentes apres resampling "
+            f"(adc={adc.shape}, dwi={dwi.shape}, flair={flair.shape}, mask={mask.shape})"
+        )
+        return False
+
+    cropped = crop_to_foreground(
+        {"adc": adc, "dwi": dwi, "flair": flair, "mask": mask},
+        reference_key="adc",
     )
-
-    mask_img = resample_to_reference(
-        mask_img,
-        adc_img,
-        is_mask=True,
-    )
-
-    # Conversion numpy
-
-    adc = sitk.GetArrayFromImage(adc_img)
-
-    dwi = sitk.GetArrayFromImage(dwi_img)
-
-    flair = sitk.GetArrayFromImage(flair_img)
-
-    mask = sitk.GetArrayFromImage(mask_img)
-
-    # SimpleITK retourne (z,y,x)
-
-    adc = np.transpose(adc, (2, 1, 0))
-
-    dwi = np.transpose(dwi, (2, 1, 0))
-
-    flair = np.transpose(flair, (2, 1, 0))
-
-    mask = np.transpose(mask, (2, 1, 0))
-
-    # Normalisation
+    adc, dwi, flair, mask = cropped["adc"], cropped["dwi"], cropped["flair"], cropped["mask"]
 
     adc = normalize_volume(adc)
-
     dwi = normalize_volume(dwi)
-
     flair = normalize_volume(flair)
 
-    # Resize
-
     adc = resize_volume(adc)
-
     dwi = resize_volume(dwi)
-
     flair = resize_volume(flair)
+    mask = resize_volume(mask, is_mask=True)
 
-    mask = resize_volume(
-        mask,
-        is_mask=True,
-    )
-
-    # Sauvegarde
-
-    save_patient(
-        patient_id,
-        adc,
-        dwi,
-        flair,
-        mask,
-    )
+    save_patient(patient_id, adc, dwi, flair, mask)
 
     return True
 
-# 7. Prétraitement de tout le dataset
 
-def run_preprocessing( loader: ISLESDatasetLoader, patient_ids: list[str],):
+# ----------------------------------------------------------------------
+# 8. Pretraitement de tout le dataset
+# ----------------------------------------------------------------------
+def run_preprocessing(loader: ISLESDatasetLoader, patient_ids: List[str]) -> Dict:
+    """
+    Applique preprocess_patient() a tous les patients et compte
+    combien ont ete traites avec succes / ignores.
+    """
 
-    OUTPUT_DIR.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     processed = 0
     skipped = 0
@@ -232,15 +252,9 @@ def run_preprocessing( loader: ISLESDatasetLoader, patient_ids: list[str],):
     print("\n========== PREPROCESSING ==========\n")
 
     for i, patient_id in enumerate(patient_ids, start=1):
+        print(f"\n[{i}/{len(patient_ids)}] {patient_id}")
 
-        print(
-            f"\n[{i}/{len(patient_ids)}] {patient_id}"
-        )
-
-        success = preprocess_patient(
-            patient_id,
-            loader,
-        )
+        success = preprocess_patient(patient_id, loader)
 
         if success:
             processed += 1
@@ -248,64 +262,28 @@ def run_preprocessing( loader: ISLESDatasetLoader, patient_ids: list[str],):
             skipped += 1
 
     return {
-
         "total": len(patient_ids),
-
         "processed": processed,
-
         "skipped": skipped,
-
         "output": OUTPUT_DIR,
-
     }
 
 
-# 8. Résumé
-
-def print_summary(summary):
+# ----------------------------------------------------------------------
+# 9. Resume
+# ----------------------------------------------------------------------
+def print_summary(summary: Dict) -> None:
     """
-    Affiche un résumé du prétraitement.
+    Affiche un resume final du pretraitement.
     """
 
     print("\n")
     print("=" * 60)
-    print("PREPROCESSING TERMINÉ")
+    print("PREPROCESSING TERMINE")
     print("=" * 60)
 
     print(f"Patients totaux      : {summary['total']}")
-    print(f"Patients traités     : {summary['processed']}")
-    print(f"Patients ignorés     : {summary['skipped']}")
-
-    print(f"\nDonnées sauvegardées dans :")
-
-    print(summary["output"])
-
-    print("\nStructure obtenue :")
-
+    print(f"Patients traites     : {summary['processed']}")
+    print(f"Patients ignores     : {summary['skipped']}")
+    print(f"\nDonnees sauvegardees dans : {summary['output']}")
     print("=" * 60)
-
-def main():
-
-    dataset_path = "data/ISLES-2022"
-
-    loader = ISLESDatasetLoader(
-        dataset_path
-    )
-
-    loader.validate_dataset_path()
-
-    patient_ids = loader.discover_patients()
-
-    summary = run_preprocessing(
-
-        loader,
-
-        patient_ids,
-
-    )
-
-    print_summary(summary)
-
-
-if __name__ == "__main__":
-    main()
