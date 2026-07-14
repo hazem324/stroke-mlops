@@ -236,9 +236,9 @@ src/split_dataset.py
 Cloner le dépôt :
 
 ```bash
-git clone <url_du_repository>
+git clone https://github.com/hazem324/stroke-mlops.git
 
-cd Stroke-MLOps
+cd stroke-mlops
 ```
 
 Créer un environnement virtuel :
@@ -248,14 +248,6 @@ python3.10 -m venv .venv
 ```
 
 L'activer :
-
-### Linux / macOS
-
-```bash
-source .venv/bin/activate
-```
-
-### Windows
 
 ```bash
 .venv\Scripts\activate
@@ -285,14 +277,14 @@ python src/main.py
 
 Les principales bibliothèques utilisées sont :
 
-- nibabel
-- SimpleITK
-- NumPy
-- Pandas
-- Matplotlib
-- scikit-image
-- scikit-learn
-- tqdm
+- **nibabel** : lecture et manipulation des images médicales au format NIfTI (.nii/.nii.gz).
+- **SimpleITK** : prétraitement des images médicales (rééchantillonnage, interpolation, etc.).
+- **NumPy** : manipulation et calcul sur les tableaux numériques multidimensionnels.
+- **Pandas** : gestion et analyse des données tabulaires (CSV, DataFrame).
+- **Matplotlib** : visualisation des images IRM et génération de graphiques.
+- **scikit-image** : traitement d'images (filtrage, redimensionnement, transformations).
+- **scikit-learn** : division du jeu de données et outils d'apprentissage automatique.
+- **tqdm** : affichage de barres de progression lors de l'exécution des scripts.
 
 La liste complète est disponible dans le fichier **requirements.txt**.
 
