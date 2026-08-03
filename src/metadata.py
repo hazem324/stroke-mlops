@@ -1,17 +1,3 @@
-"""
-metadata.py
-
-Role : extraire, afficher et agreger les metadonnees des fichiers NIfTI
-de chaque patient (shape, spacing, dtype, affine), puis produire un
-rapport CSV global du dataset.
-
-Depend de load_data.py pour :
-- la construction des chemins de fichiers
-- la validation d'existence des fichiers
-
-Pas de bloc main() ici : ce module est appele depuis main.py.
-"""
-
 from pathlib import Path
 from typing import Dict, List
 import pandas as pd
@@ -21,10 +7,6 @@ from load_data import ISLESDatasetLoader
 
 # 1. Extraction des metadonnees d'un patient
 def extract_metadata(paths: Dict) -> Dict:
-    """
-    Extrait les metadonnees (shape, dtype, spacing, affine) de chaque
-    fichier NIfTI d'un patient.
-    """
 
     metadata = {}
 
@@ -47,9 +29,6 @@ def extract_metadata(paths: Dict) -> Dict:
 
 # 2. Affichage des metadonnees d'un patient
 def print_metadata(metadata: Dict) -> None:
-    """
-    Affiche dans la console les metadonnees d'un patient.
-    """
 
     print("\n========== METADATA ==========\n")
 
@@ -64,10 +43,6 @@ def print_metadata(metadata: Dict) -> None:
 def build_metadata_dataframe(
     loader: ISLESDatasetLoader, patient_ids: List[str]
 ) -> pd.DataFrame:
-    """
-    Parcourt tous les patients, extrait leurs metadonnees et construit
-    un DataFrame plat (une ligne = un patient + une modalite).
-    """
 
     rows = []
 
@@ -102,10 +77,6 @@ def build_metadata_dataframe(
 
 # 4. Resume statistique du dataset
 def summarize_dataset(df: pd.DataFrame) -> None:
-    """
-    Affiche un resume synthetique : shapes/spacing les plus frequents
-    par modalite, dtypes rencontres.
-    """
 
     print("\n========== RESUME DU DATASET ==========\n")
     print(f"Nombre de lignes (patient x modalite) : {len(df)}")
@@ -127,9 +98,6 @@ def summarize_dataset(df: pd.DataFrame) -> None:
 
 # 5. Distribution des shapes par modalite
 def show_shape_distribution(df: pd.DataFrame) -> None:
-    """
-    Affiche la distribution des shapes pour chaque modalite.
-    """
 
     print("\n========== DISTRIBUTION DES SHAPES ==========\n")
 
@@ -146,9 +114,6 @@ def show_shape_distribution(df: pd.DataFrame) -> None:
 
 # 6. Export des rapports CSV
 def export_reports(df: pd.DataFrame, output_dir: str) -> None:
-    """
-    Sauvegarde le detail complet en CSV.
-    """
 
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
