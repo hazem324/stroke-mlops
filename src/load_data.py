@@ -1,14 +1,3 @@
-"""
-load_data.py
-
-Role : validation de la structure du dataset, decouverte des patients,
-construction des chemins de fichiers, et verification que les fichiers
-NIfTI existent et sont lisibles.
-
-Ce module ne fait PAS d'extraction de metadonnees (voir metadata.py)
-ni de pretraitement (voir preprocessing.py).
-"""
-
 from pathlib import Path
 from dataclasses import dataclass
 from typing import Optional, List, Dict
