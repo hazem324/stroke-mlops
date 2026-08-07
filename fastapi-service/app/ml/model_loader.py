@@ -7,10 +7,9 @@ from app.core.config import get_settings
 from app.ml.model import create_model
 
 
+# Load the trained 3D U-Net model for inference.
+
 def load_model() -> nn.Module:
-    """
-    Load the trained 3D U-Net model for inference.
-    """
 
     settings = get_settings()
 
@@ -19,6 +18,9 @@ def load_model() -> nn.Module:
 
     # Check that the model file exists
     model_path = Path(settings.model_path)
+
+    print(f"model path =======================\n{model_path}")
+
 
     if not model_path.exists():
         raise FileNotFoundError(
