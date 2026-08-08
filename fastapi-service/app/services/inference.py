@@ -208,7 +208,7 @@ def save_prediction_as_nifti( prediction: np.ndarray, reference_image: sitk.Imag
 
 # Complete inference
 
-def predict( file_path: Path, output_path: Path, ) -> dict:
+def predict( file_path: Path, output_path: Path, overlay_path: Path, ) -> dict:
     
     # Load cached model
 
@@ -298,6 +298,7 @@ def predict( file_path: Path, output_path: Path, ) -> dict:
         restore_mask_to_original(prediction, original_shape, crop_slices, )
     )
 
+    save_overlay_as_nifti(     original_volume,     prediction_original,     image,     overlay_path, ) 
     # Save NIfTI
 
     save_prediction_as_nifti( prediction_original, image,output_path, )
@@ -307,3 +308,47 @@ def predict( file_path: Path, output_path: Path, ) -> dict:
         "original_image": image,
         "original_volume": original_volume,
     }
+
+
+def save_overlay_as_nifti( dwi_volume: np.ndarray, prediction: np.ndarray, reference_image: sitk.Image, output_path: Path, ) -> None:
+
+    # Copy original DWI
+    overlay = dwi_volume.copy().astype(np.float32)
+
+    # Normalize DWI intensity for visualization
+    non_zero = overlay[overlay > 0]
+
+    if non_zero.size > 0:
+        min_value = non_zero.min()
+        max_value = non_zero.max()
+
+        if max_value > min_value:
+            overlay = (
+                (overlay - min_value)
+                / (max_value - min_value)
+            )
+
+    # Highlight predicted lesion
+    lesion = prediction > 0
+
+    if lesion.any():
+        overlay[lesion] = 1.5
+
+    # NumPy (x,y,z) -> SimpleITK (z,y,x)
+    overlay_sitk = sitk.GetImageFromArray(
+        np.transpose(
+            overlay,
+            (2, 1, 0),
+        ).astype(np.float32)
+    )
+
+    # Keep original DWI geometry
+    overlay_sitk.CopyInformation(
+        reference_image
+    )
+
+    # Save
+    sitk.WriteImage(
+        overlay_sitk,
+        str(output_path),
+    )

@@ -12,19 +12,10 @@ from fastapi import (
     status,
 )
 
-from app.schemas.prediction import (
-    PredictionResponse,
-)
-
+from app.schemas.prediction import PredictionResponse
 from app.services.inference import predict
-
-from app.services.lesion_analysis import (
-    analyze_lesion,
-)
-
-from app.services.visualization import (
-    create_prediction_preview,
-)
+from app.services.lesion_analysis import analyze_lesion
+from app.services.visualization import create_prediction_preview
 
 
 router = APIRouter(
@@ -60,87 +51,86 @@ async def predict_stroke(
     # ======================================================
 
     if not file.filename:
-
         raise HTTPException(
             status_code=400,
             detail="Filename is required.",
         )
 
-    if not file.filename.lower().endswith(
-        ".nii.gz"
-    ):
-
+    if not file.filename.lower().endswith(".nii.gz"):
         raise HTTPException(
             status_code=400,
-            detail=(
-                "Only .nii.gz NIfTI files "
-                "are supported."
-            ),
+            detail="Only .nii.gz NIfTI files are supported.",
         )
 
+    # ======================================================
     # Temporary uploaded file
+    # ======================================================
 
     with tempfile.TemporaryDirectory() as temp_dir:
 
-        temp_path = (
-            Path(temp_dir)
-            / file.filename
-        )
+        temp_path = Path(temp_dir) / file.filename
 
         try:
 
-            with open(
-                temp_path,
-                "wb",
-            ) as buffer:
+            # ==================================================
+            # Save uploaded file
+            # ==================================================
 
+            with open(temp_path, "wb") as buffer:
                 shutil.copyfileobj(
                     file.file,
                     buffer,
                 )
 
-            # Unique output names
+            # ==================================================
+            # Create unique output names
+            # ==================================================
 
-            prediction_id = (
-                uuid.uuid4().hex
-            )
+            prediction_id = uuid.uuid4().hex
 
             prediction_filename = (
                 f"prediction_{prediction_id}.nii.gz"
+            )
+
+            overlay_filename = (
+                f"prediction_overlay_{prediction_id}.nii.gz"
             )
 
             preview_filename = (
                 f"prediction_{prediction_id}.png"
             )
 
+            # ==================================================
+            # Create output paths
+            # ==================================================
+
             prediction_path = (
-                OUTPUT_DIR
-                / prediction_filename
+                OUTPUT_DIR / prediction_filename
+            )
+
+            overlay_path = (
+                OUTPUT_DIR / overlay_filename
             )
 
             preview_path = (
-                OUTPUT_DIR
-                / preview_filename
+                OUTPUT_DIR / preview_filename
             )
 
+            # ==================================================
             # AI inference
+            # ==================================================
 
             result = predict(
                 temp_path,
                 prediction_path,
+                overlay_path,
             )
 
-            prediction = result[
-                "prediction"
-            ]
+            prediction = result["prediction"]
 
-            original_volume = result[
-                "original_volume"
-            ]
+            original_volume = result["original_volume"]
 
-            original_image = result[
-                "original_image"
-            ]
+            original_image = result["original_image"]
 
             # ==================================================
             # Lesion analysis
@@ -152,15 +142,13 @@ async def predict_stroke(
             )
 
             # ==================================================
-            # Visualization
+            # PNG visualization
             # ==================================================
 
-            preview_slice = (
-                create_prediction_preview(
-                    original_volume,
-                    prediction,
-                    preview_path,
-                )
+            preview_slice = create_prediction_preview(
+                original_volume,
+                prediction,
+                preview_path,
             )
 
             # ==================================================
@@ -173,23 +161,25 @@ async def predict_stroke(
             )
 
             # ==================================================
-            # Response
+            # API response
             # ==================================================
 
             return PredictionResponse(
                 status="success",
                 filename=file.filename,
-                prediction_file=(
-                    prediction_filename
-                ),
-                preview_file=(
-                    preview_filename
-                ),
+                overlay_file=overlay_filename,
+                prediction_file=prediction_filename,
+
+                preview_file=preview_filename,
+
                 prediction_shape=list(
                     prediction.shape
                 ),
+
                 preview_slice=preview_slice,
+
                 lesion=lesion,
+
                 execution_time_seconds=round(
                     execution_time,
                     3,
@@ -203,7 +193,5 @@ async def predict_stroke(
 
             raise HTTPException(
                 status_code=500,
-                detail=(
-                    f"Inference failed: {str(exc)}"
-                ),
+                detail=f"Inference failed: {str(exc)}",
             ) from exc

@@ -86,3 +86,9 @@ class PredictionResponse(BaseModel):
         ...,
         example=2.31,
     )
+
+    overlay_file: str = Field(
+        ...,
+        example="prediction_overlay_123456.nii.gz",
+        description="DWI volume with predicted lesion overlay",
+    )
