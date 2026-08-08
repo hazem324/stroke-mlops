@@ -4,7 +4,7 @@ import numpy as np
 import SimpleITK as sitk
 import torch
 
-from app.ml.model_loader import load_model
+from app.ml.model_loader import get_model
 
 
 TARGET_SHAPE = (128, 128, 64)
@@ -125,9 +125,7 @@ def predict(file_path: Path) -> np.ndarray:
     Complete inference pipeline.
     """
 
-    model = load_model()
-
-    model.eval()
+    model = get_model()
 
     image = load_dwi_image(file_path)
 
@@ -142,9 +140,8 @@ def predict(file_path: Path) -> np.ndarray:
     with torch.no_grad():
 
         prediction = model(tensor)
-
         prediction = torch.sigmoid(prediction)
-
+        prediction = (prediction > 0.5).to(torch.uint8)
         prediction = prediction.squeeze()
 
     return prediction.cpu().numpy()
