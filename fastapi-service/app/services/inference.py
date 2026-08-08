@@ -10,26 +10,16 @@ from app.ml.model_loader import get_model
 TARGET_SHAPE = (128, 128, 64)
 
 
-# ==========================================================
 # Read MRI
-# ==========================================================
 
 def load_dwi_image(file_path: Path) -> sitk.Image:
-    """
-    Load a DWI MRI from a NIfTI file.
-    """
 
     return sitk.ReadImage(str(file_path))
 
 
-# ==========================================================
 # Convert SimpleITK -> NumPy
-# ==========================================================
 
 def image_to_numpy(image: sitk.Image) -> np.ndarray:
-    """
-    Convert a SimpleITK image to a NumPy array.
-    """
 
     volume = sitk.GetArrayFromImage(image)
 
@@ -40,15 +30,9 @@ def image_to_numpy(image: sitk.Image) -> np.ndarray:
 
     return volume.astype(np.float32)
 
-
-# ==========================================================
 # Normalize
-# ==========================================================
 
 def normalize_volume(volume: np.ndarray) -> np.ndarray:
-    """
-    Apply Z-score normalization.
-    """
 
     foreground = volume > 0
 
@@ -58,7 +42,6 @@ def normalize_volume(volume: np.ndarray) -> np.ndarray:
         return volume
 
     mean = non_zero.mean()
-
     std = non_zero.std()
 
     normalized = np.zeros_like(volume)
@@ -70,9 +53,7 @@ def normalize_volume(volume: np.ndarray) -> np.ndarray:
     return normalized
 
 
-# ==========================================================
 # Resize
-# ==========================================================
 
 def resize_volume(volume: np.ndarray) -> np.ndarray:
 
@@ -92,56 +73,73 @@ def resize_volume(volume: np.ndarray) -> np.ndarray:
     return resized.astype(np.float32)
 
 
-# ==========================================================
 # NumPy -> Tensor
-# ==========================================================
 
 def numpy_to_tensor(volume: np.ndarray) -> torch.Tensor:
-    """
-    Convert NumPy volume to PyTorch tensor.
 
-    Output shape:
-
-    (1,1,H,W,D)
-    """
-
-    tensor = torch.from_numpy(volume)
-
-    tensor = tensor.float()
+    tensor = torch.from_numpy(volume).float()
 
     tensor = tensor.unsqueeze(0)
-
     tensor = tensor.unsqueeze(0)
 
     return tensor
 
 
-# ==========================================================
+# Save segmentation as NIfTI
+
+def save_prediction_as_nifti( prediction: np.ndarray, output_path: Path,) -> None:
+
+    prediction_image = sitk.GetImageFromArray(
+        prediction.astype(np.uint8)
+    )
+
+    sitk.WriteImage(
+        prediction_image,
+        str(output_path),
+    )
+
+
 # Prediction
-# ==========================================================
 
-def predict(file_path: Path) -> np.ndarray:
-    """
-    Complete inference pipeline.
-    """
+def predict( file_path: Path, output_path: Path, ) -> np.ndarray:
 
+
+    # Get cached model
     model = get_model()
 
+    # Read MRI
     image = load_dwi_image(file_path)
 
+    # Convert to NumPy
     volume = image_to_numpy(image)
 
+    # Normalize
     volume = normalize_volume(volume)
 
+    # Resize
     volume = resize_volume(volume)
 
+    # NumPy -> Tensor
     tensor = numpy_to_tensor(volume)
 
+    # Model inference
     with torch.no_grad():
 
         prediction = model(tensor)
+
+        # Logits -> probabilities
         prediction = torch.sigmoid(prediction)
-        prediction = (prediction > 0.5).to(torch.uint8)
+
+        # Probability -> binary mask
+        prediction = ( prediction > 0.5).to(torch.uint8)
+
+        # Remove batch/channel dimensions
         prediction = prediction.squeeze()
 
-    return prediction.cpu().numpy()
+    # Tensor -> NumPy
+    prediction = prediction.cpu().numpy()
+
+    # Save NIfTI
+    save_prediction_as_nifti(prediction, output_path,)
+
+    return prediction

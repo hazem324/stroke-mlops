@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class PredictionResponse(BaseModel):
+
     status: str = Field(
         ...,
         example="success",
@@ -11,11 +12,17 @@ class PredictionResponse(BaseModel):
     filename: str = Field(
         ...,
         example="patient001_dwi.nii.gz",
-        description="Uploaded MRI filename",
+        description="Uploaded DWI MRI filename",
+    )
+
+    prediction_file: str = Field(
+        ...,
+        example="prediction_001.nii.gz",
+        description="Generated segmentation mask",
     )
 
     prediction_shape: list[int] = Field(
         ...,
         example=[128, 128, 64],
-        description="Shape of the predicted segmentation",
+        description="Shape of the segmentation mask",
     )

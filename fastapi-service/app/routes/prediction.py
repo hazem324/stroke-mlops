@@ -1,9 +1,15 @@
 from pathlib import Path
 import shutil
 import tempfile
-import traceback
+import uuid
 
-from fastapi import APIRouter, File, HTTPException, UploadFile, status
+from fastapi import (
+    APIRouter,
+    File,
+    HTTPException,
+    UploadFile,
+    status,
+)
 
 from app.schemas.prediction import PredictionResponse
 from app.services.inference import predict
@@ -15,15 +21,22 @@ router = APIRouter(
 )
 
 
+OUTPUT_DIR = Path("outputs")
+OUTPUT_DIR.mkdir(
+    parents=True,
+    exist_ok=True,
+)
+
+
 @router.post(
     "/",
     response_model=PredictionResponse,
     status_code=status.HTTP_200_OK,
     summary="Predict Stroke Lesion",
-    description="""
-Upload a DWI MRI (.nii.gz) and return the predicted
-ischemic stroke lesion segmentation.
-""",
+    description=(
+        "Upload a DWI MRI (.nii.gz) and "
+        "generate a stroke lesion segmentation."
+    ),
 )
 async def predict_stroke(
     file: UploadFile = File(
@@ -31,13 +44,10 @@ async def predict_stroke(
         description="DWI MRI (.nii.gz)",
     )
 ):
-    """
-    Predict ischemic stroke lesion from a DWI MRI.
-    """
 
-    # ---------------------------------------------------------
-    # Validate uploaded file
-    # ---------------------------------------------------------
+    # ======================================================
+    # Validate file extension
+    # ======================================================
 
     if not file.filename.endswith(".nii.gz"):
 
@@ -46,30 +56,64 @@ async def predict_stroke(
             detail="Only .nii.gz files are supported.",
         )
 
-    # ---------------------------------------------------------
-    # Save temporary file
-    # ---------------------------------------------------------
+    # ======================================================
+    # Save uploaded file temporarily
+    # ======================================================
 
     with tempfile.TemporaryDirectory() as temp_dir:
 
-        temp_path = Path(temp_dir) / file.filename
+        temp_path = (
+            Path(temp_dir) / file.filename
+        )
 
         with open(temp_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
+
+            shutil.copyfileobj(
+                file.file,
+                buffer,
+            )
 
         try:
 
-            prediction = predict(temp_path)
+            # ==================================================
+            # Create unique prediction filename
+            # ==================================================
+
+            prediction_filename = (
+                f"prediction_{uuid.uuid4().hex}.nii.gz"
+            )
+
+            prediction_path = (
+                OUTPUT_DIR / prediction_filename
+            )
+
+            # ==================================================
+            # Run inference
+            # ==================================================
+
+            prediction = predict(
+                temp_path,
+                prediction_path,
+            )
+
+            # ==================================================
+            # Return metadata
+            # ==================================================
 
             return PredictionResponse(
                 status="success",
                 filename=file.filename,
-                prediction_shape=list(prediction.shape),
+                prediction_file=prediction_filename,
+                prediction_shape=list(
+                    prediction.shape
+                ),
             )
 
         except Exception as e:
-            traceback.print_exc()
+
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                status_code=(
+                    status.HTTP_500_INTERNAL_SERVER_ERROR
+                ),
                 detail=str(e),
             )
