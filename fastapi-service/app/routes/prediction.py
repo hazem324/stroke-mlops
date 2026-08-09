@@ -46,9 +46,7 @@ async def predict_stroke(
 
     start_time = time.perf_counter()
 
-    # ======================================================
     # Validate filename
-    # ======================================================
 
     if not file.filename:
         raise HTTPException(
@@ -62,9 +60,7 @@ async def predict_stroke(
             detail="Only .nii.gz NIfTI files are supported.",
         )
 
-    # ======================================================
     # Temporary uploaded file
-    # ======================================================
 
     with tempfile.TemporaryDirectory() as temp_dir:
 
@@ -72,20 +68,14 @@ async def predict_stroke(
 
         try:
 
-            # ==================================================
             # Save uploaded file
-            # ==================================================
 
             with open(temp_path, "wb") as buffer:
                 shutil.copyfileobj(
                     file.file,
                     buffer,
                 )
-
-            # ==================================================
             # Create unique output names
-            # ==================================================
-
             prediction_id = uuid.uuid4().hex
 
             prediction_filename = (
@@ -100,9 +90,7 @@ async def predict_stroke(
                 f"prediction_{prediction_id}.png"
             )
 
-            # ==================================================
             # Create output paths
-            # ==================================================
 
             prediction_path = (
                 OUTPUT_DIR / prediction_filename
@@ -116,9 +104,7 @@ async def predict_stroke(
                 OUTPUT_DIR / preview_filename
             )
 
-            # ==================================================
             # AI inference
-            # ==================================================
 
             result = predict(
                 temp_path,
@@ -132,18 +118,14 @@ async def predict_stroke(
 
             original_image = result["original_image"]
 
-            # ==================================================
             # Lesion analysis
-            # ==================================================
 
             lesion = analyze_lesion(
                 prediction,
                 original_image,
             )
 
-            # ==================================================
             # PNG visualization
-            # ==================================================
 
             preview_slice = create_prediction_preview(
                 original_volume,
@@ -151,18 +133,14 @@ async def predict_stroke(
                 preview_path,
             )
 
-            # ==================================================
             # Execution time
-            # ==================================================
 
             execution_time = (
                 time.perf_counter()
                 - start_time
             )
 
-            # ==================================================
             # API response
-            # ==================================================
 
             return PredictionResponse(
                 status="success",
