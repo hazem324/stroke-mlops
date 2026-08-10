@@ -87,9 +87,7 @@ def create_prediction_preview( dwi: np.ndarray, mask: np.ndarray, output_path: P
         figsize=(10, 5),
     )
 
-    # ------------------------------------------------------
     # DWI
-    # ------------------------------------------------------
 
     axes[0].imshow(
         dwi_display.T,
@@ -104,9 +102,7 @@ def create_prediction_preview( dwi: np.ndarray, mask: np.ndarray, output_path: P
 
     axes[0].axis("off")
 
-    # ------------------------------------------------------
     # Prediction
-    # ------------------------------------------------------
 
     axes[1].imshow(
         dwi_display.T,

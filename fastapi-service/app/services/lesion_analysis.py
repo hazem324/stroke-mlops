@@ -5,7 +5,6 @@ import SimpleITK as sitk
 
 
 #     Analyze the predicted stroke lesion.
-
 def analyze_lesion( mask: np.ndarray, image: sitk.Image, ) -> Dict[str, Any]:
 
     lesion_voxels = np.argwhere(

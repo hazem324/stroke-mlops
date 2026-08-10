@@ -1,6 +1,6 @@
 from monai.networks.nets import UNet
 
-# reate the 3D U-Net architecture used for DWI stroke segmentation.
+# create the 3D U-Net architecture used for DWI stroke segmentation.
 # The architecture must be identical to the one used during training.
 def create_model() -> UNet:
 

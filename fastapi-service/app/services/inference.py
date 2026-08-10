@@ -14,12 +14,8 @@ CROP_MARGIN = 5
 THRESHOLD = 0.5
 
 
-# Read DWI
-
+# Read the original DWI NIfTI image.
 def load_dwi_image(file_path: Path) -> sitk.Image:
-    """
-    Read the original DWI NIfTI image.
-    """
 
     return sitk.ReadImage(str(file_path))
 
@@ -181,13 +177,8 @@ def numpy_to_tensor( volume: np.ndarray, ) -> torch.Tensor:
     return tensor
 
 
-# Save NIfTI
-
+# Save prediction as NIfTI using the original DWI geometry.
 def save_prediction_as_nifti( prediction: np.ndarray, reference_image: sitk.Image, output_path: Path, ) -> None:
-    """
-    Save prediction as NIfTI using the original DWI
-    geometry.
-    """
 
     prediction_sitk = sitk.GetImageFromArray(
         np.transpose(
@@ -207,7 +198,6 @@ def save_prediction_as_nifti( prediction: np.ndarray, reference_image: sitk.Imag
 
 
 # Complete inference
-
 def predict( file_path: Path, output_path: Path, overlay_path: Path, ) -> dict:
     
     # Load cached model

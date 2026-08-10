@@ -20,5 +20,5 @@ app.include_router(health_router)
 
 app.include_router(prediction_router)
 
-app.include_router(download_router)
+# app.include_router(download_router)
 
