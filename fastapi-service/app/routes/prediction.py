@@ -4,13 +4,7 @@ import tempfile
 import time
 import uuid
 
-from fastapi import (
-    APIRouter,
-    File,
-    HTTPException,
-    UploadFile,
-    status,
-)
+from fastapi import ( APIRouter, File, HTTPException, UploadFile, status,)
 
 from app.schemas.prediction import PredictionResponse
 from app.services.inference import predict
