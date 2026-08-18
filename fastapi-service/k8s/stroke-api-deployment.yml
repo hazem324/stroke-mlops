@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stroke-api-deployment
+  namespace: stroke-ml
+  labels:
+    app: stroke-api
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: stroke-api
+
+  template:
+    metadata:
+      labels:
+        app: stroke-api
+
+    spec:
+      containers:
+        - name: stroke-api-container
+          image: hazem231/stroke-fastapi:1.1
+
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+
+          envFrom:
+            - configMapRef:
+                name: stroke-api-config
