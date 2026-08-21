@@ -8,10 +8,13 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
+import tn.esprit.test.stroke_backend.dto.auth.LoginResponse;
+import tn.esprit.test.stroke_backend.dto.auth.LoginRequest;
 import tn.esprit.test.stroke_backend.dto.auth.RegisterRequest;
 import tn.esprit.test.stroke_backend.entities.User;
+import tn.esprit.test.stroke_backend.exceptions.AccountDisabledException;
 import tn.esprit.test.stroke_backend.exceptions.EmailAlreadyExistsException;
+import tn.esprit.test.stroke_backend.exceptions.InvalidCredentialsException;
 import tn.esprit.test.stroke_backend.repositories.UserRepository;
 import tn.esprit.test.stroke_backend.services.servicesInterface.IAuthService;
 
@@ -21,6 +24,7 @@ public class AuthService  implements IAuthService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @Override
     public User register(RegisterRequest request) {
@@ -57,4 +61,42 @@ public class AuthService  implements IAuthService{
 
         return userRepository.save(user);
     }
+
+    @Override
+public LoginResponse login(LoginRequest request) {
+
+    String email = request.getEmail()
+            .trim()
+            .toLowerCase();
+
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() ->
+                    new InvalidCredentialsException(
+                            "Email ou mot de passe incorrect"
+                    )
+            );
+
+    if (!user.isEnabled()) {
+        throw new AccountDisabledException(
+                "Votre compte est désactivé"
+        );
+    }
+
+    if (!passwordEncoder.matches(
+            request.getPassword(),
+            user.getPassword())) {
+
+        throw new InvalidCredentialsException(
+                "Email ou mot de passe incorrect"
+        );
+    }
+
+    String token = jwtService.generateToken(user);
+
+    return new LoginResponse(
+            "Connexion réussie",
+            token, 
+            3600
+    );
+}
 }

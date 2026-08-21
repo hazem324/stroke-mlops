@@ -1,14 +1,24 @@
 package tn.esprit.test.stroke_backend.config;
 
+import java.nio.charset.StandardCharsets;
+
+import javax.crypto.SecretKey;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.beans.factory.annotation.Value;
+
+import io.jsonwebtoken.security.Keys;
 
 @Configuration
 @EnableWebSecurity
@@ -20,49 +30,81 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+public SecurityFilterChain securityFilterChain(
+        HttpSecurity http) throws Exception {
 
-        http
-            .cors(cors -> {})
-            .csrf(csrf -> csrf.disable())
+    http
+        .cors(cors -> {})
+        .csrf(csrf -> csrf.disable())
 
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(
-                    SessionCreationPolicy.STATELESS
-                )
-            )
+        .authorizeHttpRequests(auth -> auth
 
-            .authorizeHttpRequests(auth -> auth
+            // CORS
+            .requestMatchers(
+                HttpMethod.OPTIONS,
+                "/**"
+            ).permitAll()
 
-                // CORS preflight
-                .requestMatchers(HttpMethod.OPTIONS, "/**")
-                .permitAll()
+            .requestMatchers(
+                "/api/auth/**"
+            ).permitAll()
 
-                // Authentication
-                .requestMatchers("/api/auth/**")
-                .permitAll()
+            .requestMatchers(
+                "/swagger-ui/**",
+                "/swagger-ui.html",
+                "/v3/api-docs/**"
+            ).permitAll()
 
-                // Swagger
-                .requestMatchers(
-                    "/stroke_ml/**",
-                    "/swagger-ui/**",
-                    "/swagger-ui.html",
-                    "/v3/api-docs/**"
-                )
-                .permitAll()
+            // EVERYTHING ELSE
+            .anyRequest()
+            .authenticated()
+        )
 
-                // Pour le moment
-                .anyRequest()
-                .permitAll()
-            )
+        .oauth2ResourceServer(oauth2 ->
+    oauth2.jwt(jwt ->
+        jwt.jwtAuthenticationConverter(
+            jwtAuthenticationConverter()
+        )
+    )
+);
 
-            // Pas de formulaire "Please sign in"
-            .formLogin(form -> form.disable())
+    return http.build();
+}
 
-            // Pas de Basic Auth
-            .httpBasic(basic -> basic.disable());
+@Bean
+public JwtAuthenticationConverter jwtAuthenticationConverter() {
 
-        return http.build();
-    }
+    JwtAuthenticationConverter converter =
+            new JwtAuthenticationConverter();
+
+    converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+
+        String role = jwt.getClaimAsString("role");
+
+        if (role == null || role.isBlank()) {
+            return java.util.List.of();
+        }
+
+        return java.util.List.of(
+                new SimpleGrantedAuthority("ROLE_" + role)
+        );
+    });
+
+    return converter;
+}
+
+
+@Bean
+public JwtDecoder jwtDecoder(
+        @Value("${jwt.secret}") String secret) {
+
+    SecretKey key = Keys.hmacShaKeyFor(
+            secret.getBytes(StandardCharsets.UTF_8)
+    );
+
+    return NimbusJwtDecoder
+            .withSecretKey(key)
+            .build();
+}
+
 }
