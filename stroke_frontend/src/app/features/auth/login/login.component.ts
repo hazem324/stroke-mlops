@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ export class LoginComponent {
   authenticationError = false;
   showPassword = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private navigationService: NavigationService) {
     this.loginForm = this.fb.group({
       email: [
         '',
@@ -85,4 +86,9 @@ export class LoginComponent {
       (control.touched || this.submitted)
     );
   }
+
+  /* navigation */ 
+  goToSignUp () :void {
+    this.navigationService.goToRegister
+  } 
 }

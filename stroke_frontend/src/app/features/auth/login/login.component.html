@@ -311,29 +311,41 @@
 
 
         <!-- Remember / Forgot -->
-        <div class="row-between">
+       <!-- Remember me -->
+<div class="row-between">
 
-          <label class="checkbox-row">
+  <label class="checkbox-row">
 
-            <input
-              type="checkbox"
-              formControlName="rememberMe">
+    <input
+      type="checkbox"
+      formControlName="rememberMe">
 
-            Rester connecté
+    <span>
+      Rester connecté
+    </span>
 
-          </label>
+  </label>
+
+</div>
 
 
-          <a
-            class="forgot-link"
-            href="#">
+<!-- Register link -->
+<div class="form-foot">
 
-            Mot de passe oublié ?
+  <span>
+    Vous n'avez pas encore de compte ?
+  </span>
 
-          </a>
+  <button
+    type="button"
+    class="link-button"
+    (click)="goToSignUp()">
 
-        </div>
+    Créer un compte
 
+  </button>
+
+</div>
 
         <!-- Submit -->
         <button

@@ -1,1 +1,844 @@
-<p>register works!</p>
+<div class="register-shell">
+
+  <!-- ========================================================
+       LEFT : BRAND PANEL
+       ======================================================== -->
+
+  <section class="brand-panel">
+
+    <!-- Decorative droplet -->
+    <svg
+      class="droplet-mark"
+      viewBox="0 0 100 130"
+      fill="#EAF1FC"
+      aria-hidden="true">
+
+      <path
+        d="M50 0 C20 45 5 70 5 92
+           a45 45 0 0 0 90 0
+           C95 70 80 45 50 0 Z">
+      </path>
+
+    </svg>
+
+
+    <!-- Brand -->
+    <div class="brand-top">
+
+      <img
+        src="assets/logo.png"
+        alt="NEUROVIA">
+
+      <div class="name">
+
+        NEUROVIA
+
+        <small>
+          by YEBNI Information et Communication
+        </small>
+
+      </div>
+
+    </div>
+
+
+    <!-- Brand content -->
+    <div class="brand-mid">
+
+      <div class="eyebrow">
+        AI Segmentation System
+      </div>
+
+      <h1>
+        Rejoignez la plateforme clinique de segmentation IRM
+        assistée par IA.
+      </h1>
+
+      <p>
+        Créez votre compte praticien pour importer des IRM DWI,
+        lancer le modèle 3D U-Net, visualiser les segmentations
+        et valider les résultats.
+      </p>
+
+
+      <!-- Checklist -->
+      <div class="brand-checklist">
+
+        <!-- Item 1 -->
+        <div class="item">
+
+          <div class="ico">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2">
+
+              <path d="M4 12l5 5L20 6"></path>
+
+            </svg>
+
+          </div>
+
+          <div class="txt">
+
+            <b>Accès sécurisé</b>
+            — authentification JWT, conforme aux données de santé.
+
+          </div>
+
+        </div>
+
+
+        <!-- Item 2 -->
+        <div class="item">
+
+          <div class="ico">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2">
+
+              <path d="M4 12l5 5L20 6"></path>
+
+            </svg>
+
+          </div>
+
+          <div class="txt">
+
+            <b>Segmentation en quelques secondes</b>
+            — pipeline FastAPI + 3D U-Net.
+
+          </div>
+
+        </div>
+
+
+        <!-- Item 3 -->
+        <div class="item">
+
+          <div class="ico">
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2">
+
+              <path d="M4 12l5 5L20 6"></path>
+
+            </svg>
+
+          </div>
+
+          <div class="txt">
+
+            <b>Validation médicale</b>
+            — acceptez ou corrigez chaque prédiction du modèle.
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Footer -->
+    <div class="brand-foot">
+
+      <span>
+        © 2026 YEBNI Information et Communication
+      </span>
+
+      <span>
+        v1.0 · Stroke-DWI Model
+      </span>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================
+       RIGHT : REGISTER FORM
+       ======================================================== -->
+
+  <section class="form-panel">
+
+    <div class="form-card">
+
+
+      <!-- Mobile brand -->
+      <div class="mobile-brand">
+
+        <img
+          src="assets/logo.png"
+          alt="NEUROVIA">
+
+        <b>
+          NEUROVIA
+        </b>
+
+      </div>
+
+
+      <!-- Header -->
+      <h2>
+        Créer un compte praticien
+      </h2>
+
+      <p class="sub">
+        Renseignez vos informations professionnelles
+        pour accéder à la plateforme.
+      </p>
+
+
+      <!-- Global error -->
+      <div
+        class="banner-error"
+        [class.show]="registrationError">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2">
+
+          <circle
+            cx="12"
+            cy="12"
+            r="9">
+          </circle>
+
+          <path d="M12 8v5"></path>
+
+          <path d="M12 16h.01"></path>
+
+        </svg>
+
+        <span>
+          Veuillez corriger les champs indiqués
+          ci-dessous.
+        </span>
+
+      </div>
+
+
+      <!-- ======================================================
+           FORM
+           ====================================================== -->
+
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="onSubmit()"
+        novalidate>
+
+
+        <!-- ====================================================
+             FIRST NAME / LAST NAME
+             ==================================================== -->
+
+        <div class="form-row-2">
+
+
+          <!-- First name -->
+          <div class="field">
+
+            <label
+              class="field-label"
+              for="firstName">
+
+              Prénom
+
+            </label>
+
+            <input
+              id="firstName"
+              type="text"
+              class="input"
+              formControlName="firstName"
+              placeholder="Amine"
+              autocomplete="given-name"
+              [class.field-error]="isInvalid('firstName')">
+
+
+            <div
+              class="error-text"
+              *ngIf="
+                firstName?.hasError('required') &&
+                (firstName?.touched || submitted)
+              ">
+
+              <span>!</span>
+
+              Le prénom est obligatoire.
+
+            </div>
+
+
+            <div
+              class="error-text"
+              *ngIf="
+                firstName?.hasError('minlength') &&
+                (firstName?.touched || submitted)
+              ">
+
+              <span>!</span>
+
+              Le prénom doit contenir au moins 2 caractères.
+
+            </div>
+
+          </div>
+
+
+          <!-- Last name -->
+          <div class="field">
+
+            <label
+              class="field-label"
+              for="lastName">
+
+              Nom
+
+            </label>
+
+            <input
+              id="lastName"
+              type="text"
+              class="input"
+              formControlName="lastName"
+              placeholder="Rekik"
+              autocomplete="family-name"
+              [class.field-error]="isInvalid('lastName')">
+
+
+            <div
+              class="error-text"
+              *ngIf="
+                lastName?.hasError('required') &&
+                (lastName?.touched || submitted)
+              ">
+
+              <span>!</span>
+
+              Le nom est obligatoire.
+
+            </div>
+
+
+            <div
+              class="error-text"
+              *ngIf="
+                lastName?.hasError('minlength') &&
+                (lastName?.touched || submitted)
+              ">
+
+              <span>!</span>
+
+              Le nom doit contenir au moins 2 caractères.
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ====================================================
+             EMAIL
+             ==================================================== -->
+
+        <div class="field">
+
+          <label
+            class="field-label"
+            for="email">
+
+            Adresse e-mail professionnelle
+
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            class="input"
+            formControlName="email"
+            placeholder="prenom.nom@hopital.tn"
+            autocomplete="email"
+            [class.field-error]="isInvalid('email')">
+
+
+          <div
+            class="error-text"
+            *ngIf="
+              email?.hasError('required') &&
+              (email?.touched || submitted)
+            ">
+
+            <span>!</span>
+
+            L'adresse e-mail est obligatoire.
+
+          </div>
+
+
+          <div
+            class="error-text"
+            *ngIf="
+              email?.hasError('email') &&
+              (email?.touched || submitted)
+            ">
+
+            <span>!</span>
+
+            Veuillez saisir une adresse e-mail professionnelle valide.
+
+          </div>
+
+        </div>
+
+
+        <!-- ====================================================
+             ROLE / INSTITUTION
+             ==================================================== -->
+
+        <div class="form-row-2">
+
+
+          <!-- Role -->
+          <div class="field">
+
+            <label
+              class="field-label"
+              for="role">
+
+              Rôle
+
+            </label>
+
+            <select
+              id="role"
+              class="input"
+              formControlName="role"
+              [class.field-error]="isInvalid('role')">
+
+              <option value="">
+                Sélectionner…
+              </option>
+
+              <option
+                *ngFor="let role of roles"
+                [value]="role">
+
+                {{ role }}
+
+              </option>
+
+            </select>
+
+
+            <div
+              class="error-text"
+              *ngIf="
+                role?.hasError('required') &&
+                (role?.touched || submitted)
+              ">
+
+              <span>!</span>
+
+              Veuillez sélectionner votre rôle.
+
+            </div>
+
+          </div>
+
+
+          <!-- Institution -->
+          <div class="field">
+
+            <label
+              class="field-label"
+              for="institution">
+
+              Établissement
+
+            </label>
+
+            <input
+              id="institution"
+              type="text"
+              class="input"
+              formControlName="institution"
+              placeholder="Hôpital / Clinique"
+              autocomplete="organization">
+
+          </div>
+
+        </div>
+
+
+        <!-- ====================================================
+             PASSWORD
+             ==================================================== -->
+
+        <div class="field">
+
+          <label
+            class="field-label"
+            for="password">
+
+            Mot de passe
+
+          </label>
+
+
+          <div class="password-wrap">
+
+            <input
+              id="password"
+              class="input"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="••••••••"
+              autocomplete="new-password"
+              [class.field-error]="isInvalid('password')"
+              (input)="onPasswordChange()">
+
+
+            <!-- Toggle password -->
+            <button
+              type="button"
+              (click)="togglePassword()"
+              [attr.aria-label]="
+                showPassword
+                  ? 'Masquer le mot de passe'
+                  : 'Afficher le mot de passe'
+              ">
+
+              <svg
+                *ngIf="!showPassword"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8">
+
+                <path
+                  d="M1 12s4-7 11-7
+                     11 7 11 7
+                     -4 7-11 7
+                     -11-7-11-7Z">
+                </path>
+
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="3">
+                </circle>
+
+              </svg>
+
+
+              <svg
+                *ngIf="showPassword"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8">
+
+                <path d="M3 3l18 18"></path>
+
+                <path
+                  d="M10.6 10.6
+                     a2 2 0 0 0
+                     2.8 2.8">
+                </path>
+
+              </svg>
+
+            </button>
+
+          </div>
+
+
+          <!-- Password validation -->
+          <div
+            class="error-text"
+            *ngIf="
+              password?.hasError('required') &&
+              (password?.touched || submitted)
+            ">
+
+            <span>!</span>
+
+            Le mot de passe est obligatoire.
+
+          </div>
+
+
+          <div
+            class="error-text"
+            *ngIf="
+              password?.hasError('minlength') &&
+              (password?.touched || submitted)
+            ">
+
+            <span>!</span>
+
+            Le mot de passe doit contenir au moins 8 caractères.
+
+          </div>
+
+
+          <!-- Strength meter -->
+          <div class="strength-meter">
+
+            <div
+              class="bar"
+              [class.active]="passwordStrength >= 1"
+              [ngClass]="getPasswordStrengthClass()">
+            </div>
+
+            <div
+              class="bar"
+              [class.active]="passwordStrength >= 2"
+              [ngClass]="getPasswordStrengthClass()">
+            </div>
+
+            <div
+              class="bar"
+              [class.active]="passwordStrength >= 3"
+              [ngClass]="getPasswordStrengthClass()">
+            </div>
+
+            <div
+              class="bar"
+              [class.active]="passwordStrength >= 4"
+              [ngClass]="getPasswordStrengthClass()">
+            </div>
+
+          </div>
+
+
+          <div class="strength-label">
+            {{ getPasswordStrengthLabel() }}
+          </div>
+
+        </div>
+
+
+        <!-- ====================================================
+             CONFIRM PASSWORD
+             ==================================================== -->
+
+        <div class="field">
+
+          <label
+            class="field-label"
+            for="confirmPassword">
+
+            Confirmer le mot de passe
+
+          </label>
+
+
+          <div class="password-wrap">
+
+            <input
+              id="confirmPassword"
+              class="input"
+              [type]="
+                showConfirmPassword
+                  ? 'text'
+                  : 'password'
+              "
+              formControlName="confirmPassword"
+              placeholder="••••••••"
+              autocomplete="new-password"
+              [class.field-error]="
+                isInvalid('confirmPassword') ||
+                isPasswordMismatch()
+              ">
+
+
+            <button
+              type="button"
+              (click)="toggleConfirmPassword()"
+              [attr.aria-label]="
+                showConfirmPassword
+                  ? 'Masquer le mot de passe'
+                  : 'Afficher le mot de passe'
+              ">
+
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8">
+
+                <path
+                  d="M1 12s4-7 11-7
+                     11 7 11 7
+                     -4 7-11 7
+                     -11-7-11-7Z">
+                </path>
+
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="3">
+                </circle>
+
+              </svg>
+
+            </button>
+
+          </div>
+
+
+          <div
+            class="error-text"
+            *ngIf="
+              confirmPassword?.hasError('required') &&
+              (confirmPassword?.touched || submitted)
+            ">
+
+            <span>!</span>
+
+            Veuillez confirmer votre mot de passe.
+
+          </div>
+
+
+          <div
+            class="error-text"
+            *ngIf="isPasswordMismatch()">
+
+            <span>!</span>
+
+            Les mots de passe ne correspondent pas.
+
+          </div>
+
+        </div>
+
+
+        <!-- ====================================================
+             TERMS
+             ==================================================== -->
+
+        <label class="checkbox-row">
+
+          <input
+            type="checkbox"
+            formControlName="terms">
+
+          <span>
+
+            J'accepte les
+
+            <a href="#">
+              conditions d'utilisation
+            </a>
+
+            et la
+
+            <a href="#">
+              politique de confidentialité
+            </a>
+
+            concernant le traitement des données médicales.
+
+          </span>
+
+        </label>
+
+
+        <div
+          class="error-text terms-error"
+          *ngIf="
+            terms?.hasError('required') &&
+            (terms?.touched || submitted)
+          ">
+
+          <span>!</span>
+
+          Vous devez accepter les conditions d'utilisation.
+
+        </div>
+
+
+        <!-- ====================================================
+             SUBMIT
+             ==================================================== -->
+
+        <button
+          type="submit"
+          class="btn btn-primary btn-block">
+
+          Créer mon compte
+
+        </button>
+
+      </form>
+
+
+      <!-- ======================================================
+           SECURITY
+           ====================================================== -->
+
+      <div class="security-note">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8">
+
+          <rect
+            x="4"
+            y="10"
+            width="16"
+            height="10"
+            rx="2">
+          </rect>
+
+          <path
+            d="M8 10V7a4 4 0 0 1 8 0v3">
+          </path>
+
+        </svg>
+
+        Connexion chiffrée · Authentification JWT ·
+        Conforme aux données de santé
+
+      </div>
+
+
+      <!-- Footer -->
+      <div class="form-foot">
+
+        Vous avez déjà un compte ?
+
+        <button
+    type="button"
+    class="link-button"
+    (click)="goToLogin()">
+
+    Se connecter
+
+  </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

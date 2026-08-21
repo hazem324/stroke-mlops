@@ -374,7 +374,7 @@
 }
 
 .checkbox-row {
-  display: flex;
+  display: inline-flex;
 
   align-items: center;
 
@@ -383,16 +383,22 @@
   color: var(--c-ink-soft);
 
   font-size: 12.8px;
+
+  white-space: nowrap;
 }
 
 .checkbox-row input {
   width: 14px;
   height: 14px;
 
+  margin: 0;
+
+  flex-shrink: 0;
+
   accent-color: var(--c-primary-500);
 }
 
-.forgot-link {
+.login-link {
   color: var(--c-primary-600);
 
   font-size: 12.8px;
@@ -440,11 +446,19 @@
    ============================================================ */
 
 .form-foot {
-  margin-top: 26px;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  margin-top: 8px;
+  margin-bottom: 10px;
 
   color: var(--c-ink-faint);
 
-  font-size: 12.5px;
+  font-size: 12.8px;
 
   text-align: center;
 }
@@ -500,4 +514,39 @@
 
     font-size: 16px;
   }
+}
+
+
+.link-button {
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--c-primary-600);
+
+  font-family: var(--f-body);
+
+  font-size: 12.8px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition: color var(--transition-fast);
+}
+
+.link-button:hover {
+  color: var(--c-primary-700);
+
+  text-decoration: underline;
+}
+
+.link-button:focus-visible {
+  outline: 2px solid var(--c-primary-500);
+  outline-offset: 3px;
+
+  border-radius: var(--r-sm);
 }
