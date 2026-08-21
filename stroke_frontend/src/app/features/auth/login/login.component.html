@@ -1,1 +1,391 @@
-<p>login works!</p>
+<div class="login-shell">
+
+  <!-- ==================== LEFT : BRAND PANEL ==================== -->
+  <section class="brand-panel">
+
+    <!-- Decorative droplet -->
+    <svg
+      class="droplet-mark"
+      viewBox="0 0 100 130"
+      fill="#EAF1FC"
+      aria-hidden="true">
+      <path
+        d="M50 0 C20 45 5 70 5 92 a45 45 0 0 0 90 0 C95 70 80 45 50 0 Z">
+      </path>
+    </svg>
+
+    <!-- Brand -->
+    <div class="brand-top">
+
+      <img
+        src="assets/logo.png"
+        alt="NEUROVIA">
+
+      <div class="name">
+        NEUROVIA
+        <small>
+          by YEBNI Information et Communication
+        </small>
+      </div>
+
+    </div>
+
+    <!-- Main presentation -->
+    <div class="brand-mid">
+
+      <div class="eyebrow">
+        AI Segmentation System
+      </div>
+
+      <h1>
+        Détection assistée par IA des lésions ischémiques sur IRM DWI.
+      </h1>
+
+      <p>
+        Une plateforme clinique pour importer une IRM,
+        lancer l'inférence du modèle 3D U-Net,
+        visualiser la segmentation superposée et valider
+        ou corriger chaque résultat avant archivage.
+      </p>
+
+      <!-- Statistics -->
+      <div class="brand-stats">
+
+        <div>
+          <b>124</b>
+          <span>Patients suivis</span>
+        </div>
+
+        <div>
+          <b>86</b>
+          <span>Études IRM</span>
+        </div>
+
+        <div>
+          <b>96.4%</b>
+          <span>Disponibilité modèle</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="brand-foot">
+
+      <span>
+        © 2026 YEBNI Information et Communication
+      </span>
+
+      <span>
+        v1.0 · Stroke-DWI Model
+      </span>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================== RIGHT : LOGIN ==================== -->
+  <section class="form-panel">
+
+    <div class="form-card">
+
+      <!-- Mobile brand -->
+      <div class="mobile-brand">
+
+        <img
+          src="assets/logo.png"
+          alt="NEUROVIA">
+
+        <b>NEUROVIA</b>
+
+      </div>
+
+
+      <!-- Title -->
+      <h2>
+        Connexion praticien
+      </h2>
+
+      <p class="sub">
+        Accédez à votre espace d'analyse d'IRM cérébrales.
+      </p>
+
+
+      <!-- Authentication error -->
+      <div
+        class="banner-error"
+        [class.show]="authenticationError">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true">
+
+          <circle
+            cx="12"
+            cy="12"
+            r="9">
+          </circle>
+
+          <path d="M12 8v5"></path>
+
+          <path d="M12 16h.01"></path>
+
+        </svg>
+
+        <span>
+          Email ou mot de passe incorrect.
+          Vérifiez vos identifiants et réessayez.
+        </span>
+
+      </div>
+
+
+      <!-- ==================== FORM ==================== -->
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="onSubmit()"
+        novalidate>
+
+
+        <!-- Email -->
+        <div class="field">
+
+          <label
+            class="field-label"
+            for="email">
+
+            Adresse e-mail professionnelle
+
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            class="input"
+            formControlName="email"
+            placeholder="prenom.nom@hopital.tn"
+            [class.field-error]="isInvalid('email')"
+            autocomplete="email">
+
+          <!-- Required -->
+          <div
+            class="error-text"
+            *ngIf="email?.hasError('required') &&
+                   (email?.touched || submitted)">
+
+            <span>!</span>
+            L'adresse e-mail est obligatoire.
+
+          </div>
+
+          <!-- Email format -->
+          <div
+            class="error-text"
+            *ngIf="email?.hasError('email') &&
+                   (email?.touched || submitted)">
+
+            <span>!</span>
+            Veuillez saisir une adresse e-mail valide.
+
+          </div>
+
+        </div>
+
+
+        <!-- Password -->
+        <div class="field">
+
+          <label
+            class="field-label"
+            for="password">
+
+            Mot de passe
+
+          </label>
+
+          <div class="password-wrap">
+
+            <input
+              id="password"
+              class="input"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="••••••••"
+              [class.field-error]="isInvalid('password')"
+              autocomplete="current-password">
+
+
+            <!-- Toggle password -->
+            <button
+              type="button"
+              (click)="togglePassword()"
+              [attr.aria-label]="
+                showPassword
+                  ? 'Masquer le mot de passe'
+                  : 'Afficher le mot de passe'
+              ">
+
+              <svg
+                *ngIf="!showPassword"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8">
+
+                <path
+                  d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z">
+                </path>
+
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="3">
+                </circle>
+
+              </svg>
+
+
+              <svg
+                *ngIf="showPassword"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8">
+
+                <path
+                  d="M3 3l18 18">
+                </path>
+
+                <path
+                  d="M10.6 10.6a2 2 0 0 0 2.8 2.8">
+                </path>
+
+                <path
+                  d="M9.9 5.2A10.7 10.7 0 0 1 12 5
+                     c7 0 11 7 11 7
+                     a18.3 18.3 0 0 1-4.2 4.8">
+                </path>
+
+                <path
+                  d="M6.6 6.6A18.2 18.2 0 0 0 1 12
+                     s4 7 11 7
+                     a10.7 10.7 0 0 0 4.1-.8">
+                </path>
+
+              </svg>
+
+            </button>
+
+          </div>
+
+
+          <!-- Password required -->
+          <div
+            class="error-text"
+            *ngIf="password?.hasError('required') &&
+                   (password?.touched || submitted)">
+
+            <span>!</span>
+            Le mot de passe est obligatoire.
+
+          </div>
+
+
+          <!-- Password length -->
+          <div
+            class="error-text"
+            *ngIf="password?.hasError('minlength') &&
+                   (password?.touched || submitted)">
+
+            <span>!</span>
+            Le mot de passe doit contenir au moins 6 caractères.
+
+          </div>
+
+        </div>
+
+
+        <!-- Remember / Forgot -->
+        <div class="row-between">
+
+          <label class="checkbox-row">
+
+            <input
+              type="checkbox"
+              formControlName="rememberMe">
+
+            Rester connecté
+
+          </label>
+
+
+          <a
+            class="forgot-link"
+            href="#">
+
+            Mot de passe oublié ?
+
+          </a>
+
+        </div>
+
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="btn btn-primary btn-block">
+
+          Se connecter
+
+        </button>
+
+      </form>
+
+
+      <!-- Security -->
+      <div class="security-note">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8">
+
+          <rect
+            x="4"
+            y="10"
+            width="16"
+            height="10"
+            rx="2">
+          </rect>
+
+          <path
+            d="M8 10V7a4 4 0 0 1 8 0v3">
+          </path>
+
+        </svg>
+
+        Connexion chiffrée · Authentification JWT ·
+        Conforme aux données de santé
+
+      </div>
+
+
+      <!-- Footer -->
+      <div class="form-foot">
+
+        Besoin d'un accès ?
+        Contactez votre administrateur système.
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

@@ -1,71 +1,549 @@
-/* You can add global styles to this file, and also import other style files */
-/* Global styles & design tokens */
+/* ============================================================
+   STROKE-ML — GLOBAL STYLES & DESIGN SYSTEM
+   ------------------------------------------------------------
+   This file contains:
+   - Global design tokens
+   - Typography
+   - Reset / base styles
+   - Accessibility
+   - Reusable form components
+   - Reusable buttons
+   - Reusable utility classes
+   - Global responsive behavior
+
+   IMPORTANT:
+   Feature-specific styles belong to their component stylesheet.
+   Example:
+   - login.component.scss
+   - register.component.scss
+   - dashboard.component.scss
+
+   Before production deployment:
+   - Review external font/icon dependencies
+   - Review accessibility
+   - Review responsive breakpoints
+   - Review production color contrast
+   - Remove temporary/demo styles
+   ============================================================ */
 
 
-:root{
-  /* ---- Color ---- */
-  --c-primary-900:#0E2A52;
-  --c-primary-700:#154C96;
-  --c-primary-600:#1E63C4;
-  --c-primary-500:#2D74DA;
-  --c-primary-100:#E4EFFC;
-  --c-primary-50: #F2F7FE;
+/* ============================================================
+   1. EXTERNAL FONTS
+   ============================================================ */
 
-  --c-ink:      #10192B;
-  --c-ink-soft: #4B5975;
-  --c-ink-faint:#8994AB;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap');
 
-  --c-line:     #E1E6EF;
-  --c-line-soft:#EEF1F6;
 
-  --c-surface:  #FFFFFF;
-  --c-bg:       #F5F8FC;
-  --c-bg-alt:   #EFF3F9;
+/* ============================================================
+   2. DESIGN TOKENS
+   ------------------------------------------------------------
+   Centralized design variables.
+   Change the visual identity of the entire application here.
+   ============================================================ */
 
-  --c-accent:      #D8394C;
-  --c-accent-100:  #FBE7E9;
-  --c-accent-a20:  rgba(216,57,76,.20);
-  --c-accent-a40:  rgba(216,57,76,.40);
+:root {
+
+  /* ---------- Brand / Primary ---------- */
+
+  --c-primary-900: #0E2A52;
+  --c-primary-700: #154C96;
+  --c-primary-600: #1E63C4;
+  --c-primary-500: #2D74DA;
+  --c-primary-100: #E4EFFC;
+  --c-primary-50:  #F2F7FE;
+
+
+  /* ---------- Text ---------- */
+
+  --c-ink:       #10192B;
+  --c-ink-soft:  #4B5975;
+  --c-ink-faint: #8994AB;
+
+
+  /* ---------- Borders ---------- */
+
+  --c-line:      #E1E6EF;
+  --c-line-soft: #EEF1F6;
+
+
+  /* ---------- Surfaces ---------- */
+
+  --c-surface: #FFFFFF;
+  --c-bg:      #F5F8FC;
+  --c-bg-alt:  #EFF3F9;
+
+
+  /* ---------- Accent / Clinical Alert ---------- */
+
+  --c-accent:     #D8394C;
+  --c-accent-100: #FBE7E9;
+  --c-accent-a20: rgba(216, 57, 76, 0.20);
+  --c-accent-a40: rgba(216, 57, 76, 0.40);
+
+
+  /* ---------- Semantic colors ---------- */
 
   --c-success:     #1E9E6B;
   --c-success-100: #E4F6EE;
+
   --c-warning:     #C97A1F;
   --c-warning-100: #FBF0DE;
 
-  /* ---- Type ---- */
-  --f-display:'Space Grotesk', 'Inter', sans-serif;
-  --f-body:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --f-mono:'IBM Plex Mono', ui-monospace, monospace;
 
-  /* ---- Radius / shadow ---- */
-  --r-sm:8px;
-  --r-md:14px;
-  --r-lg:20px;
-  --shadow-sm: 0 1px 2px rgba(16,25,43,.04), 0 1px 1px rgba(16,25,43,.03);
-  --shadow-md: 0 8px 24px rgba(16,25,43,.08);
-  --shadow-lg: 0 16px 48px rgba(16,25,43,.14);
+  /* ==========================================================
+     Typography
+     ========================================================== */
+
+  --f-display:
+    'Space Grotesk',
+    'Inter',
+    sans-serif;
+
+  --f-body:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
+  --f-mono:
+    'IBM Plex Mono',
+    ui-monospace,
+    monospace;
+
+
+  /* ==========================================================
+     Border Radius
+     ========================================================== */
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+
+
+  /* ==========================================================
+     Shadows
+     ========================================================== */
+
+  --shadow-sm:
+    0 1px 2px rgba(16, 25, 43, 0.04),
+    0 1px 1px rgba(16, 25, 43, 0.03);
+
+  --shadow-md:
+    0 8px 24px rgba(16, 25, 43, 0.08);
+
+  --shadow-lg:
+    0 16px 48px rgba(16, 25, 43, 0.14);
+
+
+  /* ==========================================================
+     Layout
+     ========================================================== */
+
+  --sidebar-width: 248px;
+  --header-height: 68px;
+
+  --content-max-width: 1360px;
+
+
+  /* ==========================================================
+     Transitions
+     ========================================================== */
+
+  --transition-fast:
+    0.15s ease;
+
+  --transition-normal:
+    0.2s ease;
 }
 
-*,*::before,*::after{box-sizing:border-box;}
-html,body{height:100%;margin:0;}
-body{
-  font-family:var(--f-body);
-  color:var(--c-ink);
-  background:var(--c-bg);
-  -webkit-font-smoothing:antialiased;
-  font-size:14.5px;
-  line-height:1.5;
-}
-h1,h2,h3,h4{
-  font-family:var(--f-display);
-  color:var(--c-ink);
-  margin:0 0 4px;
-  letter-spacing:-0.01em;
-}
-a{color:inherit;}
-::selection{background:var(--c-primary-100);}
 
-::-webkit-scrollbar{width:9px;height:9px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:#CBD5E5;border-radius:10px;}
-::-webkit-scrollbar-thumb:hover{background:#AEBBD1;}
+/* ============================================================
+   3. GLOBAL RESET
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--f-body);
+  font-size: 14.5px;
+  line-height: 1.5;
+
+  color: var(--c-ink);
+  background: var(--c-bg);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ============================================================
+   4. TYPOGRAPHY
+   ============================================================ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--f-display);
+  color: var(--c-ink);
+
+  margin: 0 0 4px;
+
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: var(--f-body);
+}
+
+
+/* ============================================================
+   5. ACCESSIBILITY
+   ============================================================ */
+
+::selection {
+  background: var(--c-primary-100);
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-primary-500);
+  outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  border-radius: var(--r-sm);
+}
+
+
+/* ============================================================
+   6. REDUCED MOTION
+   ------------------------------------------------------------
+   Accessibility support for users who prefer less animation.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+
+/* ============================================================
+   7. SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E5;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #AEBBD1;
+}
+
+
+/* ============================================================
+   8. GLOBAL UTILITY CLASSES
+   ============================================================ */
+
+.mono {
+  font-family: var(--f-mono);
+}
+
+.muted {
+  color: var(--c-ink-soft);
+}
+
+.faint {
+  color: var(--c-ink-faint);
+}
+
+
+/* Screen-reader only content */
+.sr-only {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+}
+
+
+/* ============================================================
+   9. REUSABLE BUTTONS
+   ------------------------------------------------------------
+   Shared by Login, Register, Dashboard, etc.
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 10px 18px;
+
+  border: 1px solid transparent;
+  border-radius: 10px;
+
+  font-family: var(--f-body);
+  font-size: 13.4px;
+  font-weight: 600;
+
+  line-height: 1.4;
+
+  cursor: pointer;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    filter var(--transition-fast);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  color: #fff;
+  background: var(--c-primary-500);
+
+  box-shadow:
+    0 6px 16px rgba(45, 116, 218, 0.28);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--c-primary-600);
+}
+
+.btn-secondary {
+  color: var(--c-ink);
+  background: var(--c-surface);
+
+  border-color: var(--c-line);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--c-bg-alt);
+}
+
+.btn-ghost {
+  color: var(--c-primary-600);
+  background: transparent;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--c-primary-50);
+}
+
+.btn-danger {
+  color: var(--c-accent);
+  background: var(--c-surface);
+
+  border-color: #F2C9CE;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--c-accent-100);
+}
+
+.btn-success {
+  color: #fff;
+  background: var(--c-success);
+}
+
+.btn-success:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-sm {
+  padding: 7px 12px;
+
+  font-size: 12.5px;
+
+  border-radius: var(--r-sm);
+}
+
+
+/* ============================================================
+   10. REUSABLE FORM COMPONENTS
+   ------------------------------------------------------------
+   Shared form styles.
+   Used by Login / Register / Patient / Settings / etc.
+   ============================================================ */
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field-label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--c-ink-soft);
+
+  font-size: 12.6px;
+  font-weight: 600;
+}
+
+.input,
+select.input,
+textarea.input {
+  width: 100%;
+
+  padding: 11px 13px;
+
+  border: 1px solid var(--c-line);
+  border-radius: 10px;
+
+  background: var(--c-surface);
+
+  color: var(--c-ink);
+
+  font-family: var(--f-body);
+  font-size: 13.6px;
+
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.input::placeholder {
+  color: var(--c-ink-faint);
+}
+
+.input:focus,
+select.input:focus,
+textarea.input:focus {
+  outline: none;
+
+  border-color: var(--c-primary-500);
+
+  box-shadow:
+    0 0 0 3px var(--c-primary-100);
+}
+
+
+/* Invalid form control */
+
+.input.field-error,
+select.input.field-error,
+textarea.input.field-error {
+  border-color: var(--c-accent);
+
+  box-shadow:
+    0 0 0 3px var(--c-accent-a20);
+}
+
+
+/* Validation message */
+
+.error-text {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 6px;
+
+  color: var(--c-accent);
+
+  font-size: 12px;
+}
+
+
+/* ============================================================
+   11. REUSABLE CARD
+   ============================================================ */
+
+.card {
+  background: var(--c-surface);
+
+  border:
+    1px solid var(--c-line);
+
+  border-radius: var(--r-lg);
+
+  box-shadow: var(--shadow-sm);
+}
+
+.card-pad {
+  padding: 20px 22px;
+}
+
+
+/* ============================================================
+   12. RESPONSIVE GLOBAL RULES
+   ============================================================ */
+
+@media (max-width: 880px) {
+
+  body {
+    font-size: 14px;
+  }
+}
