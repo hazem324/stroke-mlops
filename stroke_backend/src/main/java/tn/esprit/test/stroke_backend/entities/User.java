@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,7 +21,6 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -44,8 +42,8 @@ public class User {
     @Column(nullable = false, unique = true, length = 255)
     String email;
 
-    @Column(nullable = false)
     @ToString.Exclude
+    @Column(nullable = false)
     String password;
 
     @Enumerated(EnumType.STRING)
@@ -70,6 +68,7 @@ public class User {
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
+
         createdAt = now;
         updatedAt = now;
     }
