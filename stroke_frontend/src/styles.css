@@ -1,1 +1,71 @@
 /* You can add global styles to this file, and also import other style files */
+/* Global styles & design tokens */
+
+
+:root{
+  /* ---- Color ---- */
+  --c-primary-900:#0E2A52;
+  --c-primary-700:#154C96;
+  --c-primary-600:#1E63C4;
+  --c-primary-500:#2D74DA;
+  --c-primary-100:#E4EFFC;
+  --c-primary-50: #F2F7FE;
+
+  --c-ink:      #10192B;
+  --c-ink-soft: #4B5975;
+  --c-ink-faint:#8994AB;
+
+  --c-line:     #E1E6EF;
+  --c-line-soft:#EEF1F6;
+
+  --c-surface:  #FFFFFF;
+  --c-bg:       #F5F8FC;
+  --c-bg-alt:   #EFF3F9;
+
+  --c-accent:      #D8394C;
+  --c-accent-100:  #FBE7E9;
+  --c-accent-a20:  rgba(216,57,76,.20);
+  --c-accent-a40:  rgba(216,57,76,.40);
+
+  --c-success:     #1E9E6B;
+  --c-success-100: #E4F6EE;
+  --c-warning:     #C97A1F;
+  --c-warning-100: #FBF0DE;
+
+  /* ---- Type ---- */
+  --f-display:'Space Grotesk', 'Inter', sans-serif;
+  --f-body:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --f-mono:'IBM Plex Mono', ui-monospace, monospace;
+
+  /* ---- Radius / shadow ---- */
+  --r-sm:8px;
+  --r-md:14px;
+  --r-lg:20px;
+  --shadow-sm: 0 1px 2px rgba(16,25,43,.04), 0 1px 1px rgba(16,25,43,.03);
+  --shadow-md: 0 8px 24px rgba(16,25,43,.08);
+  --shadow-lg: 0 16px 48px rgba(16,25,43,.14);
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+body{
+  font-family:var(--f-body);
+  color:var(--c-ink);
+  background:var(--c-bg);
+  -webkit-font-smoothing:antialiased;
+  font-size:14.5px;
+  line-height:1.5;
+}
+h1,h2,h3,h4{
+  font-family:var(--f-display);
+  color:var(--c-ink);
+  margin:0 0 4px;
+  letter-spacing:-0.01em;
+}
+a{color:inherit;}
+::selection{background:var(--c-primary-100);}
+
+::-webkit-scrollbar{width:9px;height:9px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#CBD5E5;border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:#AEBBD1;}
