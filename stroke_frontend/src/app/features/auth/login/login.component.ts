@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavigationService } from '../../../services/navigation.service';
+import { ToastService } from '../../../services/toast.service';
+
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,7 @@ export class LoginComponent {
   authenticationError = false;
   showPassword = false;
 
-  constructor(private fb: FormBuilder, private navigationService: NavigationService) {
+  constructor(private fb: FormBuilder, private navigationService: NavigationService, private toast: ToastService) {
     this.loginForm = this.fb.group({
       email: [
         '',
@@ -91,4 +93,35 @@ export class LoginComponent {
   goToSignUp () :void {
     this.navigationService.goToRegister
   } 
+
+
+
+  testSuccess(): void {
+    this.toast.success(
+      'Connexion réussie',
+      'Succès'
+    );
+  }
+
+  testError(): void {
+    this.toast.error(
+      'Email ou mot de passe incorrect',
+      'Erreur'
+    );
+  }
+
+  testInfo(): void {
+    this.toast.info(
+      'Veuillez vérifier vos informations',
+      'Information'
+    );
+  }
+
+  testWarning(): void {
+    this.toast.warning(
+      'Votre session va bientôt expirer',
+      'Attention'
+    );
+  }
+
 }
