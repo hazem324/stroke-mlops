@@ -8,6 +8,10 @@ import {
 } from '@angular/forms';
 
 import { NavigationService } from '../../../services/navigation.service';
+import { AuthService } from '../../../services/auth.service';
+
+import { RegisterRequest } from '../../../models/auth/register-request.model';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -23,17 +27,21 @@ export class RegisterComponent {
 
   showPassword = false;
   showConfirmPassword = false;
+  isLoading = false;
 
   passwordStrength = 0;
 
   readonly roles = [
-    'Radiologist',
+    /*'Radiologist',
     'Neurologist',
     'General Practitioner',
-    'Medical Administrator'
+    'Medical Administrator'*/
+    'ADMIN',
+    'DOCTOR',
+    'RADIOLOGIST'
   ];
 
-  constructor(private fb: FormBuilder, private navigation: NavigationService) {
+  constructor(private fb: FormBuilder, private navigation: NavigationService, private authService: AuthService, private toast: ToastService) {
 
     this.registerForm = this.fb.group(
       {
@@ -94,11 +102,6 @@ export class RegisterComponent {
     );
   }
 
-
-  /* ==========================================================
-     GETTERS
-     ========================================================== */
-
   get firstName() {
     return this.registerForm.get('firstName');
   }
@@ -131,11 +134,6 @@ export class RegisterComponent {
     return this.registerForm.get('terms');
   }
 
-
-  /* ==========================================================
-     PASSWORD MATCH VALIDATOR
-     ========================================================== */
-
   private passwordMatchValidator(
     control: AbstractControl
   ): ValidationErrors | null {
@@ -152,58 +150,149 @@ export class RegisterComponent {
       : { passwordMismatch: true };
   }
 
-
-  /* ==========================================================
-     FORM SUBMISSION
-     ========================================================== */
-
   onSubmit(): void {
 
-    this.submitted = true;
-    this.registrationError = false;
+  this.submitted = true;
+  this.registrationError = false;
 
-    if (this.registerForm.invalid) {
+  if (this.registerForm.invalid) {
 
-      this.registerForm.markAllAsTouched();
+    this.registerForm.markAllAsTouched();
 
-      return;
-    }
-
-    const registrationData = {
-      firstName: this.registerForm.value.firstName,
-      lastName: this.registerForm.value.lastName,
-      email: this.registerForm.value.email,
-      role: this.registerForm.value.role,
-      institution: this.registerForm.value.institution,
-      password: this.registerForm.value.password
-    };
-
-    console.log(
-      'Registration data:',
-      registrationData
+    this.toast.error(
+      'Veuillez corriger les champs indiqués ci-dessous.',
+      'Formulaire invalide'
     );
 
-    /*
-     * Later:
-     *
-     * this.authService.register(registrationData).subscribe({
-     *
-     *   next: () => {
-     *      this.router.navigate(['/auth/login']);
-     *   },
-     *
-     *   error: () => {
-     *      this.registrationError = true;
-     *   }
-     *
-     * });
-     */
+    return;
+  }
+
+  if (!this.registerForm.value.terms) {
+
+    this.terms?.markAsTouched();
+
+    this.toast.error(
+      'Vous devez accepter les conditions d’utilisation.',
+      'Conditions requises'
+    );
+
+    return;
+  }
+
+  if (this.isLoading) {
+    return;
+  }
+
+  const registrationData: RegisterRequest = {
+
+    firstName:
+      this.registerForm.value.firstName.trim(),
+
+    lastName:
+      this.registerForm.value.lastName.trim(),
+
+    email:
+      this.registerForm.value.email.trim().toLowerCase(),
+
+    password:
+      this.registerForm.value.password,
+
+    role:
+      this.registerForm.value.role,
+
+    // Frontend "institution"
+    // Backend "establishment"
+    establishment:
+      this.registerForm.value.institution?.trim() || '',
+
+    // Frontend "terms"
+    // Backend "acceptedTerms"
+    acceptedTerms:
+      this.registerForm.value.terms
+  };
+
+
+  console.log(
+    'Registration data:',
+    registrationData
+  );
+
+  this.isLoading = true;
+
+  this.authService.register(registrationData).subscribe({
+
+    next: (response) => {
+
+      this.registrationError = false;
+      this.isLoading = false;
+
+      this.toast.success(
+        response.message || 'Compte créé avec succès',
+        'Inscription'
+      );
+
+      // Redirect to login
+      this.navigation.goToLogin();
+    },
+
+    error: (error) => {
+
+      this.registrationError = true;
+      this.isLoading = false;
+
+      const message =
+        error?.error?.message ||
+        'Une erreur est survenue lors de la création du compte.';
+
+
+      switch (error?.status) {
+
+        case 400:
+
+          this.toast.error(
+            message,
+            'Informations invalides'
+          );
+
+          break;
+
+        case 409:
+
+          this.toast.error(
+            message,
+            'Email déjà utilisé'
+          );
+
+          break;
+
+        case 500:
+
+          this.toast.error(
+            'Une erreur interne est survenue. Veuillez réessayer plus tard.',
+            'Erreur serveur'
+          );
+
+          break;
+
+        default:
+
+          this.toast.error(
+            message,
+            'Erreur'
+          );
+
+          break;
+      }
+    }
+  });
+}
+
+  canSubmit(): boolean {
+    return !!this.terms?.value && !this.isLoading;
   }
 
 
-  /* ==========================================================
-     PASSWORD VISIBILITY
-     ========================================================== */
+    /* PASSWORD VISIBILITY */ 
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
@@ -215,9 +304,7 @@ export class RegisterComponent {
   }
 
 
-  /* ==========================================================
-     PASSWORD STRENGTH
-     ========================================================== */
+     /* PASSWORD STRENGTH */
 
   onPasswordChange(): void {
 
@@ -315,5 +402,5 @@ export class RegisterComponent {
   goToLogin(): void {
     this.navigation.goToLogin();
   }
-  
+
 }

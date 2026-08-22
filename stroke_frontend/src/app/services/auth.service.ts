@@ -16,7 +16,7 @@ import { RegisterResponse } from '../models/auth/register-response.model';
 })
 export class AuthService {
 
-  private readonly baseUrl = environment.apiBaseUrl + '/auth';
+  private readonly baseUrl = environment.apiBaseUrl + '/api/auth';
 
   constructor(
     private http: HttpClient,

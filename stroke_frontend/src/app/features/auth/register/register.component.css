@@ -649,3 +649,50 @@
 
   border-radius: var(--r-sm);
 }
+
+/* ============================================================
+   17. LOADING STATE
+   ============================================================ */
+
+.btn.is-loading {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-spinner-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+}
+
+.spinner {
+  width: 15px;
+  height: 15px;
+
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.input:disabled,
+select.input:disabled,
+.checkbox-row input:disabled,
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
