@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavigationService } from '../../../services/navigation.service';
 import { ToastService } from '../../../services/toast.service';
+import { AuthService } from '../../../services/auth.service';
+import { LoginRequest } from '../../../models/auth/login-request.model';
 
 
 @Component({
@@ -16,8 +18,10 @@ export class LoginComponent {
   submitted = false;
   authenticationError = false;
   showPassword = false;
+  isLoading = false;
 
-  constructor(private fb: FormBuilder, private navigationService: NavigationService, private toast: ToastService) {
+  constructor(private fb: FormBuilder, private navigationService: NavigationService, private toast: ToastService, private authService: AuthService) {
+
     this.loginForm = this.fb.group({
       email: [
         '',
@@ -46,33 +50,80 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+
     this.submitted = true;
     this.authenticationError = false;
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      this.toast.error(
+        'Veuillez vérifier les informations saisies.',
+        'Formulaire invalide'
+      );
       return;
     }
 
-    const credentials = {
-      email: this.loginForm.value.email,
-      password: this.loginForm.value.password,
-      rememberMe: this.loginForm.value.rememberMe
+    // Prevent double submit while a request is already in flight
+    if (this.isLoading) {
+      return;
+    }
+
+    const credentials: LoginRequest = {
+      email: this.loginForm.value.email.trim(),
+      password: this.loginForm.value.password
     };
 
-    console.log('Login credentials:', credentials);
+    this.isLoading = true;   // <-- START LOADING
 
-    /*
-     * Plus tard :
-     * this.authService.login(credentials).subscribe({
-     *   next: (response) => {
-     *      ...
-     *   },
-     *   error: () => {
-     *      this.authenticationError = true;
-     *   }
-     * });
-     */
+    this.authService.login(credentials).subscribe({
+
+      next: (response) => {
+        this.authenticationError = false;
+
+        this.toast.success(
+          response.message || 'Connexion réussie',
+          'Bienvenue'
+        );
+
+        this.navigationService.goToHome();
+
+        // Keep isLoading = true here since we're navigating away.
+        // If you prefer to reset it immediately, uncomment below:
+        // this.isLoading = false;
+      },
+
+      error: (error) => {
+        console.error('Login error:', error);
+
+        this.authenticationError = true;
+        this.isLoading = false;   // <-- STOP LOADING ON ERROR
+
+        const message =
+          error?.error?.message ||
+          'Une erreur est survenue lors de la connexion.';
+
+        switch (error?.status) {
+          case 400:
+            this.toast.error(message, 'Informations invalides');
+            break;
+          case 401:
+            this.toast.error(message, 'Connexion échouée');
+            break;
+          case 403:
+            this.toast.error(message, 'Compte désactivé');
+            break;
+          case 500:
+            this.toast.error(
+              'Une erreur interne est survenue. Veuillez réessayer plus tard.',
+              'Erreur serveur'
+            );
+            break;
+          default:
+            this.toast.error(message, 'Erreur');
+            break;
+        }
+      }
+    });
   }
 
   togglePassword(): void {
@@ -91,7 +142,7 @@ export class LoginComponent {
 
   /* navigation */ 
   goToSignUp () :void {
-    this.navigationService.goToRegister
+    this.navigationService.goToRegister();
   } 
 
 

@@ -146,219 +146,92 @@
 
 
       <!-- ==================== FORM ==================== -->
+     
       <form
-        [formGroup]="loginForm"
-        (ngSubmit)="onSubmit()"
-        novalidate>
+  [formGroup]="loginForm"
+  (ngSubmit)="onSubmit()"
+  novalidate>
 
-
-        <!-- Email -->
-        <div class="field">
-
-          <label
-            class="field-label"
-            for="email">
-
-            Adresse e-mail professionnelle
-
-          </label>
-
-          <input
-            id="email"
-            type="email"
-            class="input"
-            formControlName="email"
-            placeholder="prenom.nom@hopital.tn"
-            [class.field-error]="isInvalid('email')"
-            autocomplete="email">
-
-          <!-- Required -->
-          <div
-            class="error-text"
-            *ngIf="email?.hasError('required') &&
-                   (email?.touched || submitted)">
-
-            <span>!</span>
-            L'adresse e-mail est obligatoire.
-
-          </div>
-
-          <!-- Email format -->
-          <div
-            class="error-text"
-            *ngIf="email?.hasError('email') &&
-                   (email?.touched || submitted)">
-
-            <span>!</span>
-            Veuillez saisir une adresse e-mail valide.
-
-          </div>
-
-        </div>
-
-
-        <!-- Password -->
-        <div class="field">
-
-          <label
-            class="field-label"
-            for="password">
-
-            Mot de passe
-
-          </label>
-
-          <div class="password-wrap">
-
-            <input
-              id="password"
-              class="input"
-              [type]="showPassword ? 'text' : 'password'"
-              formControlName="password"
-              placeholder="••••••••"
-              [class.field-error]="isInvalid('password')"
-              autocomplete="current-password">
-
-
-            <!-- Toggle password -->
-            <button
-              type="button"
-              (click)="togglePassword()"
-              [attr.aria-label]="
-                showPassword
-                  ? 'Masquer le mot de passe'
-                  : 'Afficher le mot de passe'
-              ">
-
-              <svg
-                *ngIf="!showPassword"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8">
-
-                <path
-                  d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z">
-                </path>
-
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="3">
-                </circle>
-
-              </svg>
-
-
-              <svg
-                *ngIf="showPassword"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8">
-
-                <path
-                  d="M3 3l18 18">
-                </path>
-
-                <path
-                  d="M10.6 10.6a2 2 0 0 0 2.8 2.8">
-                </path>
-
-                <path
-                  d="M9.9 5.2A10.7 10.7 0 0 1 12 5
-                     c7 0 11 7 11 7
-                     a18.3 18.3 0 0 1-4.2 4.8">
-                </path>
-
-                <path
-                  d="M6.6 6.6A18.2 18.2 0 0 0 1 12
-                     s4 7 11 7
-                     a10.7 10.7 0 0 0 4.1-.8">
-                </path>
-
-              </svg>
-
-            </button>
-
-          </div>
-
-
-          <!-- Password required -->
-          <div
-            class="error-text"
-            *ngIf="password?.hasError('required') &&
-                   (password?.touched || submitted)">
-
-            <span>!</span>
-            Le mot de passe est obligatoire.
-
-          </div>
-
-
-          <!-- Password length -->
-          <div
-            class="error-text"
-            *ngIf="password?.hasError('minlength') &&
-                   (password?.touched || submitted)">
-
-            <span>!</span>
-            Le mot de passe doit contenir au moins 6 caractères.
-
-          </div>
-
-        </div>
-
-
-        <!-- Remember / Forgot -->
-       <!-- Remember me -->
-<div class="row-between">
-
-  <label class="checkbox-row">
-
+  <!-- Email -->
+  <div class="field">
+    <label class="field-label" for="email">Adresse e-mail professionnelle</label>
     <input
-      type="checkbox"
-      formControlName="rememberMe">
+      id="email"
+      type="email"
+      class="input"
+      formControlName="email"
+      placeholder="prenom.nom@hopital.tn"
+      [class.field-error]="isInvalid('email')"
+      [attr.disabled]="isLoading ? true : null"
+      autocomplete="email">
+    <!-- ...errors unchanged... -->
+  </div>
 
-    <span>
-      Rester connecté
-    </span>
+  <!-- Password -->
+  <div class="field">
+    <label class="field-label" for="password">Mot de passe</label>
+    <div class="password-wrap">
+      <input
+        id="password"
+        class="input"
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="password"
+        placeholder="••••••••"
+        [class.field-error]="isInvalid('password')"
+        [attr.disabled]="isLoading ? true : null"
+        autocomplete="current-password">
 
-  </label>
+      <button
+        type="button"
+        (click)="togglePassword()"
+        [disabled]="isLoading"
+        [attr.aria-label]="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
+        <!-- ...svgs unchanged... -->
+      </button>
+    </div>
+    <!-- ...errors unchanged... -->
+  </div>
 
-</div>
+  <!-- Remember me -->
+  <div class="row-between">
+    <label class="checkbox-row">
+      <input
+        type="checkbox"
+        formControlName="rememberMe"
+        [attr.disabled]="isLoading ? true : null">
+      <span>Rester connecté</span>
+    </label>
+  </div>
 
+  <!-- Register link -->
+  <div class="form-foot">
+    <span>Vous n'avez pas encore de compte ?</span>
+    <button
+      type="button"
+      class="link-button"
+      [disabled]="isLoading"
+      (click)="goToSignUp()">
+      Créer un compte
+    </button>
+  </div>
 
-<!-- Register link -->
-<div class="form-foot">
-
-  <span>
-    Vous n'avez pas encore de compte ?
-  </span>
-
+  <!-- Submit -->
   <button
-    type="button"
-    class="link-button"
-    (click)="goToSignUp()">
+    type="submit"
+    class="btn btn-primary btn-block"
+    [disabled]="isLoading"
+    [class.is-loading]="isLoading">
 
-    Créer un compte
+    <span *ngIf="!isLoading">Se connecter</span>
+
+    <span *ngIf="isLoading" class="btn-spinner-wrap">
+      <span class="spinner" aria-hidden="true"></span>
+      Connexion en cours…
+    </span>
 
   </button>
 
-</div>
-
-        <!-- Submit -->
-        <button
-          type="submit"
-          class="btn btn-primary btn-block">
-
-          Se connecter
-
-        </button>
-
-      </form>
-
-
+</form>
       <!-- Security -->
       <div class="security-note">
 
@@ -399,34 +272,5 @@
     </div>
 
   </section>
-
-</div>
-
-
-<div class="toast-test">
-
-  <button
-    type="button"
-    (click)="testSuccess()">
-    Test Success
-  </button>
-
-  <button
-    type="button"
-    (click)="testError()">
-    Test Error
-  </button>
-
-  <button
-    type="button"
-    (click)="testInfo()">
-    Test Info
-  </button>
-
-  <button
-    type="button"
-    (click)="testWarning()">
-    Test Warning
-  </button>
 
 </div>

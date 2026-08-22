@@ -25,4 +25,9 @@ export class NavigationService {
     );
   }
 
+  goToHome(): void {
+    this.router.navigateByUrl(
+      APP_ROUTES.auth.register
+    )
+  }
 }
