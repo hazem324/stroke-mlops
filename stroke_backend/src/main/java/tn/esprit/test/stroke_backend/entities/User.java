@@ -1,6 +1,7 @@
 package tn.esprit.test.stroke_backend.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
@@ -77,4 +79,7 @@ public class User {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    @OneToMany(mappedBy = "doctor")
+    private List<Patient> patients;
 }

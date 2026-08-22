@@ -5,137 +5,100 @@ import java.util.List;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 
 import io.jsonwebtoken.security.Keys;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http) throws Exception {
+
+        http
+            .cors(cors -> {})
+            .csrf(csrf -> csrf.disable())
+
+            .authorizeHttpRequests(auth -> auth
+
+                .requestMatchers(
+                    HttpMethod.OPTIONS,
+                    "/**"
+                ).permitAll()
+
+                .requestMatchers(
+                    "/api/auth/**"
+                ).permitAll()
+                .requestMatchers("/api/patient/**"
+                ).permitAll()
+
+                .requestMatchers(
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/v3/api-docs/**"
+                ).permitAll()
+
+                .anyRequest().authenticated()
+            )
+
+            .oauth2ResourceServer(oauth2 ->
+                oauth2.jwt(jwt ->
+                    jwt.jwtAuthenticationConverter(
+                        jwtAuthenticationConverter()
+                    )
+                )
+            );
+
+        return http.build();
     }
 
+
     @Bean
-public SecurityFilterChain securityFilterChain(
-        HttpSecurity http) throws Exception {
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
 
-    http
-        .cors(cors -> {})
-        .csrf(csrf -> csrf.disable())
+        JwtAuthenticationConverter converter =
+                new JwtAuthenticationConverter();
 
-        .authorizeHttpRequests(auth -> auth
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
 
-            // CORS
-            .requestMatchers(
-                HttpMethod.OPTIONS,
-                "/**"
-            ).permitAll()
+            String role = jwt.getClaimAsString("role");
 
-            .requestMatchers(
-                "/api/auth/**"
-            ).permitAll()
+            if (role == null || role.isBlank()) {
+                return List.of();
+            }
 
-            .requestMatchers(
-                "/swagger-ui/**",
-                "/swagger-ui.html",
-                "/v3/api-docs/**"
-            ).permitAll()
+            return List.of(
+                    new SimpleGrantedAuthority(
+                            "ROLE_" + role
+                    )
+            );
+        });
 
-            // EVERYTHING ELSE
-            .anyRequest()
-            .authenticated()
-        )
-
-        .oauth2ResourceServer(oauth2 ->
-    oauth2.jwt(jwt ->
-        jwt.jwtAuthenticationConverter(
-            jwtAuthenticationConverter()
-        )
-    )
-);
-
-    return http.build();
-}
-
-@Bean
-public CorsConfigurationSource corsConfigurationSource() {
-
-    CorsConfiguration configuration = new CorsConfiguration();
-
-    configuration.setAllowedOrigins(
-        List.of("http://localhost:4200")
-    );
-
-    configuration.setAllowedMethods(
-        List.of(
-            "GET",
-            "POST",
-            "PUT",
-            "DELETE",
-            "PATCH",
-            "OPTIONS"
-        )
-    );
-
-    configuration.setAllowedHeaders(
-        List.of("*")
-    );
-
-    configuration.setAllowCredentials(false);
-
-    UrlBasedCorsConfigurationSource source =
-        new UrlBasedCorsConfigurationSource();
-
-    source.registerCorsConfiguration(
-        "/**",
-        configuration
-    );
-
-    return source;
-}
-
-@Bean
-public JwtAuthenticationConverter jwtAuthenticationConverter() {
-
-    JwtAuthenticationConverter converter =
-            new JwtAuthenticationConverter();
-
-    converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-
-        String role = jwt.getClaimAsString("role");
-
-        if (role == null || role.isBlank()) {
-            return java.util.List.of();
-        }
-
-        return java.util.List.of(
-                new SimpleGrantedAuthority("ROLE_" + role)
-        );
-    });
-
-    return converter;
-}
+        return converter;
+    }
 
 
-@Bean
+    @Bean
 public JwtDecoder jwtDecoder(
         @Value("${jwt.secret}") String secret) {
 
@@ -145,7 +108,50 @@ public JwtDecoder jwtDecoder(
 
     return NimbusJwtDecoder
             .withSecretKey(key)
+            .macAlgorithm(MacAlgorithm.HS384)
             .build();
 }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration =
+                new CorsConfiguration();
+
+        configuration.setAllowedOrigins(
+                List.of("http://localhost:4200")
+        );
+
+        configuration.setAllowedMethods(
+                List.of(
+                    "GET",
+                    "POST",
+                    "PUT",
+                    "DELETE",
+                    "PATCH",
+                    "OPTIONS"
+                )
+        );
+
+        configuration.setAllowedHeaders(
+                List.of("*")
+        );
+
+        configuration.setAllowCredentials(false);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
+
+        return source;
+    }
+
+    @Bean
+public PasswordEncoder passwordEncoder() {
+    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+}
 }

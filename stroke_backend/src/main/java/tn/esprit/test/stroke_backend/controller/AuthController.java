@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import tn.esprit.test.stroke_backend.dto.auth.LoginResponse;
@@ -18,6 +19,9 @@ import tn.esprit.test.stroke_backend.exceptions.AccountDisabledException;
 import tn.esprit.test.stroke_backend.exceptions.EmailAlreadyExistsException;
 import tn.esprit.test.stroke_backend.exceptions.InvalidCredentialsException;
 import tn.esprit.test.stroke_backend.services.servicesInterface.IAuthService;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -103,6 +107,37 @@ public ResponseEntity<Map<String, Object>> login(
                         "Une erreur interne est survenue sur le serveur"
                 ));
     }
+}
+
+
+
+@GetMapping("/debug-auth")
+public ResponseEntity<Map<String, Object>> debugAuth() {
+
+    Authentication authentication =
+            SecurityContextHolder
+                    .getContext()
+                    .getAuthentication();
+
+    return ResponseEntity.ok(
+            Map.of(
+                    "authenticationClass",
+                    authentication.getClass().getName(),
+
+                    "principalClass",
+                    authentication.getPrincipal()
+                            .getClass().getName(),
+
+                    "name",
+                    authentication.getName(),
+
+                    "authenticated",
+                    authentication.isAuthenticated(),
+
+                    "authorities",
+                    authentication.getAuthorities()
+            )
+    );
 }
 
 
