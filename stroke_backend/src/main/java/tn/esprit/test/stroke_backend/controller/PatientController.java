@@ -1,5 +1,6 @@
 package tn.esprit.test.stroke_backend.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import jakarta.validation.Valid;
@@ -28,11 +29,7 @@ public class PatientController {
 
     private final PatientService patientService;
 
-
-    // =========================
     // CREATE
-    // =========================
-
     @PostMapping
     public ResponseEntity<Map<String, Object>> createPatient(
             @Valid @RequestBody PatientRequest request) {
@@ -90,11 +87,7 @@ public class PatientController {
         }
     }
 
-
-    // =========================
     // GET
-    // =========================
-
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getPatient(
             @PathVariable Long id) {
@@ -147,11 +140,7 @@ public class PatientController {
         }
     }
 
-
-    // =========================
     // UPDATE
-    // =========================
-
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, Object>> updatePatient(
             @PathVariable Long id,
@@ -213,4 +202,45 @@ public class PatientController {
                     ));
         }
     }
+
+    @GetMapping("/by-docktor")
+    public ResponseEntity<Map<String, Object>> getAllPatients() {
+
+    try {
+
+        List<Patient> patients =
+                patientService.getAllPatients();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of(
+                        "patients", patients
+                ));
+
+    } catch (ForbiddenException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(Map.of(
+                        "message", e.getMessage()
+                ));
+
+    } catch (Exception e) {
+
+        log.error(
+                "Error while retrieving patients",
+                e
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of(
+                        "message",
+                        "Une erreur interne est survenue sur le serveur"
+                ));
+    }
+}
+
+
+
 }

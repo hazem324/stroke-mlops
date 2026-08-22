@@ -21,7 +21,6 @@ import tn.esprit.test.stroke_backend.exceptions.InvalidCredentialsException;
 import tn.esprit.test.stroke_backend.services.servicesInterface.IAuthService;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @RestController
 @RequestMapping("/api/auth")

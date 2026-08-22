@@ -1,5 +1,7 @@
 package tn.esprit.test.stroke_backend.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -23,10 +25,7 @@ public class PatientService implements IPatientService {
     private final CurrentUserService currentUserService;
 
 
-    // =========================
     // CREATE PATIENT
-    // =========================
-
     @Override
     public Patient createPatient(PatientRequest request) {
 
@@ -65,11 +64,7 @@ public class PatientService implements IPatientService {
         return patientRepository.save(patient);
     }
 
-
-    // =========================
     // GET PATIENT
-    // =========================
-
     @Override
     public Patient getPatient(Long id) {
 
@@ -91,11 +86,7 @@ public class PatientService implements IPatientService {
                 );
     }
 
-
-    // =========================
     // UPDATE PATIENT
-    // =========================
-
     @Override
     public Patient updatePatient(
             Long id,
@@ -127,4 +118,18 @@ public class PatientService implements IPatientService {
 
         return patientRepository.save(patient);
     }
+     
+    public List<Patient> getAllPatients() {
+
+    User doctor = currentUserService.getCurrentUser();
+
+    if (doctor.getRole() != Role.DOCTOR) {
+        throw new ForbiddenException(
+                "Only a doctor can access patients"
+        );
+    }
+
+    return patientRepository.findAllByDoctor(doctor);
+}
+
 }
