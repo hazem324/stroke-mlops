@@ -3,8 +3,14 @@ import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
 
+     {
+    path: '',
+    loadChildren: () =>
+      import('./layout/front-office/front-office.module')
+        .then(m => m.FrontOfficeModule)
+  },
     {
-        path: '',
+        path: 'home',
         component: HomeComponent
     },
 
@@ -12,11 +18,5 @@ export const routes: Routes = [
         loadChildren: ()=>
             import('./features/auth/auth.module')
             .then(m => m.AuthModule)
-    }, 
-    {
-        path: 'patient',
-        loadChildren: () => 
-            import('./features/patient/patient.module')
-        .then(m =>m.PatientModule)
     }
 ];

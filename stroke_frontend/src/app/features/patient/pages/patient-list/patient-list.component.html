@@ -1,7 +1,7 @@
 <div class="main">
 
   <!-- =========================
-       PAGE HEADER
+       EN-TÊTE DE LA PAGE
        ========================= -->
 
   <div class="page-head">
@@ -16,7 +16,10 @@
 
     </div>
 
-    <button class="btn btn-primary" type="button" (click)="openAddPatientModal()">
+    <button
+      class="btn btn-primary"
+      type="button"
+      (click)="openAddPatientModal()">
 
       <svg
         viewBox="0 0 24 24"
@@ -30,7 +33,7 @@
 
       </svg>
 
-      Add patient
+      Ajouter un patient
 
     </button>
 
@@ -38,12 +41,12 @@
 
 
   <!-- =========================
-       FILTERS
+       FILTRES
        ========================= -->
 
   <div class="filters-row">
 
-    <!-- Search -->
+    <!-- Recherche -->
 
     <div class="search-input">
 
@@ -71,7 +74,7 @@
     </div>
 
 
-    <!-- Status -->
+    <!-- Statut -->
 
     <select class="input">
 
@@ -86,13 +89,13 @@
     </select>
 
 
-    <!-- Sort -->
+    <!-- Tri -->
 
     <select class="input">
 
-      <option>Trier: récent</option>
+      <option>Trier : récent</option>
 
-      <option>Trier: nom (A–Z)</option>
+      <option>Trier : nom (A–Z)</option>
 
     </select>
 
@@ -100,7 +103,7 @@
 
 
   <!-- =========================
-       PATIENT TABLE
+       TABLEAU DES PATIENTS
        ========================= -->
 
   <div class="card">
@@ -114,27 +117,27 @@
           <tr>
 
             <th>
-              Patient ID
+              ID patient
             </th>
 
             <th>
-              Name
+              Nom
             </th>
 
             <th>
-              Date of birth
+              Date de naissance
             </th>
 
             <th>
-              Studies
+              Études
             </th>
 
             <th>
-              Last analysis
+              Dernière analyse
             </th>
 
-            <th style="text-align:right;">
-              Action
+            <th class="actions-header">
+              Actions
             </th>
 
           </tr>
@@ -146,7 +149,9 @@
 
           <tr *ngFor="let patient of patients">
 
-            <!-- ID -->
+            <!-- =========================
+                 ID
+                 ========================= -->
 
             <td>
 
@@ -157,7 +162,9 @@
             </td>
 
 
-            <!-- NAME -->
+            <!-- =========================
+                 NOM
+                 ========================= -->
 
             <td>
 
@@ -166,27 +173,33 @@
               </div>
 
               <div class="cell-sub">
-                DOB {{ patient.dob }}
+                Né(e) le {{ patient.dob }}
               </div>
 
             </td>
 
 
-            <!-- DOB -->
+            <!-- =========================
+                 DATE DE NAISSANCE
+                 ========================= -->
 
             <td>
               {{ patient.dob }}
             </td>
 
 
-            <!-- STUDIES -->
+            <!-- =========================
+                 ÉTUDES
+                 ========================= -->
 
             <td>
               {{ patient.studies }}
             </td>
 
 
-            <!-- LAST ANALYSIS -->
+            <!-- =========================
+                 DERNIÈRE ANALYSE
+                 ========================= -->
 
             <td>
 
@@ -195,7 +208,7 @@
               </div>
 
 
-              <!-- LESION -->
+              <!-- LÉSION -->
 
               <span
                 *ngIf="patient.status === 'lesion'"
@@ -203,28 +216,25 @@
 
                 <span class="dot"></span>
 
-                Lesion detected
+                Lésion détectée
 
               </span>
 
 
-              <!-- NO LESION -->
+              <!-- AUCUNE LÉSION -->
 
               <span
                 *ngIf="patient.status === 'none'"
                 class="badge badge-no-lesion">
 
-                <span
-                  class="dot"
-                  style="background:var(--c-ink-faint);">
-                </span>
+                <span class="dot"></span>
 
-                No lesion
+                Aucune lésion
 
               </span>
 
 
-              <!-- PROCESSING -->
+              <!-- TRAITEMENT -->
 
               <span
                 *ngIf="patient.status === 'processing'"
@@ -232,12 +242,12 @@
 
                 <span class="dot"></span>
 
-                Processing
+                En traitement
 
               </span>
 
 
-              <!-- REVIEW -->
+              <!-- EN ATTENTE -->
 
               <span
                 *ngIf="patient.status === 'review'"
@@ -245,36 +255,42 @@
 
                 <span class="dot"></span>
 
-                Awaiting review
+                En attente de vérification
 
               </span>
 
             </td>
 
 
-            <!-- ACTIONS -->
+            <!-- =========================
+                 ACTIONS
+                 ========================= -->
 
             <td class="actions-cell">
-              <button
-                class="btn btn-secondary btn-sm">
 
-                View
+              <button
+                class="btn btn-secondary btn-sm"
+                type="button">
+
+                Voir
 
               </button>
 
 
               <button
-                class="btn btn-secondary btn-sm">
+                class="btn btn-secondary btn-sm"
+                type="button">
 
-                Edit
+                Modifier
 
               </button>
 
 
               <button
-                class="btn btn-primary btn-sm">
+                class="btn btn-primary btn-sm"
+                type="button">
 
-                New Analysis
+                Nouvelle analyse
 
               </button>
 
@@ -291,6 +307,11 @@
   </div>
 
 </div>
+
+
+<!-- =========================
+     MODALE AJOUT PATIENT
+     ========================= -->
 
 <app-add-patient-modal
   *ngIf="showAddPatientModal"

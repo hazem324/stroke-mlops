@@ -1,0 +1,333 @@
+<aside class="sidebar">
+
+  <!-- =========================
+       LOGO / MARQUE
+       ========================= -->
+
+  <div class="sidebar-brand">
+
+    <img
+      src="assets/images/neurovia-logo.png"
+      alt="Logo Neurovia">
+
+    <div class="brand-text">
+
+      <div class="brand-name">
+        NEUROVIA
+      </div>
+
+      <div class="brand-sub">
+        STROKE MRI AI
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       NAVIGATION
+       ========================= -->
+
+  <nav class="sidebar-nav">
+
+    <!-- Espace de travail -->
+
+    <div class="nav-group-label">
+      Espace de travail
+    </div>
+
+
+    <!-- Tableau de bord -->
+
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-link">
+
+      <!-- Icône dashboard -->
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8">
+
+        <rect
+          x="3"
+          y="3"
+          width="7"
+          height="7"
+          rx="1">
+        </rect>
+
+        <rect
+          x="14"
+          y="3"
+          width="7"
+          height="7"
+          rx="1">
+        </rect>
+
+        <rect
+          x="3"
+          y="14"
+          width="7"
+          height="7"
+          rx="1">
+        </rect>
+
+        <rect
+          x="14"
+          y="14"
+          width="7"
+          height="7"
+          rx="1">
+        </rect>
+
+      </svg>
+
+      <span>
+        Tableau de bord
+      </span>
+
+    </a>
+
+
+    <!-- Patients -->
+
+    <a
+      routerLink="/patient"
+      routerLinkActive="active"
+      class="nav-link">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8">
+
+        <circle
+          cx="9"
+          cy="8"
+          r="3">
+        </circle>
+
+        <path
+          d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6">
+        </path>
+
+        <circle
+          cx="17.5"
+          cy="8.5"
+          r="2.4">
+        </circle>
+
+        <path
+          d="M15.8 13.6c2.9.3 5.2 2.7 5.2 6.4">
+        </path>
+
+      </svg>
+
+      <span>
+        Patients
+      </span>
+
+    </a>
+
+
+    <!-- Nouvelle analyse -->
+
+    <a
+      routerLink="/analysis/new"
+      routerLinkActive="active"
+      class="nav-link">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+
+        <path
+          d="M12 3v12">
+        </path>
+
+        <path
+          d="M7 8l5-5 5 5">
+        </path>
+
+        <path
+          d="M5 21h14">
+        </path>
+
+        <path
+          d="M5 17h14">
+        </path>
+
+      </svg>
+
+      <span>
+        Nouvelle analyse IRM
+      </span>
+
+    </a>
+
+
+    <!-- Historique -->
+
+    <a
+      routerLink="/analysis/history"
+      routerLinkActive="active"
+      class="nav-link">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round">
+
+        <circle
+          cx="12"
+          cy="12"
+          r="9">
+        </circle>
+
+        <path
+          d="M12 7v5l3 2">
+        </path>
+
+        <path
+          d="M4 12H2">
+        </path>
+
+      </svg>
+
+      <span>
+        Historique des analyses
+      </span>
+
+    </a>
+
+
+    <!-- Annotations -->
+
+    <a
+      routerLink="/annotations"
+      routerLinkActive="active"
+      class="nav-link">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+
+        <path
+          d="M12 20h9">
+        </path>
+
+        <path
+          d="M16.5 3.5a2.1 2.1 0 013 3L8 18l-4 1 1-4L16.5 3.5z">
+        </path>
+
+      </svg>
+
+      <span>
+        Annotations
+      </span>
+
+    </a>
+
+
+    <!-- =========================
+         SYSTÈME
+         ========================= -->
+
+    <div class="nav-group-label">
+      Système
+    </div>
+
+
+    <!-- Paramètres -->
+
+    <a
+      routerLink="/settings"
+      routerLinkActive="active"
+      class="nav-link">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round">
+
+        <circle
+          cx="12"
+          cy="12"
+          r="3">
+        </circle>
+
+        <path
+          d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V20h-2.6v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1-1.8-1.8.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H6v-2.6h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 001.9.3 1.7 1.7 0 001-1.6V6h2.6v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 00-.3 1.9 1.7 1.7 0 001.6 1h.1v2.6h-.1a1.7 1.7 0 00-1.6 1z">
+        </path>
+
+      </svg>
+
+      <span>
+        Paramètres
+      </span>
+
+    </a>
+
+  </nav>
+
+
+  <!-- =========================
+       DÉCONNEXION
+       ========================= -->
+
+  <div class="sidebar-footer">
+
+    <button
+      type="button"
+      class="nav-link logout-button">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+
+        <path
+          d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4">
+        </path>
+
+        <path
+          d="M16 17l5-5-5-5">
+        </path>
+
+        <path
+          d="M21 12H9">
+        </path>
+
+      </svg>
+
+      <span>
+        Déconnexion
+      </span>
+
+    </button>
+
+  </div>
+
+</aside>
