@@ -22,7 +22,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Study {
+public class Studies {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +35,7 @@ public class Study {
     Modality modality;
 
     @Enumerated(EnumType.STRING)
-    StudyStatus status;
+    StudiesStatus status;
 
     @ManyToOne
     Patient patient;
@@ -47,7 +47,7 @@ public class Study {
         createdAt = LocalDateTime.now();
 
         if (status == null) {
-            status = StudyStatus.READY;
+            status = StudiesStatus.READY;
         }
     }
 }
