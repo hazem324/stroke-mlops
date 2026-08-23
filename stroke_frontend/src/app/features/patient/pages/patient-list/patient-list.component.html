@@ -1,0 +1,298 @@
+<div class="main">
+
+  <!-- =========================
+       PAGE HEADER
+       ========================= -->
+
+  <div class="page-head">
+
+    <div>
+
+      <h1>Patients</h1>
+
+      <p class="lede">
+        124 patients suivis sur la plateforme.
+      </p>
+
+    </div>
+
+    <button class="btn btn-primary" type="button" (click)="openAddPatientModal()">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round">
+
+        <path d="M12 5v14"></path>
+        <path d="M5 12h14"></path>
+
+      </svg>
+
+      Add patient
+
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       FILTERS
+       ========================= -->
+
+  <div class="filters-row">
+
+    <!-- Search -->
+
+    <div class="search-input">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8">
+
+        <circle
+          cx="11"
+          cy="11"
+          r="7">
+        </circle>
+
+        <path d="m21 21-4.3-4.3"></path>
+
+      </svg>
+
+      <input
+        class="input"
+        type="text"
+        placeholder="Rechercher un patient, un ID…">
+
+    </div>
+
+
+    <!-- Status -->
+
+    <select class="input">
+
+      <option>Tous les statuts</option>
+
+      <option>Lésion détectée</option>
+
+      <option>Aucune lésion</option>
+
+      <option>En attente</option>
+
+    </select>
+
+
+    <!-- Sort -->
+
+    <select class="input">
+
+      <option>Trier: récent</option>
+
+      <option>Trier: nom (A–Z)</option>
+
+    </select>
+
+  </div>
+
+
+  <!-- =========================
+       PATIENT TABLE
+       ========================= -->
+
+  <div class="card">
+
+    <div class="table-wrap">
+
+      <table class="data">
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Patient ID
+            </th>
+
+            <th>
+              Name
+            </th>
+
+            <th>
+              Date of birth
+            </th>
+
+            <th>
+              Studies
+            </th>
+
+            <th>
+              Last analysis
+            </th>
+
+            <th style="text-align:right;">
+              Action
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr *ngFor="let patient of patients">
+
+            <!-- ID -->
+
+            <td>
+
+              <span class="id-tag">
+                {{ patient.id }}
+              </span>
+
+            </td>
+
+
+            <!-- NAME -->
+
+            <td>
+
+              <div class="cell-primary">
+                {{ patient.name }}
+              </div>
+
+              <div class="cell-sub">
+                DOB {{ patient.dob }}
+              </div>
+
+            </td>
+
+
+            <!-- DOB -->
+
+            <td>
+              {{ patient.dob }}
+            </td>
+
+
+            <!-- STUDIES -->
+
+            <td>
+              {{ patient.studies }}
+            </td>
+
+
+            <!-- LAST ANALYSIS -->
+
+            <td>
+
+              <div>
+                {{ patient.lastAnalysis }}
+              </div>
+
+
+              <!-- LESION -->
+
+              <span
+                *ngIf="patient.status === 'lesion'"
+                class="badge badge-lesion">
+
+                <span class="dot"></span>
+
+                Lesion detected
+
+              </span>
+
+
+              <!-- NO LESION -->
+
+              <span
+                *ngIf="patient.status === 'none'"
+                class="badge badge-no-lesion">
+
+                <span
+                  class="dot"
+                  style="background:var(--c-ink-faint);">
+                </span>
+
+                No lesion
+
+              </span>
+
+
+              <!-- PROCESSING -->
+
+              <span
+                *ngIf="patient.status === 'processing'"
+                class="badge badge-processing">
+
+                <span class="dot"></span>
+
+                Processing
+
+              </span>
+
+
+              <!-- REVIEW -->
+
+              <span
+                *ngIf="patient.status === 'review'"
+                class="badge badge-review">
+
+                <span class="dot"></span>
+
+                Awaiting review
+
+              </span>
+
+            </td>
+
+
+            <!-- ACTIONS -->
+
+            <td class="actions-cell">
+              <button
+                class="btn btn-secondary btn-sm">
+
+                View
+
+              </button>
+
+
+              <button
+                class="btn btn-secondary btn-sm">
+
+                Edit
+
+              </button>
+
+
+              <button
+                class="btn btn-primary btn-sm">
+
+                New Analysis
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+<app-add-patient-modal
+  *ngIf="showAddPatientModal"
+  (close)="closeAddPatientModal()">
+</app-add-patient-modal>

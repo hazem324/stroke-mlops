@@ -1,0 +1,54 @@
+:host {
+  display: table-row;
+}
+
+:host td {
+  padding: 16px 18px;
+  font-size: 14px;
+  color: var(--c-ink, #111827);
+  border-bottom: 1px solid var(--c-border, #e2e8f0);
+  vertical-align: middle;
+}
+
+:host:hover {
+  background: var(--c-surface-soft, #f8fafc);
+}
+
+.id-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 7px;
+  background: var(--c-primary-50, #eff6ff);
+  color: var(--c-primary-700, #1d4ed8);
+  font-family: var(--f-mono, monospace);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cell-primary {
+  font-weight: 600;
+}
+
+.cell-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--c-ink-muted, #64748b);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
