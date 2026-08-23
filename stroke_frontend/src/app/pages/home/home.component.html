@@ -1,0 +1,1097 @@
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+
+<header class="home-nav">
+
+  <div class="home-wrap nav-inner">
+
+    <a
+      routerLink="/"
+      class="nav-brand"
+      (click)="closeMenu()"
+    >
+      <img
+        src="assets/logo.png"
+        alt="NEUROVIA"
+      />
+
+      <b>NEUROVIA</b>
+    </a>
+
+    <nav
+      class="nav-links"
+      [class.mobile-open]="menuOpen"
+    >
+      <a
+        href="#features"
+        (click)="closeMenu()"
+      >
+        Fonctionnalités
+      </a>
+
+      <a
+        href="#workflow"
+        (click)="closeMenu()"
+      >
+        Workflow
+      </a>
+
+      <a
+        href="#viewer"
+        (click)="closeMenu()"
+      >
+        Visualisation
+      </a>
+
+      <a
+        href="#security"
+        (click)="closeMenu()"
+      >
+        Sécurité
+      </a>
+    </nav>
+
+    <div class="nav-actions">
+
+      <a
+        routerLink="/login"
+        class="btn btn-secondary"
+      >
+        Se connecter
+      </a>
+
+      <a
+        routerLink="/register"
+        class="btn btn-primary"
+      >
+        Créer un compte
+      </a>
+
+    </div>
+
+    <button
+      type="button"
+      class="nav-toggle"
+      aria-label="Menu"
+      [attr.aria-expanded]="menuOpen"
+      (click)="toggleMenu()"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+
+  </div>
+
+</header>
+
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+
+<section class="hero">
+
+  <div class="home-wrap hero-grid">
+
+    <div class="hero-copy">
+
+      <div class="eyebrow">
+        AI Segmentation System
+      </div>
+
+      <h1>
+        Détectez les lésions d'AVC sur IRM
+        <span class="accent">
+          en quelques secondes
+        </span>,
+        pas en quelques heures.
+      </h1>
+
+      <p class="lede">
+        NEUROVIA segmente automatiquement les lésions
+        ischémiques sur IRM DWI grâce à un modèle 3D U-Net,
+        et laisse le dernier mot au médecin — visualisation
+        superposée, validation et correction en un clic.
+      </p>
+
+      <div class="hero-cta">
+
+        <a
+          routerLink="/register"
+          class="btn btn-primary btn-lg"
+        >
+          Démarrer gratuitement
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </a>
+
+        <a
+          href="#workflow"
+          class="btn btn-secondary btn-lg"
+        >
+          Voir comment ça marche
+        </a>
+
+      </div>
+
+      <div class="hero-trust">
+
+        <div class="t-item">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+          >
+            <path d="M4 12l5 5L20 6" />
+          </svg>
+
+          Authentification JWT
+        </div>
+
+        <div class="t-item">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+          >
+            <path d="M4 12l5 5L20 6" />
+          </svg>
+
+          Traçabilité complète
+        </div>
+
+        <div class="t-item">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+          >
+            <path d="M4 12l5 5L20 6" />
+          </svg>
+
+          Données jamais écrasées
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- HERO VISUAL -->
+
+    <div class="hero-visual">
+
+      <div class="viewer-mock">
+
+        <div class="viewer-mock-top">
+
+          <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div class="tag">
+            S001 · DWI · axial
+          </div>
+
+        </div>
+
+        <div class="viewer-mock-canvas-wrap">
+
+          <span class="viewer-mock-badge">
+
+            <span class="dot"></span>
+
+            Lesion detected
+
+          </span>
+
+          <canvas
+            #heroCanvas
+            width="600"
+            height="570"
+          ></canvas>
+
+        </div>
+
+        <div class="viewer-mock-bottom">
+
+          <div class="viewer-mock-stat">
+            Lesion volume
+            <b>12.8 ml</b>
+          </div>
+
+          <div class="viewer-mock-stat">
+            Processing time
+            <b>8.4 sec</b>
+          </div>
+
+          <div class="viewer-mock-stat">
+            Model
+            <b>Stroke-DWI v1</b>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="floating-chip chip-1">
+
+        <div class="ico icon-green">
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M4 12l5 5L20 6" />
+          </svg>
+
+        </div>
+
+        <div class="txt">
+          <b>Validated</b>
+          <span>by Dr. Rekik</span>
+        </div>
+
+      </div>
+
+
+      <div class="floating-chip chip-2">
+
+        <div class="ico icon-blue">
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect
+              x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="3"
+            />
+
+            <path d="M3 9h18M9 21V9" />
+
+          </svg>
+
+        </div>
+
+        <div class="txt">
+          <b>3D U-Net</b>
+          <span>PyTorch · MONAI</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ============================================================
+     STATS
+     ============================================================ -->
+
+<div class="stats-strip">
+
+  <div class="home-wrap stats-wrap">
+
+    <div class="stat">
+      <b>124+</b>
+      <span>Patients suivis</span>
+    </div>
+
+    <div class="stat">
+      <b>86</b>
+      <span>Études IRM analysées</span>
+    </div>
+
+    <div class="stat">
+      <b>8.4s</b>
+      <span>Temps moyen de segmentation</span>
+    </div>
+
+    <div class="stat">
+      <b>96.4%</b>
+      <span>Disponibilité du service ML</span>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ============================================================
+     FEATURES
+     ============================================================ -->
+
+<section id="features">
+
+  <div class="home-wrap">
+
+    <div class="section-head">
+
+      <div class="eyebrow centered">
+        Fonctionnalités
+      </div>
+
+      <h2>
+        Tout ce qu'il faut pour aller de l'IRM au diagnostic
+      </h2>
+
+      <p>
+        Une plateforme pensée pour le workflow clinique réel —
+        pas seulement pour le modèle de deep learning.
+      </p>
+
+    </div>
+
+
+    <div class="features-grid">
+
+      <div class="feature-card">
+
+        <div class="feature-icon icon-blue">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <rect
+              x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="3"
+            />
+            <path d="M8 3v18M16 3v18M3 8h18M3 16h18" />
+          </svg>
+        </div>
+
+        <h3>Segmentation 3D automatique</h3>
+
+        <p>
+          Un modèle 3D U-Net entraîné avec PyTorch et MONAI
+          segmente la lésion ischémique sur l'ensemble du
+          volume DWI en quelques secondes.
+        </p>
+
+      </div>
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon icon-red">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 3" />
+          </svg>
+        </div>
+
+        <h3>Visualisation superposée</h3>
+
+        <p>
+          IRM en niveaux de gris et masque de lésion en rouge
+          semi-transparent, navigation coupe par coupe et
+          opacité réglable.
+        </p>
+
+      </div>
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon icon-green">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path d="M4 17.3 15.4 5.9a2 2 0 0 1 2.8 0l1 1a2 2 0 0 1 0 2.8L8 21H4v-3.7Z" />
+          </svg>
+        </div>
+
+        <h3>Validation & correction</h3>
+
+        <p>
+          Le médecin accepte ou corrige chaque prédiction.
+          La correction est conservée séparément — la sortie
+          du modèle n'est jamais écrasée.
+        </p>
+
+      </div>
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon icon-blue">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle cx="9" cy="8" r="3.2" />
+            <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" />
+            <circle cx="17.5" cy="8.5" r="2.4" />
+            <path d="M15.8 13.6c2.9.3 5.2 2.7 5.2 6.4" />
+          </svg>
+        </div>
+
+        <h3>Gestion des patients</h3>
+
+        <p>
+          Dossiers patients, historique des études et des
+          analyses, recherche rapide — tout centralisé dans
+          une interface claire.
+        </p>
+
+      </div>
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon icon-red">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <rect
+              x="4"
+              y="10"
+              width="16"
+              height="10"
+              rx="2"
+            />
+            <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+          </svg>
+        </div>
+
+        <h3>Sécurité médicale</h3>
+
+        <p>
+          Authentification JWT, rôles utilisateurs, fichiers
+          accessibles uniquement via le backend, journalisation
+          des opérations.
+        </p>
+
+      </div>
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon icon-green">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path d="M3 12a9 9 0 1 0 3-6.7" />
+            <path d="M3 4v5h5" />
+            <path d="M12 8v4.5l3 1.8" />
+          </svg>
+        </div>
+
+        <h3>Prêt pour le réentraînement</h3>
+
+        <p>
+          IRM originale, prédiction et correction médecin sont
+          toutes conservées pour constituer un futur dataset
+          annoté.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ============================================================
+     WORKFLOW
+     ============================================================ -->
+
+<section
+  class="workflow"
+  id="workflow"
+>
+
+  <div class="home-wrap">
+
+    <div class="section-head">
+
+      <div class="eyebrow centered">
+        Workflow
+      </div>
+
+      <h2>
+        De l'import de l'IRM au résultat validé
+      </h2>
+
+      <p>
+        Quatre étapes simples pour le médecin — toute la
+        complexité du deep learning reste masquée derrière
+        Spring Boot et FastAPI.
+      </p>
+
+    </div>
+
+
+    <div class="workflow-steps">
+
+      <div class="wf-step">
+        <div class="wf-num">1</div>
+
+        <h4>Importer l'IRM</h4>
+
+        <p>
+          Glissez-déposez le fichier DWI (.nii / .nii.gz)
+          pour un patient sélectionné.
+        </p>
+      </div>
+
+
+      <div class="wf-step">
+        <div class="wf-num">2</div>
+
+        <h4>Analyse par le modèle</h4>
+
+        <p>
+          Prétraitement, inférence 3D U-Net et post-traitement
+          s'exécutent automatiquement.
+        </p>
+      </div>
+
+
+      <div class="wf-step">
+        <div class="wf-num">3</div>
+
+        <h4>Visualiser le résultat</h4>
+
+        <p>
+          IRM et segmentation superposées, navigation par
+          coupe, statistiques de la lésion.
+        </p>
+      </div>
+
+
+      <div class="wf-step">
+        <div class="wf-num">4</div>
+
+        <h4>Valider ou corriger</h4>
+
+        <p>
+          Le médecin accepte la prédiction ou ajuste le masque
+          avant archivage définitif.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ============================================================
+     VIEWER
+     ============================================================ -->
+
+<section id="viewer">
+
+  <div class="home-wrap showcase">
+
+    <div>
+
+      <div class="eyebrow">
+        Visualisation
+      </div>
+
+      <h2 class="showcase-title">
+        Un viewer IRM pensé pour la lecture clinique
+      </h2>
+
+      <p class="showcase-description">
+        Naviguez dans le volume 3D coupe par coupe,
+        comparez l'IRM seule, le masque seul, ou les deux
+        superposés avec une opacité ajustable.
+      </p>
+
+
+      <div class="showcase-list">
+
+        <div class="showcase-item">
+
+          <div class="num">
+            01
+          </div>
+
+          <div>
+            <h4>Navigation par coupe</h4>
+
+            <p>
+              Slider synchronisé entre l'IRM et le masque
+              de segmentation.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="showcase-item">
+
+          <div class="num">
+            02
+          </div>
+
+          <div>
+            <h4>Opacité réglable</h4>
+
+            <p>
+              Affichez la lésion sans jamais masquer
+              complètement l'anatomie.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="showcase-item">
+
+          <div class="num">
+            03
+          </div>
+
+          <div>
+            <h4>Statistiques instantanées</h4>
+
+            <p>
+              Volume, nombre de voxels et temps de traitement
+              à côté de l'image.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="showcase-visual">
+
+      <div class="showcase-visual-top">
+
+        <span class="tag">
+          DWI · axial
+        </span>
+
+        <span class="tag">
+          Slice {{ slice }} / {{ totalSlices }}
+        </span>
+
+      </div>
+
+      <div class="showcase-canvas-wrap">
+
+        <canvas
+          #showcaseCanvas
+          width="600"
+          height="540"
+        ></canvas>
+
+      </div>
+
+      <div class="showcase-controls">
+
+        <input
+          type="range"
+          min="0"
+          [max]="totalSlices"
+          [value]="slice"
+          (input)="onSliceChange($event)"
+          aria-label="Navigation entre les coupes"
+        />
+
+        <span class="val">
+          {{ slice }} / {{ totalSlices }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ============================================================
+     SECURITY
+     ============================================================ -->
+
+<section
+  class="security"
+  id="security"
+>
+
+  <div class="home-wrap">
+
+    <div class="section-head">
+
+      <div class="eyebrow centered security-eyebrow">
+        Sécurité
+      </div>
+
+      <h2>
+        Conçu pour des données médicales sensibles
+      </h2>
+
+      <p>
+        Chaque couche de l'architecture protège l'accès
+        aux IRM et aux résultats des patients.
+      </p>
+
+    </div>
+
+
+    <div class="security-grid">
+
+      <div class="security-card">
+
+        <div class="ico">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <rect
+              x="4"
+              y="10"
+              width="16"
+              height="10"
+              rx="2"
+            />
+            <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+          </svg>
+        </div>
+
+        <h4>Authentification JWT</h4>
+
+        <p>
+          Connexion sécurisée avec Spring Security,
+          rôles utilisateurs et contrôle d'accès.
+        </p>
+
+      </div>
+
+
+      <div class="security-card">
+
+        <div class="ico">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path d="M12 2 3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6z" />
+          </svg>
+        </div>
+
+        <h4>Fichiers protégés</h4>
+
+        <p>
+          Le stockage n'est jamais exposé directement —
+          accès uniquement via le backend authentifié.
+        </p>
+
+      </div>
+
+
+      <div class="security-card">
+
+        <div class="ico">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path d="M3 12a9 9 0 1 0 3-6.7" />
+            <path d="M3 4v5h5" />
+          </svg>
+        </div>
+
+        <h4>Journalisation</h4>
+
+        <p>
+          Toutes les opérations importantes sont tracées
+          pour un audit complet.
+        </p>
+
+      </div>
+
+
+      <div class="security-card">
+
+        <div class="ico">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path d="M9 12l2 2 4-4" />
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+            />
+          </svg>
+        </div>
+
+        <h4>HTTPS partout</h4>
+
+        <p>
+          Chiffrement des échanges entre Angular,
+          Spring Boot et le service FastAPI.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ============================================================
+     CTA
+     ============================================================ -->
+
+<section>
+
+  <div class="home-wrap">
+
+    <div class="cta-band">
+
+      <div>
+
+        <h2>
+          Prêt à accélérer vos lectures d'IRM ?
+        </h2>
+
+        <p>
+          Créez un compte praticien et lancez votre première
+          analyse en quelques minutes.
+        </p>
+
+      </div>
+
+
+      <div class="cta-actions">
+
+        <a
+          routerLink="/register"
+          class="btn btn-white btn-lg"
+        >
+          Créer un compte
+        </a>
+
+        <a
+          routerLink="/login"
+          class="btn btn-cta-login btn-lg"
+        >
+          Se connecter
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+
+<footer>
+
+  <div class="home-wrap">
+
+    <div class="footer-grid">
+
+      <div>
+
+        <div class="footer-brand">
+
+          <img
+            src="assets/logo.png"
+            alt="NEUROVIA"
+          />
+
+          <b>NEUROVIA</b>
+
+        </div>
+
+        <p class="footer-desc">
+          Plateforme clinique de segmentation IA des lésions
+          d'AVC ischémique sur IRM DWI. Développée par YEBNI
+          Information et Communication.
+        </p>
+
+      </div>
+
+
+      <div class="footer-col">
+
+        <h5>Produit</h5>
+
+        <a href="#features">
+          Fonctionnalités
+        </a>
+
+        <a href="#workflow">
+          Workflow
+        </a>
+
+        <a href="#viewer">
+          Visualisation
+        </a>
+
+        <a href="#security">
+          Sécurité
+        </a>
+
+      </div>
+
+
+      <div class="footer-col">
+
+        <h5>Compte</h5>
+
+        <a routerLink="/login">
+          Se connecter
+        </a>
+
+        <a routerLink="/register">
+          Créer un compte
+        </a>
+
+        <a routerLink="/forgot-password">
+          Mot de passe oublié
+        </a>
+
+      </div>
+
+
+      <div class="footer-col">
+
+        <h5>Entreprise</h5>
+
+        <a
+          href="https://tn.linkedin.com/company/yebni-information-et-communication"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          YEBNI Information et Communication
+        </a>
+
+        <a href="#">
+          Contact
+        </a>
+
+        <a href="#">
+          Confidentialité
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+      <span>
+        © 2026 YEBNI Information et Communication —
+        NEUROVIA v1.0
+      </span>
+
+      <div class="footer-socials">
+
+        <a
+          href="#"
+          aria-label="LinkedIn"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.5V23h-4V8z" />
+          </svg>
+        </a>
+
+        <a
+          href="#"
+          aria-label="X"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M18.9 2H22l-7.6 8.7L23.3 22h-7.1l-5.6-6.9L4 22H1l8.2-9.3L0.8 2H8l5 6.3L18.9 2z" />
+          </svg>
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</footer>
