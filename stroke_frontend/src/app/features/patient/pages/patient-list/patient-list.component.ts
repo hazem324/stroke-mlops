@@ -64,6 +64,11 @@ export class PatientListComponent implements OnInit {
     });
   }
 
+  onPatientCreated(): void {
+  console.log('New patient created → refreshing list');
+  this.loadPatients();
+}
+
   /**
    * Open Add Patient modal.
    */

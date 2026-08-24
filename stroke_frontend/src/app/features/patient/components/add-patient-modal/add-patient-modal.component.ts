@@ -14,9 +14,7 @@ import {CreatePatientRequest} from '../../../../models/patient/patient.model';
 export class AddPatientModalComponent {
 
   @Output() close = new EventEmitter<void>();
-
-  @Output() patientCreated =
-    new EventEmitter<void>();
+  @Output() patientCreated = new EventEmitter<void>();
 
   patientForm: FormGroup;
 

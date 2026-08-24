@@ -302,5 +302,6 @@
 
 <app-add-patient-modal
   *ngIf="showAddPatientModal"
-  (close)="closeAddPatientModal()">
+  (close)="closeAddPatientModal()"
+  (patientCreated)="onPatientCreated()">
 </app-add-patient-modal>
