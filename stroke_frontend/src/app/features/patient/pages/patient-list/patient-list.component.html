@@ -250,7 +250,8 @@
 
               <button
                 class="btn btn-secondary btn-sm"
-                type="button">
+                type="button" 
+                (click)="openEditPatientModal(patient.id)">
 
                 Modifier
 
@@ -306,3 +307,13 @@
   (close)="closeAddPatientModal()"
   (patientCreated)="onPatientCreated()">
 </app-add-patient-modal>
+
+<app-edit-patient-modal
+  *ngIf="
+    showEditPatientModal &&
+    selectedPatientId !== null
+  "
+  [patientId]="selectedPatientId"
+  (close)="closeEditPatientModal()"
+  (patientUpdated)="onPatientUpdated()">
+</app-edit-patient-modal>

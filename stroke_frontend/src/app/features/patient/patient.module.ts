@@ -9,6 +9,7 @@ import { AddPatientModalComponent } from './components/add-patient-modal/add-pat
 import { PatientDetailComponent } from './components/patient-detail/patient-detail.component';
 import { PatientStudiesComponent } from './components/patient-studies/patient-studies.component';
 import { PatientDetailPageComponent } from './pages/patient-detail-page/patient-detail-page.component';
+import { EditPatientModalComponent } from './components/edit-patient-modal/edit-patient-modal.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,9 @@ import { PatientDetailPageComponent } from './pages/patient-detail-page/patient-
     AddPatientModalComponent,
     PatientDetailComponent,
     PatientStudiesComponent,
-    PatientDetailPageComponent
+    PatientDetailPageComponent,
+    EditPatientModalComponent,
+    EditPatientModalComponent 
   ],
 
   imports: [

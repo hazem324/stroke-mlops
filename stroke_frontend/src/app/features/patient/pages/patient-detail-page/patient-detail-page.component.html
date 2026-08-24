@@ -129,3 +129,14 @@
   </app-patient-studies>
 
 </div>
+
+<!-- =====================================================
+     MODALE MODIFICATION PATIENT
+     ===================================================== -->
+
+<app-edit-patient-modal
+  *ngIf="showEditPatientModal"
+  [patientId]="patientId"
+  (close)="closeEditPatientModal()"
+  (patientUpdated)="onPatientUpdated()">
+</app-edit-patient-modal>

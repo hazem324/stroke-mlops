@@ -1,0 +1,804 @@
+/* ============================================================
+   EDIT PATIENT MODAL
+   ============================================================ */
+
+:host {
+  display: contents;
+}
+
+
+/* ============================================================
+   BACKDROP
+   ============================================================ */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(15, 23, 42, 0.52);
+
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+
+.modal {
+  width: min(620px, 100%);
+
+  max-height: calc(100vh - 48px);
+
+  display: flex;
+  flex-direction: column;
+
+  background: #ffffff;
+
+  border: 1px solid #dbe3ef;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 24px 60px rgba(15, 23, 42, 0.20),
+    0 8px 24px rgba(15, 23, 42, 0.10);
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.modal-head {
+  flex: 0 0 auto;
+
+  min-height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  padding: 16px 20px;
+
+  border-bottom: 1px solid #e5eaf1;
+
+  box-sizing: border-box;
+}
+
+
+.modal-head-left {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+/* ============================================================
+   AVATAR
+   ============================================================ */
+
+.modal-avatar {
+  width: 42px;
+  height: 42px;
+
+  flex: 0 0 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e8f1ff;
+
+  color: #2468c9;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  line-height: 1;
+
+  text-transform: uppercase;
+}
+
+
+/* ============================================================
+   HEADER TEXT
+   ============================================================ */
+
+.modal-head h3 {
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  line-height: 1.3;
+}
+
+
+.modal-head .sub {
+  margin-top: 3px;
+
+  color: #718096;
+
+  font-size: 12px;
+
+  line-height: 1.4;
+}
+
+
+/* ============================================================
+   CLOSE BUTTON
+   ============================================================ */
+
+.close-x {
+  width: 34px;
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #64748b;
+
+  cursor: pointer;
+
+  transition:
+    background .15s ease,
+    color .15s ease;
+}
+
+
+.close-x:hover {
+  background: #f1f5f9;
+
+  color: #0f172a;
+}
+
+
+.close-x:disabled {
+  cursor: not-allowed;
+
+  opacity: .55;
+}
+
+
+.close-x svg {
+  width: 18px;
+  height: 18px;
+
+  display: block;
+}
+
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+
+.modal-loading {
+  min-height: 260px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 30px;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+.modal-loading .spinner {
+  width: 18px;
+  height: 18px;
+
+  flex: 0 0 18px;
+
+  border: 2px solid #dbe7f7;
+
+  border-top-color: #2d74da;
+
+  border-radius: 50%;
+
+  animation: edit-modal-spin .7s linear infinite;
+}
+
+
+@keyframes edit-modal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* ============================================================
+   BODY
+   ============================================================ */
+
+.modal-body {
+  flex: 1 1 auto;
+
+  min-height: 0;
+
+  overflow-y: auto;
+
+  padding: 22px 24px 24px;
+
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   FORM
+   ============================================================ */
+
+.modal-body form {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0;
+
+  margin: 0;
+}
+
+
+/* ============================================================
+   SECTION LABEL
+   ============================================================ */
+
+.section-label {
+  margin: 4px 0 14px;
+
+  color: #172033;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  line-height: 1.4;
+}
+
+
+.section-label:not(:first-child) {
+  margin-top: 22px;
+}
+
+
+/* ============================================================
+   FORM ROWS
+   ============================================================ */
+
+.form-row-2 {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+
+  gap: 16px;
+
+  margin-bottom: 16px;
+}
+
+
+.form-row-3 {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.4fr)
+    minmax(120px, .8fr)
+    minmax(100px, .7fr);
+
+  gap: 16px;
+
+  margin-bottom: 16px;
+}
+
+
+/* ============================================================
+   FIELD
+   ============================================================ */
+
+.field {
+  width: 100%;
+
+  min-width: 0;
+
+  margin-bottom: 16px;
+
+  box-sizing: border-box;
+}
+
+
+.form-row-2 .field,
+.form-row-3 .field {
+  margin-bottom: 0;
+}
+
+
+.field-label {
+  display: block;
+
+  margin: 0 0 7px;
+
+  color: #53627a;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  line-height: 1.3;
+}
+
+
+/* ============================================================
+   INPUTS
+   ============================================================ */
+
+.modal .input {
+  width: 100%;
+
+  height: 40px;
+
+  display: block;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d8e0eb;
+
+  border-radius: 9px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #172033;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  line-height: 40px;
+
+  transition:
+    border-color .15s ease,
+    box-shadow .15s ease,
+    background .15s ease;
+}
+
+
+.modal .input:focus {
+  border-color: #6fa4e8;
+
+  box-shadow:
+    0 0 0 3px rgba(45, 116, 218, 0.10);
+}
+
+
+.modal .input:disabled,
+.modal .input[readonly] {
+  background: #f6f8fb;
+
+  color: #7b8799;
+
+  cursor: not-allowed;
+}
+
+
+.modal select.input {
+  line-height: normal;
+
+  cursor: pointer;
+
+  appearance: auto;
+}
+
+
+.modal input[type="date"].input {
+  line-height: normal;
+
+  cursor: pointer;
+}
+
+
+.modal input[type="number"].input {
+  line-height: normal;
+}
+
+
+/* ============================================================
+   SUFFIX INPUT
+   ============================================================ */
+
+.input-suffix-wrap {
+  position: relative;
+
+  width: 100%;
+}
+
+
+.input-suffix-wrap .input {
+  padding-right: 48px;
+}
+
+
+.input-suffix {
+  position: absolute;
+
+  top: 50%;
+  right: 12px;
+
+  transform: translateY(-50%);
+
+  color: #7b8799;
+
+  font-size: 12px;
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   HINT
+   ============================================================ */
+
+.field-hint {
+  margin-top: 6px;
+
+  color: #8a96a8;
+
+  font-size: 11px;
+
+  line-height: 1.4;
+}
+
+
+/* ============================================================
+   VALIDATION
+   ============================================================ */
+
+.modal .input.field-error {
+  border-color: #dc6b6b;
+
+  background: #fffafa;
+}
+
+
+.error-text {
+  margin-top: 5px;
+
+  color: #c24141;
+
+  font-size: 11px;
+
+  line-height: 1.4;
+}
+
+
+/* ============================================================
+   DOCTOR CHIP
+   ============================================================ */
+
+.doctor-chip {
+  width: 100%;
+
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 10px 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dfe6ef;
+
+  border-radius: 10px;
+
+  background: #f8fafc;
+}
+
+
+.d-avatar {
+  width: 34px;
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e7efff;
+
+  color: #286bc8;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+.d-txt {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+
+.d-txt b {
+  color: #253047;
+
+  font-size: 12px;
+  font-weight: 650;
+}
+
+
+.d-txt span {
+  color: #8a96a8;
+
+  font-size: 11px;
+}
+
+
+.d-lock {
+  margin-left: auto;
+
+  width: 28px;
+  height: 28px;
+
+  flex: 0 0 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #8995a8;
+}
+
+
+.d-lock svg {
+  width: 16px;
+  height: 16px;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.modal-foot {
+  flex: 0 0 auto;
+
+  min-height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  padding: 13px 20px;
+
+  box-sizing: border-box;
+
+  border-top: 1px solid #e5eaf1;
+
+  background: #ffffff;
+}
+
+
+.save-hint {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color: #8995a8;
+
+  font-size: 10.5px;
+
+  line-height: 1.4;
+}
+
+
+.save-hint svg {
+  width: 15px;
+  height: 15px;
+
+  flex: 0 0 15px;
+}
+
+
+.modal-foot-actions {
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+
+/* ============================================================
+   BUTTON LOADING
+   ============================================================ */
+
+.btn.is-loading {
+  cursor: not-allowed;
+
+  opacity: .85;
+}
+
+
+.btn-spinner-wrap {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+}
+
+
+.btn-spinner-wrap .spinner {
+  width: 15px;
+  height: 15px;
+
+  flex: 0 0 15px;
+
+  border: 2px solid rgba(255, 255, 255, .4);
+
+  border-top-color: #ffffff;
+
+  border-radius: 50%;
+
+  animation: edit-modal-spin .7s linear infinite;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 680px) {
+
+  .modal-backdrop {
+    padding: 12px;
+  }
+
+
+  .modal {
+    width: 100%;
+
+    max-height: calc(100vh - 24px);
+
+    border-radius: 14px;
+  }
+
+
+  .modal-head {
+    padding: 14px 16px;
+  }
+
+
+  .modal-body {
+    padding: 18px 16px;
+  }
+
+
+  .form-row-2,
+  .form-row-3 {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+
+  .form-row-2 .field,
+  .form-row-3 .field {
+    margin-bottom: 16px;
+  }
+
+
+  .modal-foot {
+    align-items: stretch;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    padding: 14px 16px;
+  }
+
+
+  .save-hint {
+    order: 2;
+  }
+
+
+  .modal-foot-actions {
+    width: 100%;
+  }
+
+
+  .modal-foot-actions .btn {
+    flex: 1;
+  }
+
+}
+
+
+/* ============================================================
+   VERY SMALL SCREENS
+   ============================================================ */
+
+@media (max-width: 420px) {
+
+  .modal-head-left {
+    gap: 9px;
+  }
+
+
+  .modal-avatar {
+    width: 36px;
+    height: 36px;
+
+    flex-basis: 36px;
+  }
+
+
+  .modal-head h3 {
+    font-size: 15px;
+  }
+
+
+  .modal-head .sub {
+    font-size: 11px;
+  }
+
+}

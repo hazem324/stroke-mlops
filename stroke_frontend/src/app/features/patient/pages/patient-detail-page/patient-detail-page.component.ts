@@ -20,12 +20,32 @@ import { Patient } from '../../../../models/patient/patient.model';
 })
 export class PatientDetailPageComponent implements OnInit {
 
+  // =========================================================
+  // PATIENT
+  // =========================================================
+
   patient: Patient | null = null;
 
   patientId!: number;
 
+
+  // =========================================================
+  // LOADING
+  // =========================================================
+
   loading = false;
 
+
+  // =========================================================
+  // EDIT MODAL
+  // =========================================================
+
+  showEditPatientModal = false;
+
+
+  // =========================================================
+  // CONSTRUCTOR
+  // =========================================================
 
   constructor(
     private route: ActivatedRoute,
@@ -34,6 +54,10 @@ export class PatientDetailPageComponent implements OnInit {
     private toastService: ToastService
   ) {}
 
+
+  // =========================================================
+  // INIT
+  // =========================================================
 
   ngOnInit(): void {
 
@@ -48,7 +72,7 @@ export class PatientDetailPageComponent implements OnInit {
       );
 
       this.router.navigate([
-        '/patients'
+        '/dashboard/patient'
       ]);
 
       return;
@@ -56,12 +80,33 @@ export class PatientDetailPageComponent implements OnInit {
 
     this.patientId = Number(id);
 
+    // Vérification de l'ID
+    if (isNaN(this.patientId)) {
+
+      this.toastService.error(
+        'Identifiant du patient invalide.',
+        'Erreur'
+      );
+
+      this.router.navigate([
+        '/dashboard/patient'
+      ]);
+
+      return;
+    }
+
     this.loadPatient();
   }
 
 
+  // =========================================================
+  // GET PATIENT
+  // =========================================================
+
   /**
    * GET /api/patient/{id}
+   *
+   * Récupère les informations du patient.
    */
   loadPatient(): void {
 
@@ -101,18 +146,55 @@ export class PatientDetailPageComponent implements OnInit {
   }
 
 
+  // =========================================================
+  // EDIT PATIENT
+  // =========================================================
+
   /**
-   * Navigate to edit patient.
+   * Ouvre le même modal de modification
+   * utilisé dans la liste des patients.
    */
   editPatient(): void {
 
-    this.router.navigate([
-      '/patients',
-      this.patientId,
-      'edit'
-    ]);
+    console.log(
+      'Opening edit modal for patient:',
+      this.patientId
+    );
+
+    this.showEditPatientModal = true;
   }
 
+
+  /**
+   * Ferme le modal de modification.
+   */
+  closeEditPatientModal(): void {
+
+    this.showEditPatientModal = false;
+  }
+
+
+  /**
+   * Appelé après une modification réussie.
+   *
+   * Recharge les informations du patient
+   * sans recharger le navigateur.
+   */
+  onPatientUpdated(): void {
+
+    console.log(
+      'Patient updated → refreshing patient details'
+    );
+
+    this.showEditPatientModal = false;
+
+    this.loadPatient();
+  }
+
+
+  // =========================================================
+  // NEW ANALYSIS
+  // =========================================================
 
   /**
    * Navigate to new MRI analysis.
@@ -130,20 +212,25 @@ export class PatientDetailPageComponent implements OnInit {
   }
 
 
+  // =========================================================
+  // RETURN
+  // =========================================================
+
   /**
    * Return to patient list.
    */
   backToPatients(): void {
 
     this.router.navigate([
-      '/patients'
+      '/dashboard/patient'
     ]);
   }
 
 
-  /**
-   * Handle API errors.
-   */
+  // =========================================================
+  // ERROR HANDLING
+  // =========================================================
+
   private handleError(
     error: any
   ): void {
@@ -178,7 +265,7 @@ export class PatientDetailPageComponent implements OnInit {
       );
 
       this.router.navigate([
-        '/patients'
+        '/dashboard/patient'
       ]);
 
       return;
