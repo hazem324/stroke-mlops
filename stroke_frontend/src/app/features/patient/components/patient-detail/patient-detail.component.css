@@ -1,0 +1,137 @@
+.patient-info-card {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  margin-bottom: 18px;
+}
+
+
+/* ============================================================
+   PATIENT DETAIL
+   Styles spécifiques au composant uniquement
+   ============================================================ */
+
+.patient-info-card {
+  margin-bottom: 18px;
+}
+
+
+/* =========================
+   SECTION TITLE
+   ========================= */
+
+.section-title {
+  margin: 0 0 20px 0;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  color: var(--c-ink);
+}
+
+
+/* =========================
+   INFORMATION GRID
+   ========================= */
+
+.info-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  column-gap: 40px;
+  row-gap: 22px;
+
+  width: 100%;
+}
+
+
+/* =========================
+   INFORMATION ITEM
+   ========================= */
+
+.info-item {
+  min-width: 0;
+}
+
+
+/* Label */
+
+.info-item .k {
+  margin-bottom: 6px;
+
+  font-size: 11px;
+  line-height: 1.3;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  color: var(--c-ink-faint);
+}
+
+
+/* Value */
+
+.info-item .v {
+  font-size: 14px;
+  line-height: 1.4;
+
+  font-weight: 600;
+
+  color: var(--c-ink);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* Patient code */
+
+.info-item .v.mono {
+  font-family: var(--f-mono);
+
+  color: var(--c-primary-700);
+}
+
+
+/* =========================
+   DIVIDER
+   ========================= */
+
+.patient-info-card .divider {
+  margin: 22px 0;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+  .info-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    column-gap: 30px;
+  }
+}
+
+
+@media (max-width: 650px) {
+
+  .info-grid {
+    grid-template-columns: 1fr;
+
+    row-gap: 18px;
+  }
+
+  .info-item .v {
+    white-space: normal;
+  }
+}

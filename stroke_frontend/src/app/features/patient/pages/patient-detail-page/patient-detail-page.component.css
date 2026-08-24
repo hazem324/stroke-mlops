@@ -1,0 +1,98 @@
+/* ============================================================
+   PATIENT DETAIL PAGE
+   ============================================================ */
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.patient-page-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+
+/* ============================================================
+   BACK TO PATIENTS
+   ============================================================ */
+
+.back-link {
+  display: inline-flex;
+
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 10px;
+
+  padding: 0;
+
+  color: var(--c-primary-600);
+
+  font-size: 12.5px;
+  font-weight: 600;
+
+  line-height: 1.5;
+
+  text-decoration: none;
+
+  background: transparent;
+
+  border: none;
+
+  cursor: pointer;
+}
+
+
+.back-link:hover {
+  background: var(--c-primary-50);
+
+  text-decoration: none;
+}
+
+
+.back-link svg {
+  width: 14px;
+  height: 14px;
+
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  flex: 0 0 auto;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+  .page-head {
+    align-items: flex-start;
+  }
+
+  .page-actions {
+    width: 100%;
+
+    justify-content: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+}

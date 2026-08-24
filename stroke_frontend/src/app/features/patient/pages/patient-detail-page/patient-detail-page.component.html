@@ -1,0 +1,131 @@
+<div class="main">
+
+  <!-- =====================================================
+       PAGE HEADER
+       ===================================================== -->
+
+  <div class="page-head">
+
+    <div class="patient-page-title">
+
+      <!-- Retour aux patients -->
+
+      <a
+        routerLink="/dashboard/patient"
+        class="btn-ghost back-link">
+
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2">
+
+          <path d="m15 18-6-6 6-6"></path>
+
+        </svg>
+
+        Retour aux patients
+
+      </a>
+
+
+      <!-- Patient -->
+
+      <h1 *ngIf="patient">
+
+        {{ patient.firstName }}
+        {{ patient.lastName }}
+
+      </h1>
+
+
+      <p class="lede">
+
+        Dossier patient et historique des études IRM.
+
+      </p>
+
+    </div>
+
+
+    <!-- =================================================
+         ACTIONS
+         ================================================= -->
+
+    <div 
+      class="page-actions bg-black"
+      *ngIf="patient">
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="editPatient()">
+
+        Modifier le patient
+
+      </button>
+
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="newAnalysis()">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round">
+
+          <path d="M12 5v14"></path>
+          <path d="M5 12h14"></path>
+
+        </svg>
+
+        Nouvelle analyse
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
+
+  <div
+    *ngIf="loading"
+    class="progress-line">
+
+    <span class="spin"></span>
+
+    Chargement du patient...
+
+  </div>
+
+
+  <!-- =====================================================
+       PATIENT DETAIL
+       ===================================================== -->
+
+  <app-patient-detail
+    *ngIf="patient && !loading"
+    [patient]="patient">
+  </app-patient-detail>
+
+
+  <!-- =====================================================
+       PATIENT STUDIES
+       ===================================================== -->
+
+  <app-patient-studies
+    *ngIf="patient && !loading"
+    [patientId]="patientId">
+  </app-patient-studies>
+
+</div>

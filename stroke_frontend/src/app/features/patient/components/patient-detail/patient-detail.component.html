@@ -1,0 +1,122 @@
+<div class="card card-pad patient-info-card">
+
+  <h3 class="section-title">
+    Informations du patient
+  </h3>
+
+  <div class="info-grid">
+
+    <div class="info-item">
+
+      <div class="k">
+        ID patient
+      </div>
+
+      <div class="v mono">
+        {{ patient.patientCode }}
+      </div>
+
+    </div>
+
+
+    <div class="info-item">
+
+      <div class="k">
+        Nom
+      </div>
+
+      <div class="v">
+        {{ patient.firstName }}
+        {{ patient.lastName }}
+      </div>
+
+    </div>
+
+
+    <div class="info-item">
+
+      <div class="k">
+        Date de naissance
+      </div>
+
+      <div class="v">
+        {{ patient.dateOfBirth | date:'dd/MM/yyyy' }}
+      </div>
+
+    </div>
+
+
+    <div class="info-item">
+
+      <div class="k">
+        Nombre d'études
+      </div>
+
+      <div class="v">
+        —
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="divider"></div>
+
+
+  <div class="info-grid">
+
+    <div class="info-item">
+
+      <div class="k">
+        Sexe
+      </div>
+
+      <div class="v">
+        {{ patient.sex === 'MALE' ? 'Homme' : 'Femme' }}
+      </div>
+
+    </div>
+
+
+    <div class="info-item">
+
+      <div class="k">
+        Âge
+      </div>
+
+      <div class="v">
+        {{ patient.age }} ans
+      </div>
+
+    </div>
+
+
+    <div class="info-item">
+
+      <div class="k">
+        Poids
+      </div>
+
+      <div class="v">
+        {{ patient.weight }} kg
+      </div>
+
+    </div>
+
+
+    <div class="info-item">
+
+      <div class="k">
+        Téléphone
+      </div>
+
+      <div class="v">
+        {{ patient.phoneNumber }}
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
