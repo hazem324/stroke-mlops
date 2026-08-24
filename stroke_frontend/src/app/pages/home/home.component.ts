@@ -1,9 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  ViewChild
-} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -14,6 +9,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements AfterViewInit {
+
+  constructor() {}
+
 
   @ViewChild('heroCanvas')
   heroCanvas!: ElementRef<HTMLCanvasElement>;
@@ -328,4 +326,6 @@ export class HomeComponent implements AfterViewInit {
       ctx.restore();
     }
   }
+
+
 }

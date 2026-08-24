@@ -11,7 +11,7 @@
       <h1>Patients</h1>
 
       <p class="lede">
-        124 patients suivis sur la plateforme.
+        Patients suivis sur la plateforme.
       </p>
 
     </div>
@@ -79,11 +79,8 @@
     <select class="input">
 
       <option>Tous les statuts</option>
-
       <option>Lésion détectée</option>
-
       <option>Aucune lésion</option>
-
       <option>En attente</option>
 
     </select>
@@ -94,13 +91,24 @@
     <select class="input">
 
       <option>Trier : récent</option>
-
       <option>Trier : nom (A–Z)</option>
 
     </select>
 
   </div>
 
+
+  <!-- =========================
+       CHARGEMENT
+       ========================= -->
+
+  <div
+    *ngIf="loading"
+    class="loading-message">
+
+    Chargement des patients...
+
+  </div>
 
   <!-- =========================
        TABLEAU DES PATIENTS
@@ -147,16 +155,22 @@
 
         <tbody>
 
+          <!-- =========================
+               PATIENTS
+               ========================= -->
+
           <tr *ngFor="let patient of patients">
 
             <!-- =========================
-                 ID
+                 ID PATIENT
                  ========================= -->
 
             <td>
 
               <span class="id-tag">
-                {{ patient.id }}
+
+                {{ patient.patientCode }}
+
               </span>
 
             </td>
@@ -169,11 +183,17 @@
             <td>
 
               <div class="cell-primary">
-                {{ patient.name }}
+
+                {{ patient.firstName }}
+                {{ patient.lastName }}
+
               </div>
 
               <div class="cell-sub">
-                Né(e) le {{ patient.dob }}
+
+                Né(e) le
+                {{ patient.dateOfBirth | date:'dd/MM/yyyy' }}
+
               </div>
 
             </td>
@@ -184,7 +204,9 @@
                  ========================= -->
 
             <td>
-              {{ patient.dob }}
+
+              {{ patient.dateOfBirth | date:'dd/MM/yyyy' }}
+
             </td>
 
 
@@ -193,7 +215,9 @@
                  ========================= -->
 
             <td>
-              {{ patient.studies }}
+
+              —
+
             </td>
 
 
@@ -203,61 +227,7 @@
 
             <td>
 
-              <div>
-                {{ patient.lastAnalysis }}
-              </div>
-
-
-              <!-- LÉSION -->
-
-              <span
-                *ngIf="patient.status === 'lesion'"
-                class="badge badge-lesion">
-
-                <span class="dot"></span>
-
-                Lésion détectée
-
-              </span>
-
-
-              <!-- AUCUNE LÉSION -->
-
-              <span
-                *ngIf="patient.status === 'none'"
-                class="badge badge-no-lesion">
-
-                <span class="dot"></span>
-
-                Aucune lésion
-
-              </span>
-
-
-              <!-- TRAITEMENT -->
-
-              <span
-                *ngIf="patient.status === 'processing'"
-                class="badge badge-processing">
-
-                <span class="dot"></span>
-
-                En traitement
-
-              </span>
-
-
-              <!-- EN ATTENTE -->
-
-              <span
-                *ngIf="patient.status === 'review'"
-                class="badge badge-review">
-
-                <span class="dot"></span>
-
-                En attente de vérification
-
-              </span>
+              —
 
             </td>
 
@@ -293,6 +263,23 @@
                 Nouvelle analyse
 
               </button>
+
+            </td>
+
+          </tr>
+
+
+          <!-- =========================
+               AUCUN PATIENT
+               ========================= -->
+
+          <tr *ngIf="!loading && patients.length === 0">
+
+            <td
+              colspan="6"
+              class="empty-state">
+
+              Aucun patient trouvé.
 
             </td>
 

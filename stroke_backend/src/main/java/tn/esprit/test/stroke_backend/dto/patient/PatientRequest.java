@@ -20,4 +20,5 @@ public class PatientRequest {
     Sex sex;
     Integer age;
     Double weight;
+    String phoneNumber;
 }

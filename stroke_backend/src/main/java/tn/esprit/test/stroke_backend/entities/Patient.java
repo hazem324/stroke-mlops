@@ -33,6 +33,7 @@ public class Patient {
     String firstName;
     String lastName;
     LocalDate dateOfBirth;
+    String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     Sex sex;

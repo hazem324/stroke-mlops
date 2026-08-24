@@ -7,19 +7,20 @@
     aria-labelledby="add-patient-title">
 
     <!-- =========================
-         HEADER
+         EN-TÊTE
          ========================= -->
 
     <div class="modal-head">
 
       <h3 id="add-patient-title">
-        Add new patient
+        Ajouter un nouveau patient
       </h3>
 
       <button
         type="button"
         class="close-x"
-        aria-label="Close"
+        aria-label="Fermer"
+        [disabled]="isLoading"
         (click)="closeModal()">
 
         <svg
@@ -39,200 +40,488 @@
 
 
     <!-- =========================
-         BODY
+         FORMULAIRE
          ========================= -->
 
-    <div class="modal-body">
+    <form
+      [formGroup]="patientForm"
+      (ngSubmit)="savePatient()"
+      novalidate>
 
-      <!-- Patient code -->
-
-      <div class="field">
-
-        <label
-          class="field-label"
-          for="patientCode">
-
-          Patient code
-
-        </label>
-
-        <input
-          id="patientCode"
-          type="text"
-          class="input mono"
-          value="P125"
-          readonly>
-
-      </div>
+      <div class="modal-body">
 
 
-      <!-- First name / Last name -->
-
-      <div class="form-grid">
+        <!-- =========================
+             CODE PATIENT
+             ========================= -->
 
         <div class="field">
 
           <label
             class="field-label"
-            for="firstName">
+            for="patientCode">
 
-            First name
+            Code patient
 
           </label>
 
           <input
-            id="firstName"
+            id="patientCode"
             type="text"
-            class="input"
-            placeholder="e.g. Ahmed">
+            class="input mono"
+            formControlName="patientCode"
+            placeholder="Ex. P001">
+
+          <div
+            class="field-error"
+            *ngIf="
+              submitted &&
+              f['patientCode'].invalid
+            ">
+
+            <span
+              *ngIf="
+                f['patientCode'].errors?.['required']
+              ">
+
+              Le code patient est obligatoire.
+
+            </span>
+
+            <span
+              *ngIf="
+                f['patientCode'].errors?.['maxlength']
+              ">
+
+              Le code patient est trop long.
+
+            </span>
+
+          </div>
 
         </div>
 
+
+        <!-- =========================
+             PRÉNOM / NOM
+             ========================= -->
+
+        <div class="form-grid">
+
+
+          <!-- Prénom -->
+
+          <div class="field">
+
+            <label
+              class="field-label"
+              for="firstName">
+
+              Prénom
+
+            </label>
+
+            <input
+              id="firstName"
+              type="text"
+              class="input"
+              formControlName="firstName"
+              placeholder="Ex. Ahmed">
+
+            <div
+              class="field-error"
+              *ngIf="
+                submitted &&
+                f['firstName'].invalid
+              ">
+
+              <span
+                *ngIf="
+                  f['firstName'].errors?.['required']
+                ">
+
+                Le prénom est obligatoire.
+
+              </span>
+
+              <span
+                *ngIf="
+                  f['firstName'].errors?.['minlength']
+                ">
+
+                Le prénom doit contenir au moins
+                2 caractères.
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- Nom -->
+
+          <div class="field">
+
+            <label
+              class="field-label"
+              for="lastName">
+
+              Nom
+
+            </label>
+
+            <input
+              id="lastName"
+              type="text"
+              class="input"
+              formControlName="lastName"
+              placeholder="Ex. Ben Ali">
+
+            <div
+              class="field-error"
+              *ngIf="
+                submitted &&
+                f['lastName'].invalid
+              ">
+
+              <span
+                *ngIf="
+                  f['lastName'].errors?.['required']
+                ">
+
+                Le nom est obligatoire.
+
+              </span>
+
+              <span
+                *ngIf="
+                  f['lastName'].errors?.['minlength']
+                ">
+
+                Le nom doit contenir au moins
+                2 caractères.
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =========================
+             DATE DE NAISSANCE / SEXE
+             ========================= -->
+
+        <div class="form-grid">
+
+
+          <!-- Date de naissance -->
+
+          <div class="field">
+
+            <label
+              class="field-label"
+              for="dateOfBirth">
+
+              Date de naissance
+
+            </label>
+
+            <input
+              id="dateOfBirth"
+              type="date"
+              class="input"
+              formControlName="dateOfBirth">
+
+            <div
+              class="field-error"
+              *ngIf="
+                submitted &&
+                f['dateOfBirth'].invalid
+              ">
+
+              <span
+                *ngIf="
+                  f['dateOfBirth'].errors?.['required']
+                ">
+
+                La date de naissance est obligatoire.
+
+              </span>
+
+              <span
+                *ngIf="
+                  f['dateOfBirth'].errors?.['futureDate']
+                ">
+
+                La date de naissance ne peut pas être
+                dans le futur.
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- Sexe -->
+
+          <div class="field">
+
+            <label
+              class="field-label"
+              for="sex">
+
+              Sexe
+
+            </label>
+
+            <select
+              id="sex"
+              class="input"
+              formControlName="sex">
+
+              <option value="MALE">
+                Homme
+              </option>
+
+              <option value="FEMALE">
+                Femme
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <!-- =========================
+             ÂGE / POIDS
+             ========================= -->
+
+        <div class="form-grid">
+
+
+          <!-- Âge -->
+
+          <div class="field">
+
+            <label
+              class="field-label"
+              for="age">
+
+              Âge
+
+            </label>
+
+            <input
+              id="age"
+              type="number"
+              class="input"
+              formControlName="age"
+              placeholder="Ex. 47"
+              min="0"
+              max="120">
+
+            <div
+              class="field-error"
+              *ngIf="
+                submitted &&
+                f['age'].invalid
+              ">
+
+              <span
+                *ngIf="
+                  f['age'].errors?.['required']
+                ">
+
+                L'âge est obligatoire.
+
+              </span>
+
+              <span
+                *ngIf="
+                  f['age'].errors?.['min'] ||
+                  f['age'].errors?.['max']
+                ">
+
+                L'âge doit être compris entre
+                0 et 120 ans.
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- Poids -->
+
+          <div class="field">
+
+            <label
+              class="field-label"
+              for="weight">
+
+              Poids (kg)
+
+            </label>
+
+            <input
+              id="weight"
+              type="number"
+              step="0.1"
+              class="input"
+              formControlName="weight"
+              placeholder="Ex. 75,5"
+              min="1"
+              max="500">
+
+            <div
+              class="field-error"
+              *ngIf="
+                submitted &&
+                f['weight'].invalid
+              ">
+
+              <span
+                *ngIf="
+                  f['weight'].errors?.['required']
+                ">
+
+                Le poids est obligatoire.
+
+              </span>
+
+              <span
+                *ngIf="
+                  f['weight'].errors?.['min'] ||
+                  f['weight'].errors?.['max']
+                ">
+
+                Le poids doit être compris entre
+                1 et 500 kg.
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =========================
+             NUMÉRO DE TÉLÉPHONE
+             ========================= -->
 
         <div class="field">
 
           <label
             class="field-label"
-            for="lastName">
+            for="phoneNumber">
 
-            Last name
+            Numéro de téléphone
 
           </label>
 
           <input
-            id="lastName"
-            type="text"
+            id="phoneNumber"
+            type="tel"
             class="input"
-            placeholder="e.g. Ben Ali">
+            formControlName="phoneNumber"
+            placeholder="+216 20 000 000">
+
+          <div
+            class="field-error"
+            *ngIf="
+              submitted &&
+              f['phoneNumber'].invalid
+            ">
+
+            <span
+              *ngIf="
+                f['phoneNumber'].errors?.['required']
+              ">
+
+              Le numéro de téléphone est obligatoire.
+
+            </span>
+
+            <span
+              *ngIf="
+                f['phoneNumber'].errors?.['pattern']
+              ">
+
+              Veuillez saisir un numéro de téléphone
+              valide.
+
+            </span>
+
+          </div>
 
         </div>
 
       </div>
 
 
-      <!-- Date of birth / Sex -->
+      <!-- =========================
+           PIED DU FORMULAIRE
+           ========================= -->
 
-      <div class="form-grid">
+      <div class="modal-foot">
 
-        <div class="field">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          [disabled]="isLoading"
+          (click)="closeModal()">
 
-          <label
-            class="field-label"
-            for="dateOfBirth">
+          Annuler
 
-            Date of birth
-
-          </label>
-
-          <input
-            id="dateOfBirth"
-            type="date"
-            class="input">
-
-        </div>
+        </button>
 
 
-        <div class="field">
-
-          <label
-            class="field-label"
-            for="sex">
-
-            Sex
-
-          </label>
-
-          <select
-            id="sex"
-            class="input">
-
-            <option value="MALE">
-              Male
-            </option>
-
-            <option value="FEMALE">
-              Female
-            </option>
-
-          </select>
-
-        </div>
-
-      </div>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="patientForm.invalid || isLoading"
+          [class.is-loading]="isLoading">
 
 
-      <!-- Age / Weight -->
+          <!-- BOUTON NORMAL -->
 
-      <div class="form-grid">
+          <span *ngIf="!isLoading">
 
-        <div class="field">
+            Enregistrer le patient
 
-          <label
-            class="field-label"
-            for="age">
-
-            Age
-
-          </label>
-
-          <input
-            id="age"
-            type="number"
-            class="input"
-            placeholder="e.g. 47">
-
-        </div>
+          </span>
 
 
-        <div class="field">
+          <!-- CHARGEMENT -->
 
-          <label
-            class="field-label"
-            for="weight">
+          <span
+            *ngIf="isLoading"
+            class="btn-spinner-wrap">
 
-            Weight
+            <span
+              class="spinner"
+              aria-hidden="true">
+            </span>
 
-          </label>
+            Enregistrement du patient…
 
-          <input
-            id="weight"
-            type="number"
-            step="0.1"
-            class="input"
-            placeholder="e.g. 75.5">
+          </span>
 
-        </div>
+        </button>
 
       </div>
 
-    </div>
-
-
-    <!-- =========================
-         FOOTER
-         ========================= -->
-
-    <div class="modal-foot">
-
-      <button
-        type="button"
-        class="btn btn-secondary"
-        (click)="closeModal()">
-
-        Cancel
-
-      </button>
-
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="savePatient()">
-
-        Save patient
-
-      </button>
-
-    </div>
+    </form>
 
   </div>
 

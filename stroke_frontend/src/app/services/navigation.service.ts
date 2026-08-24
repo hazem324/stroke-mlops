@@ -25,9 +25,15 @@ export class NavigationService {
     );
   }
 
-  goToHome(): void {
+  goToHomeDash(): void {
     this.router.navigateByUrl(
-      APP_ROUTES.auth.register
+      APP_ROUTES.home.home
+    )
+  }
+
+  goToPatient (): void {
+    this.router.navigateByUrl(
+      APP_ROUTES.dash.patient
     )
   }
 }

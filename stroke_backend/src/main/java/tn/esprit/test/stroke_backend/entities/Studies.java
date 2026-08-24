@@ -47,7 +47,7 @@ public class Studies {
         createdAt = LocalDateTime.now();
 
         if (status == null) {
-            status = StudiesStatus.READY;
+            status = StudiesStatus.UPLOADED;
         }
     }
 }

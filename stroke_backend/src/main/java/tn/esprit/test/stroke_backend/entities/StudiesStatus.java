@@ -1,9 +1,9 @@
 package tn.esprit.test.stroke_backend.entities;
 
 public enum StudiesStatus {
-    
-    READY,
+    UPLOADED,
     PROCESSING,
     COMPLETED,
+    VALIDATED,
     FAILED
 }

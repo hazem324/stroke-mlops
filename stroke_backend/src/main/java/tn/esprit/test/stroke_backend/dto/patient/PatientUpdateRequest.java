@@ -5,31 +5,35 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-
+import lombok.experimental.FieldDefaults;
 import tn.esprit.test.stroke_backend.entities.Sex;
 
 @Getter
 @Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PatientUpdateRequest {
 
     @NotBlank
-    private String firstName;
+    String firstName;
 
     @NotBlank
-    private String lastName;
+    String lastName;
 
     @NotNull
-    private LocalDate dateOfBirth;
+    LocalDate dateOfBirth;
 
     @NotNull
-    private Sex sex;
+    Sex sex;
 
     @Positive
-    private Integer age;
+    Integer age;
 
     @Positive
-    private Double weight;
+    Double weight;
+    
+    String phoneNumber;
+
 }

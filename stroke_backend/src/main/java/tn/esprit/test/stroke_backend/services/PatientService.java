@@ -56,6 +56,7 @@ public class PatientService implements IPatientService {
         patient.setSex(request.getSex());
         patient.setAge(request.getAge());
         patient.setWeight(request.getWeight());
+        patient.setPhoneNumber(request.getPhoneNumber());
 
         // IMPORTANT:
         // Doctor comes from JWT, not from frontend
@@ -115,6 +116,7 @@ public class PatientService implements IPatientService {
         patient.setSex(request.getSex());
         patient.setAge(request.getAge());
         patient.setWeight(request.getWeight());
+        patient.setPhoneNumber(request.getPhoneNumber());
 
         return patientRepository.save(patient);
     }

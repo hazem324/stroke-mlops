@@ -85,7 +85,7 @@ export class LoginComponent {
           'Bienvenue'
         );
 
-        this.navigationService.goToHome();
+        this.goToPatient();
 
         // Keep isLoading = true here since we're navigating away.
         // If you prefer to reset it immediately, uncomment below:
@@ -145,6 +145,13 @@ export class LoginComponent {
     this.navigationService.goToRegister();
   } 
 
+  goToPatient (): void {
+    this.navigationService.goToPatient();
+  }
+
+  goToHomeDash(): void{
+    this.navigationService.goToHomeDash();
+  }
 
 
   testSuccess(): void {
