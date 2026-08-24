@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { PatientService } from '../../../../services/patient.service';
 import { Patient } from '../../../../models/patient/patient.model';
@@ -19,12 +20,25 @@ export class PatientListComponent implements OnInit {
 
   constructor(
     private patientService: PatientService,
-    private toastService: ToastService
+    private toastService: ToastService, 
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadPatients();
   }
+
+  viewPatient(id: number): void {
+
+  console.log('Opening patient:', id);
+
+  this.router.navigate([
+    '/dashboard',
+    'patient',
+    id
+  ]);
+
+}
 
   /**
    * Get all patients belonging to the authenticated doctor.
