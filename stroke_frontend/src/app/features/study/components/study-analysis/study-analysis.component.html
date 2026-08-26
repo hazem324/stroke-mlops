@@ -1,1 +1,451 @@
-<p>study-analysis works!</p>
+<main class="main">
+
+  <div class="page-head">
+
+    <div>
+      <h1>Nouvelle analyse IRM</h1>
+
+      <p class="lede">
+        Sélectionnez un patient, importez l'IRM DWI,
+        puis lancez la segmentation automatique.
+      </p>
+    </div>
+
+  </div>
+
+
+  <div class="wizard">
+
+    <!-- ======================================================
+         COLONNE PRINCIPALE
+         ====================================================== -->
+
+    <div class="card" id="wizardCard">
+
+
+      <!-- ====================================================
+           ÉTAPE 1 : PATIENT
+           ==================================================== -->
+
+      <div class="step done">
+
+        <div class="step-num">
+          1
+        </div>
+
+        <div class="step-content">
+
+          <div class="step-title">
+            Sélectionner le patient
+          </div>
+
+          <div class="step-sub">
+            Choisissez le patient concerné par cette étude.
+          </div>
+
+          <select
+            class="input"
+            [(ngModel)]="selectedPatientId"
+            (ngModelChange)="onPatientChange()"
+          >
+
+            <option [ngValue]="null">
+              Sélectionner un patient…
+            </option>
+
+            <option
+              *ngFor="let patient of patients"
+              [ngValue]="patient.id"
+            >
+              {{ patient.patientCode }} — {{ patient.firstName }} {{ patient.lastName }}
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <!-- ====================================================
+           ÉTAPE 2 : MODALITÉ
+           ==================================================== -->
+
+      <div class="step done">
+
+        <div class="step-num">
+          2
+        </div>
+
+        <div class="step-content">
+
+          <div class="step-title">
+            Modalité IRM
+          </div>
+
+          <div class="step-sub">
+            Le modèle actuel est entraîné exclusivement
+            sur la modalité DWI.
+          </div>
+
+          <span class="modality-pill">
+
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="3"
+              />
+
+              <path d="M3 9h18" />
+
+              <path d="M9 21V9" />
+            </svg>
+
+            DWI — Imagerie pondérée en diffusion
+
+            <span class="badge badge-completed">
+              <span class="dot"></span>
+              Modèle prêt
+            </span>
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- ====================================================
+           ÉTAPE 3 : UPLOAD
+           ==================================================== -->
+
+      <div class="step">
+
+        <div class="step-num">
+          3
+        </div>
+
+        <div class="step-content">
+
+          <div class="step-title">
+            Importer l'IRM DWI
+          </div>
+
+          <div class="step-sub">
+            Formats acceptés : .nii / .nii.gz
+          </div>
+
+
+          <!-- DROPZONE -->
+
+          <div
+            class="dropzone"
+            [class.drag]="isDragging"
+            [class.hidden]="selectedFile"
+            (click)="openFileSelector()"
+            (dragenter)="onDragEnter($event)"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)"
+            (drop)="onDrop($event)"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 16V4" />
+              <path d="M6.5 9.5 12 4l5.5 5.5" />
+              <path d="M4 16v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2" />
+            </svg>
+
+            <div class="dz-title">
+              Glissez-déposez votre fichier DWI ici
+            </div>
+
+            <div class="dz-sub">
+              ou cliquez pour parcourir · .nii / .nii.gz acceptés
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="openFileSelector(); $event.stopPropagation()"
+            >
+              Choisir un fichier
+            </button>
+
+            <input
+              #fileInput
+              type="file"
+              accept=".nii,.nii.gz"
+              hidden
+              (change)="onFileSelected($event)"
+            />
+
+          </div>
+
+
+          <!-- FICHIER SÉLECTIONNÉ -->
+
+          <div
+            class="file-picked"
+            [class.show]="selectedFile"
+          >
+
+            <div class="f-icon">
+
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+                <path d="M14 3v5h5" />
+              </svg>
+
+            </div>
+
+
+            <div>
+
+              <div class="f-name">
+                {{ selectedFile?.name }}
+              </div>
+
+              <div class="f-meta">
+                {{ formatFileSize(selectedFile?.size || 0) }}
+              </div>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="f-remove"
+              aria-label="Supprimer le fichier"
+              (click)="removeFile()"
+            >
+
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M18 6 6 18" />
+                <path d="M6 6l12 12" />
+              </svg>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ====================================================
+           TRAITEMENT
+           ==================================================== -->
+
+      <div
+        class="processing-panel"
+        [class.show]="isProcessing"
+      >
+
+        <div
+          class="proc-step"
+          *ngFor="let step of processingSteps; let i = index"
+          [class.active]="currentProcessingStep === i"
+          [class.complete]="currentProcessingStep > i"
+        >
+
+          <div class="dot-ring"></div>
+
+          {{ step }}
+
+        </div>
+
+      </div>
+
+
+      <!-- ====================================================
+           ACTIONS
+           ==================================================== -->
+
+      <div class="wizard-actions">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="cancel()"
+        >
+          Annuler
+        </button>
+
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!selectedPatientId || !selectedFile || isProcessing"
+          (click)="startAnalysis()"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M13 2 3 14h7l-1 8 11-14h-7z" />
+          </svg>
+
+          {{ isProcessing ? 'Analyse en cours…' : 'Analyser l’IRM' }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         COLONNE DROITE : RÉSUMÉ
+         ====================================================== -->
+
+    <div class="side-summary">
+
+
+      <!-- RÉSUMÉ -->
+
+      <div class="card card-pad">
+
+        <h3>
+          Résumé de l'analyse
+        </h3>
+
+
+        <div class="summary-row">
+
+          <span class="muted">
+            Patient
+          </span>
+
+          <span class="summary-value">
+
+            <ng-container *ngIf="selectedPatient; else noPatient">
+              {{ selectedPatient.firstName }} {{ selectedPatient.lastName }}
+              ({{ selectedPatient.patientCode }})
+            </ng-container>
+
+            <ng-template #noPatient>
+              —
+            </ng-template>
+
+          </span>
+
+        </div>
+
+
+        <div class="summary-row">
+
+          <span class="muted">
+            Modalité
+          </span>
+
+          <span class="mono">
+            DWI
+          </span>
+
+        </div>
+
+
+        <div class="summary-row">
+
+          <span class="muted">
+            Modèle
+          </span>
+
+          <span class="mono">
+            stroke-dwi v1
+          </span>
+
+        </div>
+
+
+        <div class="summary-row last">
+
+          <span class="muted">
+            Temps estimé
+          </span>
+
+          <span>
+            ≈ 8–10 s
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- INFORMATION -->
+
+      <div class="card card-pad info-card">
+
+        <div class="info-content">
+
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+            />
+
+            <path d="M12 16v-5" />
+
+            <path d="M12 8h.01" />
+
+          </svg>
+
+          <p>
+            Le fichier IRM est traité par le pipeline
+            FastAPI / 3D U-Net. Il n'est jamais analysé
+            directement dans le navigateur.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>

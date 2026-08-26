@@ -1,0 +1,549 @@
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+
+/* ============================================================
+   MAIN
+   ============================================================ */
+
+.main {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+
+  padding: 26px 28px 60px;
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.page-head {
+  margin-bottom: 22px;
+}
+
+.page-head h1 {
+  margin: 0 0 5px;
+}
+
+.lede {
+  margin: 0;
+
+  color: var(--c-ink-soft);
+
+  font-size: 13.5px;
+}
+
+
+/* ============================================================
+   WIZARD
+   ============================================================ */
+
+.wizard {
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 2.1fr)
+    minmax(280px, 1fr);
+
+  gap: 20px;
+
+  align-items: start;
+}
+
+
+/* ============================================================
+   CARD
+   ============================================================ */
+
+.card {
+  overflow: hidden;
+
+  border: 1px solid var(--c-line);
+  border-radius: 18px;
+
+  background: var(--c-surface);
+
+  box-shadow:
+    0 6px 20px rgba(16, 25, 43, 0.05);
+}
+
+.card-pad {
+  padding: 20px;
+}
+
+.card-pad h3 {
+  margin: 0 0 14px;
+
+  font-size: 14px;
+}
+
+
+/* ============================================================
+   STEPS
+   ============================================================ */
+
+.step {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 15px;
+
+  padding: 22px;
+
+  border-bottom: 1px solid var(--c-line-soft);
+}
+
+.step:last-child {
+  border-bottom: none;
+}
+
+.step-num {
+  width: 30px;
+  height: 30px;
+
+  flex: 0 0 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--c-line);
+  border-radius: 50%;
+
+  background: var(--c-surface);
+
+  color: var(--c-ink-faint);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.step.done .step-num {
+  border-color: var(--c-primary-500);
+
+  background: var(--c-primary-500);
+
+  color: #fff;
+}
+
+.step-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.step-title {
+  margin-bottom: 5px;
+
+  color: var(--c-ink);
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.step-sub {
+  margin-bottom: 14px;
+
+  color: var(--c-ink-soft);
+
+  font-size: 12.5px;
+
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   PATIENT SELECT
+   ============================================================ */
+
+.step-content .input {
+  width: 100%;
+  margin-top: 2px;
+}
+
+
+/* ============================================================
+   MODALITY
+   ============================================================ */
+
+.modality-pill {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 8px 10px;
+
+  border: 1px solid var(--c-primary-100);
+  border-radius: 9px;
+
+  background: var(--c-primary-50);
+
+  color: var(--c-primary-700);
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.modality-pill svg {
+  width: 15px;
+  height: 15px;
+
+  flex: 0 0 15px;
+}
+
+
+/* ============================================================
+   DROPZONE
+   ============================================================ */
+
+.dropzone {
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 28px;
+
+  border: 1.5px dashed var(--c-line);
+  border-radius: 14px;
+
+  background: var(--c-bg);
+
+  text-align: center;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.dropzone:hover,
+.dropzone.drag {
+  border-color: var(--c-primary-500);
+
+  background: var(--c-primary-50);
+}
+
+.dropzone.hidden {
+  display: none;
+}
+
+.dropzone > svg {
+  width: 34px;
+  height: 34px;
+
+  margin-bottom: 4px;
+
+  color: var(--c-primary-500);
+}
+
+.dz-title {
+  color: var(--c-ink);
+
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.dz-sub {
+  margin-bottom: 6px;
+
+  color: var(--c-ink-faint);
+
+  font-size: 11.5px;
+}
+
+
+/* ============================================================
+   SELECTED FILE
+   ============================================================ */
+
+.file-picked {
+  display: none;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 13px 14px;
+
+  border: 1px solid var(--c-primary-100);
+  border-radius: 10px;
+
+  background: var(--c-primary-50);
+}
+
+.file-picked.show {
+  display: flex;
+}
+
+.f-icon {
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: var(--c-primary-100);
+
+  color: var(--c-primary-600);
+}
+
+.f-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.f-name {
+  color: var(--c-ink);
+
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.f-meta {
+  margin-top: 2px;
+
+  color: var(--c-ink-faint);
+
+  font-size: 11px;
+}
+
+.f-remove {
+  width: 30px;
+  height: 30px;
+
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: var(--c-ink-faint);
+
+  cursor: pointer;
+}
+
+.f-remove:hover {
+  background: var(--c-primary-100);
+
+  color: var(--c-primary-700);
+}
+
+
+/* ============================================================
+   PROCESSING
+   ============================================================ */
+
+.processing-panel {
+  display: none;
+
+  padding: 18px 22px;
+
+  border-bottom: 1px solid var(--c-line-soft);
+
+  background: var(--c-bg);
+}
+
+.processing-panel.show {
+  display: block;
+}
+
+.proc-step {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 7px 0;
+
+  color: var(--c-ink-faint);
+
+  font-size: 12px;
+}
+
+.proc-step.active {
+  color: var(--c-primary-600);
+
+  font-weight: 600;
+}
+
+.proc-step.complete {
+  color: var(--c-success);
+}
+
+.dot-ring {
+  width: 9px;
+  height: 9px;
+
+  flex: 0 0 9px;
+
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+
+.wizard-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  padding: 18px 22px;
+
+  border-top: 1px solid var(--c-line-soft);
+}
+
+
+/* ============================================================
+   RIGHT SIDE
+   ============================================================ */
+
+.side-summary {
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+
+  min-width: 0;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 9px 0;
+
+  border-bottom: 1px solid var(--c-line-soft);
+
+  font-size: 12.8px;
+}
+
+.summary-row.last {
+  border-bottom: none;
+}
+
+.summary-value {
+  max-width: 200px;
+
+  overflow: hidden;
+
+  font-weight: 600;
+
+  text-align: right;
+
+  text-overflow: ellipsis;
+}
+
+.info-card {
+  background: var(--c-primary-50);
+
+  border-color: var(--c-primary-100);
+}
+
+.info-content {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 10px;
+}
+
+.info-content svg {
+  width: 18px;
+  height: 18px;
+
+  flex: 0 0 18px;
+
+  margin-top: 2px;
+
+  color: var(--c-primary-600);
+}
+
+.info-content p {
+  margin: 0;
+
+  color: var(--c-primary-700);
+
+  font-size: 12.6px;
+
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  .wizard {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .main {
+    padding: 20px 16px 40px;
+  }
+
+  .step {
+    padding: 18px 16px;
+  }
+
+  .wizard-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .wizard-actions .btn {
+    width: 100%;
+  }
+
+  .summary-row {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 4px;
+  }
+
+  .summary-value {
+    max-width: none;
+
+    text-align: left;
+  }
+
+}

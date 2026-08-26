@@ -17,7 +17,14 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../features/patient/patient.module')
             .then(m => m.PatientModule)
-      }
+      }, 
+
+    {
+      path: 'new-analysis', 
+      loadChildren: () =>
+        import('../../features/study/study.module')
+      .then(m => m.StudyModule)
+    }
 
     ]
   }

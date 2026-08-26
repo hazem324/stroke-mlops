@@ -48,10 +48,7 @@ export class PatientService {
    * PUT /api/patient/{id}
    * Update an existing patient.
    */
-  updatePatient(
-    id: number,
-    patient: UpdatePatientRequest
-  ) {
+  updatePatient(id: number, patient: UpdatePatientRequest) {
     return this.http.put<CreatePatientResponse>(
       `${this.baseUrl}/${id}`,
       patient
