@@ -19,13 +19,8 @@ app = FastAPI(
 
 # ============================================================
 # DEBUG HTTP
-# ============================================================
-
 @app.middleware("http")
-async def debug_request(
-    request: Request,
-    call_next
-):
+async def debug_request(request: Request,call_next):
 
     print()
     print("=" * 80)
@@ -92,16 +87,8 @@ async def debug_request(
     return response
 
 
-# ============================================================
 # ROUTERS
-# ============================================================
+app.include_router( health_router)
 
-app.include_router(
-    health_router
-)
-
-app.include_router(
-    prediction_router
-)
-
+app.include_router(prediction_router)
 # app.include_router(download_router)

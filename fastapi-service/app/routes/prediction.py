@@ -33,10 +33,7 @@ OUTPUT_DIR.mkdir(
 )
 
 
-# ============================================================
 # TEST CONNECTION
-# ============================================================
-
 @router.post("/test")
 async def test_prediction_connection(
     file: UploadFile = File(...)
@@ -44,7 +41,7 @@ async def test_prediction_connection(
 
     print()
     print("============================================================")
-    print("🔵 FASTAPI /predict/test")
+    print("FASTAPI /predict/test")
     print("============================================================")
 
     print(f"Filename       : {file.filename}")
@@ -55,7 +52,7 @@ async def test_prediction_connection(
     print(f"Received size  : {len(content)} bytes")
 
     print("============================================================")
-    print("🟢 /predict/test SUCCESS")
+    print("/predict/test SUCCESS")
     print("============================================================")
     print()
 
@@ -68,10 +65,7 @@ async def test_prediction_connection(
     }
 
 
-# ============================================================
 # REAL PREDICTION
-# ============================================================
-
 @router.post(
     "/",
     response_model=PredictionResponse,
@@ -86,31 +80,25 @@ async def predict_stroke(
 
     print()
     print("============================================================")
-    print("🚀 FASTAPI /predict/")
+    print(" FASTAPI /predict/")
     print("============================================================")
 
     start_time = time.perf_counter()
 
-    # --------------------------------------------------------
     # 1. FILE INFORMATION
-    # --------------------------------------------------------
-
     print()
-    print("[1] FILE RECEIVED")
+    print(" FILE RECEIVED")
 
     print(f"Filename       : {file.filename}")
     print(f"Content-Type   : {file.content_type}")
 
-    # --------------------------------------------------------
     # 2. VALIDATE FILENAME
-    # --------------------------------------------------------
-
     print()
     print("[2] VALIDATING FILE")
 
     if not file.filename:
 
-        print("❌ ERROR: Filename is missing")
+        print("ERROR: Filename is missing")
 
         raise HTTPException(
             status_code=400,
@@ -121,7 +109,7 @@ async def predict_stroke(
 
     if not file.filename.lower().endswith(".nii.gz"):
 
-        print("❌ ERROR: Invalid extension")
+        print("ERROR: Invalid extension")
         print(f"Received       : {file.filename}")
 
         raise HTTPException(
@@ -129,12 +117,9 @@ async def predict_stroke(
             detail="Only .nii.gz NIfTI files are supported.",
         )
 
-    print("✅ Extension OK")
+    print(" Extension OK")
 
-    # --------------------------------------------------------
     # 3. TEMPORARY DIRECTORY
-    # --------------------------------------------------------
-
     with tempfile.TemporaryDirectory() as temp_dir:
 
         print()
@@ -148,10 +133,7 @@ async def predict_stroke(
 
         try:
 
-            # ------------------------------------------------
             # 4. SAVE UPLOADED FILE
-            # ------------------------------------------------
-
             print()
             print("[4] SAVING UPLOADED FILE")
 
@@ -162,64 +144,37 @@ async def predict_stroke(
                     buffer,
                 )
 
-            print("✅ File written")
+            print("File written")
 
             print(f"Exists         : {temp_path.exists()}")
 
             if temp_path.exists():
 
-                print(
-                    f"Size           : {temp_path.stat().st_size} bytes"
-                )
+                print(f"Size           : {temp_path.stat().st_size} bytes")
 
-            # ------------------------------------------------
             # 5. CREATE PREDICTION ID
-            # ------------------------------------------------
-
             print()
-            print("[5] CREATING OUTPUT FILES")
+            print("CREATING OUTPUT FILES")
 
             prediction_id = uuid.uuid4().hex
 
             print(f"Prediction ID  : {prediction_id}")
-
-            prediction_filename = (
-                f"prediction_{prediction_id}.nii.gz"
-            )
-
-            overlay_filename = (
-                f"prediction_overlay_{prediction_id}.nii.gz"
-            )
-
-            preview_filename = (
-                f"prediction_{prediction_id}.png"
-            )
-
-            prediction_path = (
-                OUTPUT_DIR / prediction_filename
-            )
-
-            overlay_path = (
-                OUTPUT_DIR / overlay_filename
-            )
-
-            preview_path = (
-                OUTPUT_DIR / preview_filename
-            )
+            prediction_filename = (f"prediction_{prediction_id}.nii.gz")
+            overlay_filename = ( f"prediction_overlay_{prediction_id}.nii.gz")
+            preview_filename = (f"prediction_{prediction_id}.png")
+            prediction_path = (OUTPUT_DIR / prediction_filename)
+            overlay_path = (OUTPUT_DIR / overlay_filename)
+            preview_path = (OUTPUT_DIR / preview_filename )
 
             print(f"Prediction     : {prediction_path}")
             print(f"Overlay        : {overlay_path}")
             print(f"Preview        : {preview_path}")
-
             print(f"Output dir     : {OUTPUT_DIR.absolute()}")
 
-            # ------------------------------------------------
             # 6. CALL MODEL
-            # ------------------------------------------------
-
             print()
             print("============================================================")
-            print("🧠 [6] CALLING INFERENCE MODEL")
+            print("CALLING INFERENCE MODEL")
             print("============================================================")
 
             print(f"Input          : {temp_path}")
@@ -234,32 +189,16 @@ async def predict_stroke(
                 overlay_path,
             )
 
-            inference_time = (
-                time.perf_counter()
-                - inference_start
-            )
-
+            inference_time = (time.perf_counter() - inference_start)
             print()
-            print("✅ INFERENCE FINISHED")
+            print(" INFERENCE FINISHED")
+            print( f"Inference time : {inference_time:.3f} seconds")
+            print(f"Result type    : {type(result)}")
+            print(f"Result keys    : {result.keys()}")
 
-            print(
-                f"Inference time : {inference_time:.3f} seconds"
-            )
-
-            print(
-                f"Result type    : {type(result)}"
-            )
-
-            print(
-                f"Result keys    : {result.keys()}"
-            )
-
-            # ------------------------------------------------
             # 7. EXTRACT PREDICTION
-            # ------------------------------------------------
-
             print()
-            print("[7] EXTRACTING MODEL RESULT")
+            print(" XTRACTING MODEL RESULT")
 
             prediction = result["prediction"]
 
@@ -267,29 +206,15 @@ async def predict_stroke(
 
             original_image = result["original_image"]
 
-            print(
-                f"Prediction type  : {type(prediction)}"
-            )
+            print(f"Prediction type  : {type(prediction)}")
+            print(f"Prediction shape : {prediction.shape}")
+            print(f"Original volume  : {type(original_volume)}" )
+            print( f"Original image   : {type(original_image)}")
 
-            print(
-                f"Prediction shape : {prediction.shape}"
-            )
-
-            print(
-                f"Original volume  : {type(original_volume)}"
-            )
-
-            print(
-                f"Original image   : {type(original_image)}"
-            )
-
-            # ------------------------------------------------
             # 8. LESION ANALYSIS
-            # ------------------------------------------------
-
             print()
             print("============================================================")
-            print("🔬 [8] ANALYZING LESION")
+            print(" ANALYZING LESION")
             print("============================================================")
 
             lesion_start = time.perf_counter()
@@ -299,28 +224,16 @@ async def predict_stroke(
                 original_image,
             )
 
-            lesion_time = (
-                time.perf_counter()
-                - lesion_start
-            )
+            lesion_time = (time.perf_counter() - lesion_start)
 
-            print("✅ LESION ANALYSIS FINISHED")
+            print("LESION ANALYSIS FINISHED")
+            print( f"Lesion result : {lesion}" )
+            print(f"Lesion time   : {lesion_time:.3f} seconds" )
 
-            print(
-                f"Lesion result : {lesion}"
-            )
-
-            print(
-                f"Lesion time   : {lesion_time:.3f} seconds"
-            )
-
-            # ------------------------------------------------
             # 9. CREATE PREVIEW
-            # ------------------------------------------------
-
             print()
             print("============================================================")
-            print("🖼️ [9] CREATING PREVIEW")
+            print(" CREATING PREVIEW")
             print("============================================================")
 
             preview_start = time.perf_counter()
@@ -331,33 +244,15 @@ async def predict_stroke(
                 preview_path,
             )
 
-            preview_time = (
-                time.perf_counter()
-                - preview_start
-            )
+            preview_time = ( time.perf_counter() - preview_start)
 
-            print("✅ PREVIEW CREATED")
+            print(" PREVIEW CREATED")
+            print( f"Preview slice : {preview_slice}" )
+            print(f"Preview path  : {preview_path}" )
+            print(f"Preview exists: {preview_path.exists()}" )
+            print( f"Preview time  : {preview_time:.3f} seconds")
 
-            print(
-                f"Preview slice : {preview_slice}"
-            )
-
-            print(
-                f"Preview path  : {preview_path}"
-            )
-
-            print(
-                f"Preview exists: {preview_path.exists()}"
-            )
-
-            print(
-                f"Preview time  : {preview_time:.3f} seconds"
-            )
-
-            # ------------------------------------------------
             # 10. EXECUTION TIME
-            # ------------------------------------------------
-
             execution_time = (
                 time.perf_counter()
                 - start_time
@@ -365,7 +260,7 @@ async def predict_stroke(
 
             print()
             print("============================================================")
-            print("🎉 PREDICTION SUCCESS")
+            print(" PREDICTION SUCCESS")
             print("============================================================")
 
             print(
@@ -387,10 +282,7 @@ async def predict_stroke(
             print("============================================================")
             print()
 
-            # ------------------------------------------------
             # 11. RETURN RESPONSE
-            # ------------------------------------------------
-
             return PredictionResponse(
                 status="success",
                 filename=file.filename,
@@ -412,7 +304,7 @@ async def predict_stroke(
 
             print()
             print("============================================================")
-            print("⚠️ HTTP EXCEPTION")
+            print("HTTP EXCEPTION")
             print("============================================================")
 
             print(f"Status code : {exc.status_code}")
@@ -427,7 +319,7 @@ async def predict_stroke(
 
             print()
             print("============================================================")
-            print("🔥 REAL PREDICTION ERROR")
+            print(" REAL PREDICTION ERROR")
             print("============================================================")
 
             print(f"Exception type : {type(exc).__name__}")

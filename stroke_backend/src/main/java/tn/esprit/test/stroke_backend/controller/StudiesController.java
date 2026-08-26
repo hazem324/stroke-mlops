@@ -19,6 +19,7 @@ import tn.esprit.test.stroke_backend.dto.study.StudyRequest;
 import tn.esprit.test.stroke_backend.dto.study.StudyResponseDTO;
 import tn.esprit.test.stroke_backend.entities.Modality;
 import tn.esprit.test.stroke_backend.entities.Studies;
+import tn.esprit.test.stroke_backend.entities.StudiesStatus;
 import tn.esprit.test.stroke_backend.exceptions.ForbiddenException;
 import tn.esprit.test.stroke_backend.exceptions.PatientNotFoundException;
 import tn.esprit.test.stroke_backend.exceptions.StudiesCodeAlreadyExistsException;
@@ -26,14 +27,14 @@ import tn.esprit.test.stroke_backend.exceptions.StudiesNotFoundException;
 import tn.esprit.test.stroke_backend.services.StudiesService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/studies")
 @RequiredArgsConstructor
 @Slf4j
 public class StudiesController {
 
     private final StudiesService studyService;
 
-    @PostMapping("/patients/{patientId}/studies")
+    @PostMapping("/patients/{patientId}")
     public ResponseEntity<Map<String, Object>> createStudy( @PathVariable Long patientId,@Valid @RequestBody StudyRequest request) {
 
         try {
@@ -100,7 +101,7 @@ public class StudiesController {
         }
     }
 
-    @GetMapping("/patients/{patientId}/studies")
+    @GetMapping("/patients/{patientId}")
     public ResponseEntity<Map<String, Object>>getPatientStudies( @PathVariable Long patientId) {
 
         try {
@@ -154,7 +155,7 @@ public class StudiesController {
         }
     }
 
-    @GetMapping("/studies/{studyId}")
+    @GetMapping("/{studyId}")
     public ResponseEntity<Map<String, Object>>  getStudy(  @PathVariable Long studyId) {
 
         try {
@@ -209,117 +210,90 @@ public class StudiesController {
     }
 
      @PostMapping(
-            value = "/{patientId}/studies/analyze",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
-    public ResponseEntity<?> analyzeStudy(
-
-            @PathVariable Long patientId,
-
-            @RequestPart("file")
-            MultipartFile file,
-
-            @RequestParam(
-                    value = "modality",
-                    defaultValue = "DWI"
-            )
-            Modality modality) {
-
-        log.info(
-                "MRI analysis request received - patientId={}, file={}",
-                patientId,
-                file != null
-                        ? file.getOriginalFilename()
-                        : null
-        );
-
-
-        try {
-
-            StudyResponseDTO response =
-                    studyService.analyzeStudy(
-                            patientId,
-                            file,
-                            modality
-                    );
-
-
-            /*
-             * Important :
-             *
-             * Si FastAPI échoue, StudiesService retourne
-             * une Study avec status = FAILED.
-             *
-             * Ce n'est donc pas une erreur HTTP 500.
-             */
-
-            if (response.getStatus() != null &&
-                response.getStatus().name().equals("FAILED")) {
-
-                return ResponseEntity
-                        .status(HttpStatus.OK)
-                        .body(response);
-            }
-
-
+        value = "/{patientId}/analyze",
+        consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+)
+public ResponseEntity<?> analyzeStudy(@PathVariable Long patientId,
+        @RequestPart("file")
+        MultipartFile file,
+        @RequestParam(
+                value = "modality",
+                defaultValue = "DWI"
+        )
+        Modality modality) {
+    log.info(
+            "MRI analysis request received - patientId={}, file={}",
+            patientId,
+            file != null
+                    ? file.getOriginalFilename()
+                    : null
+    );
+    try {
+        StudyResponseDTO response =
+                studyService.analyzeStudy(
+                        patientId,
+                        file,
+                        modality
+                );
+        /*
+         * Important :
+         *
+         * Si FastAPI échoue, StudiesService retourne
+         * une Study avec status = FAILED.
+         *
+         * Ce n'est donc pas une erreur HTTP 500,
+         * mais on utilise 422 pour indiquer que le
+         * traitement métier/ML a échoué.
+         */
+        if (response.getStatus() == StudiesStatus.FAILED) {
             return ResponseEntity
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.UNPROCESSABLE_CONTENT)
                     .body(response);
-
-
-        } catch (PatientNotFoundException e) {
-
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(
-                            Map.of(
-                                    "message",
-                                    "Patient introuvable"
-                            )
-                    );
-
-
-        } catch (ForbiddenException e) {
-
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(
-                            Map.of(
-                                    "message",
-                                    e.getMessage()
-                            )
-                    );
-
-
-        } catch (IllegalArgumentException e) {
-
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(
-                            Map.of(
-                                    "message",
-                                    e.getMessage()
-                            )
-                    );
-
-
-        } catch (Exception e) {
-
-            log.error(
-                    "Unexpected error during MRI analysis",
-                    e
-            );
-
-
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(
-                            Map.of(
-                                    "message",
-                                    "Une erreur interne est survenue"
-                            )
-                    );
         }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    } catch (PatientNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(
+                        Map.of(
+                                "message",
+                                "Patient introuvable"
+                        )
+                );
+    } catch (ForbiddenException e) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(
+                        Map.of(
+                                "message",
+                                e.getMessage()
+                        )
+                );
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(
+                        Map.of(
+                                "message",
+                                e.getMessage()
+                        )
+                );
+    } catch (Exception e) {
+        log.error(
+                "Unexpected error during MRI analysis",
+                e
+        );
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(
+                        Map.of(
+                                "message",
+                                "Une erreur interne est survenue"
+                        )
+                );
     }
+}
 
 }

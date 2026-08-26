@@ -1,6 +1,5 @@
 package tn.esprit.test.stroke_backend.integration;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
@@ -10,492 +9,62 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
-
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.MultipartBodyBuilder;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.util.MultiValueMap;
-
 import org.springframework.web.client.RestClient;
-
 
 @Service
 public class FastApiService {
 
-
     private final RestClient restClient;
-
     private final String predictEndpoint;
 
+    public FastApiService( RestClient.Builder restClientBuilder,
 
-    // ============================================================
-    // CONSTRUCTOR
-    // ============================================================
-
-    public FastApiService(
-
-            RestClient.Builder restClientBuilder,
-
-            @Value("${app.fastapi.base-url:http://localhost:8000}")
+            @Value("${app.fastapi.base-url}")
             String baseUrl,
 
-            @Value("${app.fastapi.predict-endpoint:/predict/}")
-            String predictEndpoint
+            @Value("${app.fastapi.predict-endpoint:}")
+            String predictEndpoint) {
 
-    ) {
+        this.restClient = createRestClient(restClientBuilder, baseUrl );
 
-
-        // ========================================================
-        // APACHE HTTP CLIENT 5
-        // ========================================================
-
-        RequestConfig requestConfig =
-                RequestConfig.custom()
-
-                        .setConnectionRequestTimeout(
-                                30,
-                                TimeUnit.SECONDS
-                        )
-
-                        .setResponseTimeout(
-                                120,
-                                TimeUnit.SECONDS
-                        )
-
-                        .build();
-
-
-        CloseableHttpClient httpClient =
-                HttpClients.custom()
-
-                        .setDefaultRequestConfig(
-                                requestConfig
-                        )
-
-                        .build();
-
-
-        // ========================================================
-        // REQUEST FACTORY
-        // ========================================================
-
-        HttpComponentsClientHttpRequestFactory requestFactory =
-                new HttpComponentsClientHttpRequestFactory(
-                        httpClient
-                );
-
-
-        // ========================================================
-        // REST CLIENT
-        // ========================================================
-
-        this.restClient = restClientBuilder
-
-                .requestFactory(
-                        requestFactory
-                )
-
-                .requestInterceptor(
-                        (request, body, execution) -> {
-
-                            System.out.println();
-
-                            System.out.println(
-                                    "============================================================"
-                            );
-
-                            System.out.println(
-                                    "SPRING BOOT -> FASTAPI HTTP DEBUG"
-                            );
-
-                            System.out.println(
-                                    "============================================================"
-                            );
-
-
-                            System.out.println(
-                                    "METHOD : "
-                                            + request.getMethod()
-                            );
-
-
-                            System.out.println(
-                                    "URI : "
-                                            + request.getURI()
-                            );
-
-
-                            System.out.println();
-
-                            System.out.println(
-                                    "HEADERS:"
-                            );
-
-
-                            request.getHeaders().forEach(
-                                    (name, values) ->
-
-                                            System.out.println(
-                                                    name
-                                                            + " = "
-                                                            + values
-                                            )
-                            );
-
-
-                            System.out.println();
-
-                            System.out.println(
-                                    "BODY SIZE : "
-                                            + (
-                                            body == null
-                                                    ? 0
-                                                    : body.length
-                                    )
-                                            + " bytes"
-                            );
-
-
-                            System.out.println();
-
-                            System.out.println(
-                                    "============================================================"
-                            );
-
-
-                            return execution.execute(
-                                    request,
-                                    body
-                            );
-                        }
-                )
-
-                .baseUrl(
-                        baseUrl
-                )
-
-                .build();
-
-
-        this.predictEndpoint =
-                predictEndpoint;
+        this.predictEndpoint = predictEndpoint;
     }
 
+    /**
+     * Analyse un fichier DWI avec le modèle FastAPI.
+     */
+    public FastApiPredictionResponse predict(Path dwiFilePath) {
 
-    // ============================================================
-    // REAL PREDICTION
-    // ============================================================
+        FileSystemResource fileResource = getFileResource(dwiFilePath);
 
-    public FastApiPredictionResponse predict(
-            Path dwiFilePath
-    ) {
-
-
-        // ========================================================
-        // FILE RESOURCE
-        // ========================================================
-
-        FileSystemResource fileResource =
-                new FileSystemResource(
-                        dwiFilePath.toFile()
-                );
-
-
-        // ========================================================
-        // FILE EXISTS
-        // ========================================================
-
-        if (!fileResource.exists()) {
-
-            throw new RuntimeException(
-                    "DWI file does not exist: "
-                            + dwiFilePath
-            );
-        }
-
-
-        // ========================================================
-        // FILE READABLE
-        // ========================================================
-
-        if (!fileResource.isReadable()) {
-
-            throw new RuntimeException(
-                    "DWI file is not readable: "
-                            + dwiFilePath
-            );
-        }
-
+        MultiValueMap<String, HttpEntity<?>> body = createMultipartBody(fileResource);
 
         try {
 
-
-            // ====================================================
-            // DEBUG
-            // ====================================================
-
-            System.out.println();
-
-            System.out.println(
-                    "============================================================"
-            );
-
-            System.out.println(
-                    "CALLING FASTAPI"
-            );
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            System.out.println(
-                    "URL : "
-                            + predictEndpoint
-            );
-
-
-            System.out.println(
-                    "File : "
-                            + fileResource.getFilename()
-            );
-
-
-            System.out.println(
-                    "Path : "
-                            + dwiFilePath.toAbsolutePath()
-            );
-
-
-            System.out.println(
-                    "Exists : "
-                            + fileResource.exists()
-            );
-
-
-            System.out.println(
-                    "Readable : "
-                            + fileResource.isReadable()
-            );
-
-
-            System.out.println(
-                    "Size : "
-                            + fileResource.contentLength()
-                            + " bytes"
-            );
-
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            // ====================================================
-            // MULTIPART BODY
-            // ====================================================
-
-            MultipartBodyBuilder builder =
-                    new MultipartBodyBuilder();
-
-
-            builder.part(
-                            "file",
-                            fileResource
-                    )
-
-                    .filename(
-                            fileResource.getFilename()
-                    )
-
-                    .contentType(
-                            MediaType.APPLICATION_OCTET_STREAM
-                    );
-
-
-            MultiValueMap<String, HttpEntity<?>> multipartBody =
-                    builder.build();
-
-
-            // ====================================================
-            // CALL FASTAPI
-            // ====================================================
-
-            System.out.println();
-
-            System.out.println(
-                    "Sending multipart request to FastAPI..."
-            );
-
-
             FastApiPredictionResponse response =
-
                     restClient
-
                             .post()
-
-                            .uri(
-                                    predictEndpoint
-                            )
-
-                            .contentType(
-                                    MediaType.MULTIPART_FORM_DATA
-                            )
-
-                            .body(
-                                    multipartBody
-                            )
-
+                            .uri(predictEndpoint)
+                            .contentType(MediaType.MULTIPART_FORM_DATA)
+                            .body(body)
                             .retrieve()
-
-                            .body(
-                                    FastApiPredictionResponse.class
-                            );
-
-
-            // ====================================================
-            // EMPTY RESPONSE
-            // ====================================================
+                            .body(FastApiPredictionResponse.class);
 
             if (response == null) {
-
                 throw new RuntimeException(
                         "FastAPI returned an empty response"
                 );
             }
 
-
-            // ====================================================
-            // SUCCESS
-            // ====================================================
-
-            System.out.println();
-
-            System.out.println(
-                    "============================================================"
-            );
-
-            System.out.println(
-                    "FASTAPI RESPONSE RECEIVED"
-            );
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            System.out.println(
-                    response
-            );
-
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
             return response;
 
-
-        } catch (IOException e) {
-
-
-            // ====================================================
-            // FILE ERROR
-            // ====================================================
-
-            System.out.println();
-
-            System.out.println(
-                    "============================================================"
-            );
-
-            System.out.println(
-                    "DWI FILE ERROR"
-            );
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            System.out.println(
-                    "File : "
-                            + dwiFilePath
-            );
-
-
-            System.out.println(
-                    "Error : "
-                            + e.getMessage()
-            );
-
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            throw new RuntimeException(
-                    "Unable to read DWI file: "
-                            + e.getMessage(),
-                    e
-            );
-
-
         } catch (Exception e) {
-
-
-            // ====================================================
-            // FASTAPI ERROR
-            // ====================================================
-
-            System.out.println();
-
-            System.out.println(
-                    "============================================================"
-            );
-
-            System.out.println(
-                    "FASTAPI REQUEST ERROR"
-            );
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            System.out.println(
-                    "Exception type : "
-                            + e.getClass().getName()
-            );
-
-
-            System.out.println(
-                    "Message : "
-                            + e.getMessage()
-            );
-
-
-            System.out.println(
-                    "Cause : "
-                            + (
-                            e.getCause() == null
-                                    ? "none"
-                                    : e.getCause().toString()
-                    )
-            );
-
-
-            System.out.println(
-                    "============================================================"
-            );
-
 
             throw new RuntimeException(
                     "FastAPI prediction failed: "
@@ -505,281 +74,131 @@ public class FastApiService {
         }
     }
 
+    /**
+     * Teste la communication Spring Boot -> FastAPI.
+     */
+    public FastApiConnectionTestResponse testConnection(Path dwiFilePath) {
 
-    // ============================================================
-    // TEST CONNECTION
-    // ============================================================
+        FileSystemResource fileResource = getFileResource(dwiFilePath);
 
-    public FastApiConnectionTestResponse testConnection(
-            Path dwiFilePath
-    ) {
+        MultiValueMap<String, HttpEntity<?>> body = createMultipartBody(fileResource);
 
+        try {
 
-        // ========================================================
-        // FILE RESOURCE
-        // ========================================================
+            FastApiConnectionTestResponse response =
+                    restClient
+                            .post()
+                            .uri("/predict/test")
+                            .contentType(MediaType.MULTIPART_FORM_DATA)
+                            .body(body)
+                            .retrieve()
+                            .body(FastApiConnectionTestResponse.class);
+
+            if (response == null) {
+                throw new RuntimeException(
+                        "FastAPI test returned an empty response"
+                );
+            }
+
+            return response;
+
+        } catch (Exception e) {
+
+            throw new RuntimeException(
+                    "FastAPI connection test failed: "
+                            + e.getMessage(),
+                    e
+            );
+        }
+    }
+
+    /**
+     * Crée le RestClient avec Apache HttpClient 5.
+     *
+     * Apache HttpClient est utilisé pour éviter le problème
+     * d'upgrade HTTP/2 h2c rencontré avec le client JDK.
+     */
+    private RestClient createRestClient( RestClient.Builder restClientBuilder, String baseUrl) {
+
+        RequestConfig requestConfig =
+                RequestConfig.custom()
+                        .setConnectionRequestTimeout(
+                                60,
+                                TimeUnit.SECONDS
+                        )
+                        .setResponseTimeout(
+                                180,
+                                TimeUnit.SECONDS
+                        )
+                        .build();
+
+        CloseableHttpClient httpClient =
+                HttpClients.custom()
+                        .setDefaultRequestConfig(requestConfig)
+                        .build();
+
+        HttpComponentsClientHttpRequestFactory requestFactory =
+                new HttpComponentsClientHttpRequestFactory(
+                        httpClient
+                );
+
+        return restClientBuilder
+                .requestFactory(requestFactory)
+                .baseUrl(baseUrl)
+                .build();
+    }
+
+    /**
+     * Vérifie et transforme le fichier DWI en Resource.
+     */
+    private FileSystemResource getFileResource(Path dwiFilePath) {
 
         FileSystemResource fileResource =
                 new FileSystemResource(
                         dwiFilePath.toFile()
                 );
 
-
-        // ========================================================
-        // FILE EXISTS
-        // ========================================================
-
         if (!fileResource.exists()) {
-
             throw new RuntimeException(
                     "DWI file does not exist: "
                             + dwiFilePath
             );
         }
 
-
-        // ========================================================
-        // FILE READABLE
-        // ========================================================
-
         if (!fileResource.isReadable()) {
-
             throw new RuntimeException(
                     "DWI file is not readable: "
                             + dwiFilePath
             );
         }
 
+        return fileResource;
+    }
 
-        try {
+    /**
+     * Construit le multipart attendu par FastAPI.
+     *
+     * FastAPI attend :
+     *
+     * file: UploadFile = File(...)
+     *
+     * Le nom de la partie doit donc être "file".
+     */
+    private MultiValueMap<String, HttpEntity<?>> createMultipartBody(FileSystemResource fileResource) {
 
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
 
-            // ====================================================
-            // DEBUG
-            // ====================================================
-
-            System.out.println();
-
-            System.out.println(
-                    "============================================================"
-            );
-
-            System.out.println(
-                    "TEST SPRING BOOT -> FASTAPI"
-            );
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            System.out.println(
-                    "Endpoint : /predict/test"
-            );
-
-
-            System.out.println(
-                    "File : "
-                            + fileResource.getFilename()
-            );
-
-
-            System.out.println(
-                    "Path : "
-                            + dwiFilePath.toAbsolutePath()
-            );
-
-
-            System.out.println(
-                    "Exists : "
-                            + fileResource.exists()
-            );
-
-
-            System.out.println(
-                    "Readable : "
-                            + fileResource.isReadable()
-            );
-
-
-            System.out.println(
-                    "Size : "
-                            + fileResource.contentLength()
-                            + " bytes"
-            );
-
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            // ====================================================
-            // MULTIPART BODY
-            // ====================================================
-
-            MultipartBodyBuilder builder =
-                    new MultipartBodyBuilder();
-
-
-            builder.part(
-                            "file",
-                            fileResource
-                    )
-
-                    .filename(
-                            fileResource.getFilename()
-                    )
-
-                    .contentType(
-                            MediaType.APPLICATION_OCTET_STREAM
-                    );
-
-
-            MultiValueMap<String, HttpEntity<?>> multipartBody =
-                    builder.build();
-
-
-            // ====================================================
-            // TEST CALL
-            // ====================================================
-
-            System.out.println();
-
-            System.out.println(
-                    "Sending test multipart request..."
-            );
-
-
-            FastApiConnectionTestResponse response =
-
-                    restClient
-
-                            .post()
-
-                            .uri(
-                                    "/predict/test"
-                            )
-
-                            .contentType(
-                                    MediaType.MULTIPART_FORM_DATA
-                            )
-
-                            .body(
-                                    multipartBody
-                            )
-
-                            .retrieve()
-
-                            .body(
-                                    FastApiConnectionTestResponse.class
-                            );
-
-
-            // ====================================================
-            // EMPTY RESPONSE
-            // ====================================================
-
-            if (response == null) {
-
-                throw new RuntimeException(
-                        "FastAPI test returned an empty response"
+        builder.part(
+                        "file",
+                        fileResource
+                )
+                .filename(
+                        fileResource.getFilename()
+                )
+                .contentType(
+                        MediaType.APPLICATION_OCTET_STREAM
                 );
-            }
 
-
-            // ====================================================
-            // SUCCESS
-            // ====================================================
-
-            System.out.println();
-
-            System.out.println(
-                    "============================================================"
-            );
-
-            System.out.println(
-                    "FASTAPI TEST SUCCESS"
-            );
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            System.out.println(
-                    response
-            );
-
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            return response;
-
-
-        } catch (IOException e) {
-
-
-            throw new RuntimeException(
-                    "Unable to read DWI file: "
-                            + e.getMessage(),
-                    e
-            );
-
-
-        } catch (Exception e) {
-
-
-            System.out.println();
-
-            System.out.println(
-                    "============================================================"
-            );
-
-            System.out.println(
-                    "FASTAPI TEST ERROR"
-            );
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            System.out.println(
-                    "Exception type : "
-                            + e.getClass().getName()
-            );
-
-
-            System.out.println(
-                    "Message : "
-                            + e.getMessage()
-            );
-
-
-            System.out.println(
-                    "Cause : "
-                            + (
-                            e.getCause() == null
-                                    ? "none"
-                                    : e.getCause().toString()
-                    )
-            );
-
-
-            System.out.println(
-                    "============================================================"
-            );
-
-
-            throw new RuntimeException(
-                    "FastAPI test failed: "
-                            + e.getMessage(),
-                    e
-            );
-        }
+        return builder.build();
     }
 }

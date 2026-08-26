@@ -146,10 +146,7 @@ public class StudiesService implements IStudiesService {
                         ));
     }
 
-    // =========================================================
     // ANALYZE STUDY
-    // =========================================================
-
     @Override
     public StudyResponseDTO analyzeStudy( Long patientId, MultipartFile file, Modality modality) {
 
@@ -160,20 +157,12 @@ public class StudiesService implements IStudiesService {
         );
 
 
-        // =====================================================
         // 1. GET AUTHENTICATED DOCTOR
-        // =====================================================
-
-        User doctor =
-                currentUserService.getCurrentUser();
+        User doctor = currentUserService.getCurrentUser();
 
 
-        // =====================================================
         // 2. VERIFY DOCTOR ROLE
-        // =====================================================
-
         if (doctor == null) {
-
             throw new ForbiddenException(
                     "Utilisateur non authentifié"
             );
@@ -181,28 +170,20 @@ public class StudiesService implements IStudiesService {
 
 
         /*
-         * Ici ton projet utilise actuellement Role.DOCTOR.
+         * verifie le role d'utilisateur connecter
          */
         if (doctor.getRole() == null ||
             !doctor.getRole().name().equals("DOCTOR")) {
-
-            throw new ForbiddenException(
-                    "Only a doctor can perform MRI analysis"
+            throw new ForbiddenException( "Only a doctor can perform MRI analysis"
             );
         }
 
 
-        // =====================================================
         // 3. VERIFY FILE
-        // =====================================================
-
         validateFile(file);
 
 
-        // =====================================================
         // 4. VERIFY MODALITY
-        // =====================================================
-
         if (modality == null) {
 
             throw new IllegalArgumentException(
@@ -219,10 +200,7 @@ public class StudiesService implements IStudiesService {
         }
 
 
-        // =====================================================
         // 5. VERIFY PATIENT
-        // =====================================================
-
         Patient patient =
                 patientRepository
                         .findByIdAndDoctor(
@@ -236,39 +214,17 @@ public class StudiesService implements IStudiesService {
                         );
 
 
-        // =====================================================
         // 6. CREATE STUDY
-        // =====================================================
-
         Studies study = new Studies();
 
-        study.setStudyCode(
-                generateStudyCode()
-        );
+        study.setStudyCode(generateStudyCode());
+        study.setStudyDate(LocalDate.now());
+        study.setModality(modality);
+        study.setStatus(StudiesStatus.UPLOADED);
+        study.setPatient(patient);
 
-        study.setStudyDate(
-                LocalDate.now()
-        );
-
-        study.setModality(
-                modality
-        );
-
-        study.setStatus(
-                StudiesStatus.UPLOADED
-        );
-
-        study.setPatient(
-                patient
-        );
-
-
-        // =====================================================
         // 7. SAVE STUDY
-        // =====================================================
-
-        study =
-                studiesRepository.save(study);
+        study = studiesRepository.save(study);
 
 
         log.info(
@@ -277,11 +233,7 @@ public class StudiesService implements IStudiesService {
                 study.getStudyCode()
         );
 
-
-        // =====================================================
         // 8. SAVE DWI FILE
-        // =====================================================
-
         try {
 
             String storagePath =
@@ -291,81 +243,32 @@ public class StudiesService implements IStudiesService {
                             study.getStudyCode()
                     );
 
+            study.setDwiFileName(file.getOriginalFilename());
+            study.setDwiFileSize(file.getSize());
+            study.setDwiStoragePath(storagePath);
 
-            study.setDwiFileName(
-                    file.getOriginalFilename()
-            );
-
-            study.setDwiFileSize(
-                    file.getSize()
-            );
-
-            study.setDwiStoragePath(
-                    storagePath
-            );
-
-
-            // =================================================
             // 9. PROCESSING
-            // =================================================
-
-            study.setStatus(
-                    StudiesStatus.PROCESSING
-            );
-
-            study =
-                    studiesRepository.save(study);
-
+            study.setStatus(StudiesStatus.PROCESSING);
+            study = studiesRepository.save(study);
 
         } catch (Exception e) {
 
-            log.error(
-                    "Error while storing DWI file",
-                    e
-            );
-
-            study.setStatus(
-                    StudiesStatus.FAILED
-            );
-
-            study.setErrorMessage(
-                    "Impossible de sauvegarder le fichier DWI"
-            );
-
+            log.error("Error while storing DWI file", e);
+            study.setStatus(StudiesStatus.FAILED);
+            study.setErrorMessage("Impossible de sauvegarder le fichier DWI");
             studiesRepository.save(study);
 
             return toResponseDTO(study, null);
         }
 
-
-        // =====================================================
         // 10. CALL FASTAPI
-        // =====================================================
-
         try {
 
-            log.info(
-                    "Calling FastAPI for study {}",
-                    study.getId()
-            );
+            log.info(  "Calling FastAPI for study {}",study.getId());
+            Path physicalPath = fileStorageService.getPhysicalPath(study.getDwiStoragePath());
+            FastApiPredictionResponse response = fastApiService.predict(physicalPath);
 
-
-            Path physicalPath =
-                    fileStorageService.getPhysicalPath(
-                            study.getDwiStoragePath()
-                    );
-
-
-            FastApiPredictionResponse response =
-                    fastApiService.predict(
-                            physicalPath
-                    );
-
-
-            // =================================================
             // 11. VERIFY FASTAPI RESPONSE
-            // =================================================
-
             if (response == null) {
 
                 throw new RuntimeException(
@@ -400,28 +303,11 @@ public class StudiesService implements IStudiesService {
                     );
 
 
-            // =================================================
             // 13. COMPLETE STUDY
-            // =================================================
-
-            study.setStatus(
-                    StudiesStatus.COMPLETED
-            );
-
-            study.setErrorMessage(
-                    null
-            );
-
-            study =
-                    studiesRepository.save(
-                            study
-                    );
-
-
-            log.info(
-                    "MRI analysis completed - studyId={}",
-                    study.getId()
-            );
+            study.setStatus(StudiesStatus.COMPLETED);
+            study.setErrorMessage(null);
+            study = studiesRepository.save(study);
+            log.info("MRI analysis completed - studyId={}", study.getId());
 
 
             return toResponseDTO(
@@ -432,9 +318,7 @@ public class StudiesService implements IStudiesService {
 
         } catch (Exception e) {
 
-            // =================================================
             // FASTAPI ERROR
-            // =================================================
 
             log.error(
                     "FastAPI analysis failed for study {}",
@@ -442,21 +326,9 @@ public class StudiesService implements IStudiesService {
                     e
             );
 
-
-            study.setStatus(
-                    StudiesStatus.FAILED
-            );
-
-            study.setErrorMessage(
-                    e.getMessage()
-            );
-
-
-            study =
-                    studiesRepository.save(
-                            study
-                    );
-
+            study.setStatus(StudiesStatus.FAILED );
+            study.setErrorMessage(e.getMessage());
+            study =studiesRepository.save(study);
 
             /*
              * L'échec ML est un état métier.
@@ -471,13 +343,8 @@ public class StudiesService implements IStudiesService {
         }
     }
 
-
-    // =========================================================
     // VALIDATE FILE
-    // =========================================================
-
-    private void validateFile(
-            MultipartFile file) {
+    private void validateFile( MultipartFile file) {
 
         if (file == null ||
             file.isEmpty()) {
@@ -488,27 +355,19 @@ public class StudiesService implements IStudiesService {
         }
 
 
-        String filename =
-                file.getOriginalFilename();
+        String filename = file.getOriginalFilename();
 
 
         if (filename == null ||
             filename.isBlank()) {
 
-            throw new IllegalArgumentException(
-                    "Nom de fichier invalide"
+            throw new IllegalArgumentException(  "Nom de fichier invalide"
             );
         }
 
+        String lowerName = filename.toLowerCase();
 
-        String lowerName =
-                filename.toLowerCase();
-
-
-        boolean validExtension =
-                lowerName.endsWith(".nii") ||
-                lowerName.endsWith(".nii.gz");
-
+        boolean validExtension = lowerName.endsWith(".nii") || lowerName.endsWith(".nii.gz");
 
         if (!validExtension) {
 
@@ -519,9 +378,7 @@ public class StudiesService implements IStudiesService {
 
 
         // 200 MB
-        long maxSize =
-                200L * 1024L * 1024L;
-
+        long maxSize = 200L * 1024L * 1024L;
 
         if (file.getSize() > maxSize) {
 
@@ -531,194 +388,85 @@ public class StudiesService implements IStudiesService {
         }
     }
 
-
-    // =========================================================
     // CREATE PREDICTION
-    // =========================================================
-
     private Prediction createPrediction( Studies study,  FastApiPredictionResponse response) {
 
-        Prediction prediction =
-                new Prediction();
+        Prediction prediction = new Prediction();
 
+        prediction.setStudy( study );
 
-        prediction.setStudy(
-                study
-        );
-
-
-        // =====================================================
         // FILES
-        // =====================================================
+        prediction.setPredictionFile( response.getPrediction_file() );
+        prediction.setPreviewFile( response.getPreview_file() );
+        prediction.setOverlayFile(  response.getOverlay_file() );
 
-        prediction.setPredictionFile(
-                response.getPrediction_file()
-        );
-
-        prediction.setPreviewFile(
-                response.getPreview_file()
-        );
-
-        prediction.setOverlayFile(
-                response.getOverlay_file()
-        );
-
-
-        // =====================================================
         // SHAPE
-        // =====================================================
-
-        List<Integer> shape =
-                response.getPrediction_shape();
-
+        List<Integer> shape = response.getPrediction_shape();
 
         if (shape != null &&
             shape.size() >= 3) {
 
-            prediction.setPredictionShapeX(
-                    shape.get(0)
-            );
-
-            prediction.setPredictionShapeY(
-                    shape.get(1)
-            );
-
-            prediction.setPredictionShapeZ(
-                    shape.get(2)
-            );
+            prediction.setPredictionShapeX( shape.get(0));
+            prediction.setPredictionShapeY( shape.get(1));
+            prediction.setPredictionShapeZ(shape.get(2));
         }
 
+        prediction.setPreviewSlice( response.getPreview_slice());
 
-        prediction.setPreviewSlice(
-                response.getPreview_slice()
-        );
-
-
-        // =====================================================
         // LESION
-        // =====================================================
-
-        FastApiPredictionResponse.LesionResponse lesion =
-                response.getLesion();
+        FastApiPredictionResponse.LesionResponse lesion =response.getLesion();
 
 
         if (lesion != null) {
 
-            prediction.setLesionDetected(
-                    lesion.getDetected()
-            );
+            prediction.setLesionDetected( lesion.getDetected());
+            prediction.setLesionVoxels( lesion.getVoxel_count());
+            prediction.setLesionVolumeMm3(lesion.getVolume_mm3() );
 
-            prediction.setLesionVoxels(
-                    lesion.getVoxel_count()
-            );
-
-            prediction.setLesionVolumeMm3(
-                    lesion.getVolume_mm3()
-            );
-
-
-            // ===============================================
             // CENTROID
-            // ===============================================
-
             if (lesion.getCentroid() != null) {
 
-                var centroid =
-                        lesion.getCentroid();
-
+                var centroid = lesion.getCentroid();
 
                 if (centroid.getIndex() != null) {
 
-                    prediction.setCentroidIndexX(
-                            centroid.getIndex().getX()
-                    );
-
-                    prediction.setCentroidIndexY(
-                            centroid.getIndex().getY()
-                    );
-
-                    prediction.setCentroidIndexZ(
-                            centroid.getIndex().getZ()
-                    );
+                    prediction.setCentroidIndexX(centroid.getIndex().getX());
+                    prediction.setCentroidIndexY(centroid.getIndex().getY());
+                    prediction.setCentroidIndexZ(centroid.getIndex().getZ());
                 }
 
 
                 if (centroid.getPhysical() != null) {
 
-                    prediction.setCentroidPhysicalX(
-                            centroid.getPhysical().getX()
-                    );
-
-                    prediction.setCentroidPhysicalY(
-                            centroid.getPhysical().getY()
-                    );
-
-                    prediction.setCentroidPhysicalZ(
-                            centroid.getPhysical().getZ()
-                    );
+                    prediction.setCentroidPhysicalX(centroid.getPhysical().getX());
+                    prediction.setCentroidPhysicalY(centroid.getPhysical().getY());
+                    prediction.setCentroidPhysicalZ(centroid.getPhysical().getZ());
                 }
             }
 
-
-            // ===============================================
             // BOUNDING BOX
-            // ===============================================
-
             if (lesion.getBounding_box() != null) {
 
-                var box =
-                        lesion.getBounding_box();
-
-
-                prediction.setBoundingBoxMinX(
-                        box.getMin_x()
-                );
-
-                prediction.setBoundingBoxMaxX(
-                        box.getMax_x()
-                );
-
-                prediction.setBoundingBoxMinY(
-                        box.getMin_y()
-                );
-
-                prediction.setBoundingBoxMaxY(
-                        box.getMax_y()
-                );
-
-                prediction.setBoundingBoxMinZ(
-                        box.getMin_z()
-                );
-
-                prediction.setBoundingBoxMaxZ(
-                        box.getMax_z()
-                );
+                var box = lesion.getBounding_box();
+                prediction.setBoundingBoxMinX(box.getMin_x());
+                prediction.setBoundingBoxMaxX( box.getMax_x());
+                prediction.setBoundingBoxMinY(box.getMin_y());
+                prediction.setBoundingBoxMaxY(box.getMax_y());
+                prediction.setBoundingBoxMinZ(box.getMin_z());
+                prediction.setBoundingBoxMaxZ(box.getMax_z());
             }
         }
 
-
-        // =====================================================
         // PROCESSING TIME
-        // =====================================================
-
-        prediction.setProcessingTime(
-                response.getExecution_time_seconds()
-        );
-
-
+        prediction.setProcessingTime(response.getExecution_time_seconds());
         return prediction;
     }
 
 
-    // =========================================================
     // GENERATE STUDY CODE
-    // =========================================================
-
     private String generateStudyCode() {
 
-        long count =
-                studiesRepository.count() + 1;
-
+        long count = studiesRepository.count() + 1;
 
         return String.format(
                 "S%03d",
@@ -727,53 +475,23 @@ public class StudiesService implements IStudiesService {
     }
 
 
-    // =========================================================
     // DTO MAPPING
-    // =========================================================
+    private StudyResponseDTO toResponseDTO(Studies study, Prediction prediction) {
 
-    private StudyResponseDTO toResponseDTO(
-            Studies study,
-            Prediction prediction) {
+        StudyResponseDTO dto = new StudyResponseDTO();
 
-        StudyResponseDTO dto =
-                new StudyResponseDTO();
+        dto.setId(study.getId());
 
+        dto.setStudyCode(study.getStudyCode());
+        dto.setStudyDate(study.getStudyDate());
+        dto.setModality(study.getModality());
+        dto.setStatus(study.getStatus());
 
-        dto.setId(
-                study.getId()
-        );
-
-        dto.setStudyCode(
-                study.getStudyCode()
-        );
-
-        dto.setStudyDate(
-                study.getStudyDate()
-        );
-
-        dto.setModality(
-                study.getModality()
-        );
-
-        dto.setStatus(
-                study.getStatus()
-        );
-
-
-        // =====================================================
         // PATIENT
-        // =====================================================
-
         if (study.getPatient() != null) {
 
-            dto.setPatientId(
-                    study.getPatient().getId()
-            );
-
-            dto.setPatientCode(
-                    study.getPatient().getPatientCode()
-            );
-
+            dto.setPatientId(study.getPatient().getId());
+            dto.setPatientCode(study.getPatient().getPatientCode());
             dto.setPatientFullName(
                     study.getPatient().getFirstName()
                     + " "
@@ -781,171 +499,55 @@ public class StudiesService implements IStudiesService {
             );
         }
 
-
-        // =====================================================
         // FILE
-        // =====================================================
+        dto.setDwiFileName(study.getDwiFileName());
+        dto.setDwiFileSize(study.getDwiFileSize());
 
-        dto.setDwiFileName(
-                study.getDwiFileName()
-        );
-
-        dto.setDwiFileSize(
-                study.getDwiFileSize()
-        );
-
-
-        // =====================================================
         // ERROR
-        // =====================================================
+        dto.setErrorMessage(study.getErrorMessage());
 
-        dto.setErrorMessage(
-                study.getErrorMessage()
-        );
-
-
-        // =====================================================
         // PREDICTION
-        // =====================================================
-
         if (prediction != null) {
-
-            dto.setPrediction(
-                    toPredictionDTO(prediction)
-            );
+            dto.setPrediction(toPredictionDTO(prediction));
         }
 
-
-        dto.setCreatedAt(
-                study.getCreatedAt()
-        );
-
-        dto.setUpdatedAt(
-                study.getUpdatedAt()
-        );
-
+        dto.setCreatedAt(study.getCreatedAt());
+        dto.setUpdatedAt(study.getUpdatedAt());
 
         return dto;
     }
 
-
-    // =========================================================
     // PREDICTION DTO
-    // =========================================================
+    private PredictionResponseDTO toPredictionDTO(Prediction prediction) {
 
-    private PredictionResponseDTO toPredictionDTO(
-            Prediction prediction) {
-
-        PredictionResponseDTO dto =
-                new PredictionResponseDTO();
-
-
-        dto.setId(
-                prediction.getId()
+        PredictionResponseDTO dto = new PredictionResponseDTO();
+        dto.setId(prediction.getId());
+        dto.setPredictionFile(prediction.getPredictionFile());
+        dto.setPreviewFile(prediction.getPreviewFile());
+        dto.setOverlayFile(prediction.getOverlayFile());
+        dto.setPredictionShapeX(prediction.getPredictionShapeX());
+        dto.setPredictionShapeY(prediction.getPredictionShapeY());
+        dto.setPredictionShapeZ(prediction.getPredictionShapeZ());
+        dto.setPreviewSlice(prediction.getPreviewSlice());
+        dto.setLesionDetected(prediction.getLesionDetected());
+        dto.setLesionVoxels(prediction.getLesionVoxels());
+        dto.setLesionVolumeMm3(prediction.getLesionVolumeMm3());
+        dto.setCentroidIndexX(prediction.getCentroidIndexX());
+        dto.setCentroidIndexY(prediction.getCentroidIndexY());
+        dto.setCentroidIndexZ(prediction.getCentroidIndexZ());
+        dto.setCentroidPhysicalX(prediction.getCentroidPhysicalX());
+        dto.setCentroidPhysicalY(prediction.getCentroidPhysicalY());
+        dto.setCentroidPhysicalZ(prediction.getCentroidPhysicalZ());
+        dto.setBoundingBoxMinX(prediction.getBoundingBoxMinX());
+        dto.setBoundingBoxMaxX(prediction.getBoundingBoxMaxX());
+        dto.setBoundingBoxMinY(prediction.getBoundingBoxMinY());
+        dto.setBoundingBoxMaxY(prediction.getBoundingBoxMaxY());
+        dto.setBoundingBoxMinZ(prediction.getBoundingBoxMinZ());
+        dto.setBoundingBoxMaxZ(prediction.getBoundingBoxMaxZ());
+        dto.setProcessingTime(prediction.getProcessingTime()
         );
 
-
-        dto.setPredictionFile(
-                prediction.getPredictionFile()
-        );
-
-        dto.setPreviewFile(
-                prediction.getPreviewFile()
-        );
-
-        dto.setOverlayFile(
-                prediction.getOverlayFile()
-        );
-
-
-        dto.setPredictionShapeX(
-                prediction.getPredictionShapeX()
-        );
-
-        dto.setPredictionShapeY(
-                prediction.getPredictionShapeY()
-        );
-
-        dto.setPredictionShapeZ(
-                prediction.getPredictionShapeZ()
-        );
-
-        dto.setPreviewSlice(
-                prediction.getPreviewSlice()
-        );
-
-
-        dto.setLesionDetected(
-                prediction.getLesionDetected()
-        );
-
-        dto.setLesionVoxels(
-                prediction.getLesionVoxels()
-        );
-
-        dto.setLesionVolumeMm3(
-                prediction.getLesionVolumeMm3()
-        );
-
-
-        dto.setCentroidIndexX(
-                prediction.getCentroidIndexX()
-        );
-
-        dto.setCentroidIndexY(
-                prediction.getCentroidIndexY()
-        );
-
-        dto.setCentroidIndexZ(
-                prediction.getCentroidIndexZ()
-        );
-
-
-        dto.setCentroidPhysicalX(
-                prediction.getCentroidPhysicalX()
-        );
-
-        dto.setCentroidPhysicalY(
-                prediction.getCentroidPhysicalY()
-        );
-
-        dto.setCentroidPhysicalZ(
-                prediction.getCentroidPhysicalZ()
-        );
-
-
-        dto.setBoundingBoxMinX(
-                prediction.getBoundingBoxMinX()
-        );
-
-        dto.setBoundingBoxMaxX(
-                prediction.getBoundingBoxMaxX()
-        );
-
-        dto.setBoundingBoxMinY(
-                prediction.getBoundingBoxMinY()
-        );
-
-        dto.setBoundingBoxMaxY(
-                prediction.getBoundingBoxMaxY()
-        );
-
-        dto.setBoundingBoxMinZ(
-                prediction.getBoundingBoxMinZ()
-        );
-
-        dto.setBoundingBoxMaxZ(
-                prediction.getBoundingBoxMaxZ()
-        );
-
-
-        dto.setProcessingTime(
-                prediction.getProcessingTime()
-        );
-
-        dto.setCreatedAt(
-                prediction.getCreatedAt()
-        );
+        dto.setCreatedAt( prediction.getCreatedAt() );
 
 
         return dto;
