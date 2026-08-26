@@ -10,13 +10,11 @@ import {Patient, CreatePatientRequest, UpdatePatientRequest, CreatePatientRespon
 })
 export class PatientService {
 
-  private readonly baseUrl =
-    environment.apiBaseUrl + '/api/patient';
+  private readonly baseUrl = environment.apiBaseUrl + '/api/patient';
 
   constructor(private http: HttpClient) {}
 
   /**
-   * GET /api/patient/by-docktor
    * Get all patients belonging to the authenticated doctor.
    */
   getMyPatients() {
