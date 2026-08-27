@@ -547,3 +547,86 @@
   }
 
 }
+
+
+/* ============================================================
+   DROPZONE — disabled (isLoading)
+   ============================================================ */
+
+.dropzone.disabled {
+  pointer-events: none;
+
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+
+/* ============================================================
+   FILE PICKED — remove button disabled
+   ============================================================ */
+
+.f-remove:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.5;
+}
+
+.f-remove:disabled:hover {
+  background: transparent;
+
+  color: var(--c-ink-faint);
+}
+
+
+/* ============================================================
+   PATIENT SELECT — disabled
+   ============================================================ */
+
+.step-content .input:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.6;
+
+  background: var(--c-line-soft);
+}
+
+
+/* ============================================================
+   BUTTONS — disabled state (Choisir un fichier / Annuler / Analyser)
+   ============================================================ */
+
+.btn:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.55;
+}
+
+.btn:disabled:hover {
+  filter: none;
+}
+
+
+/* ============================================================
+   PROCESSING PANEL — single spinner line (isLoading)
+   ============================================================ */
+
+.processing-panel .proc-step.active {
+  color: var(--c-primary-600);
+
+  font-weight: 600;
+}
+
+.processing-panel .dot-ring {
+  animation: spin 0.9s linear infinite;
+
+  border-top-color: transparent;
+}
+
+@keyframes spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}

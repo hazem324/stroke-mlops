@@ -47,6 +47,7 @@
             class="input"
             [(ngModel)]="selectedPatientId"
             (ngModelChange)="onPatientChange()"
+            [disabled]="isLoading"
           >
 
             <option [ngValue]="null">
@@ -152,6 +153,7 @@
             class="dropzone"
             [class.drag]="isDragging"
             [class.hidden]="selectedFile"
+            [class.disabled]="isLoading"
             (click)="openFileSelector()"
             (dragenter)="onDragEnter($event)"
             (dragover)="onDragOver($event)"
@@ -183,6 +185,7 @@
             <button
               type="button"
               class="btn btn-secondary btn-sm"
+              [disabled]="isLoading"
               (click)="openFileSelector(); $event.stopPropagation()"
             >
               Choisir un fichier
@@ -240,6 +243,7 @@
               type="button"
               class="f-remove"
               aria-label="Supprimer le fichier"
+              [disabled]="isLoading"
               (click)="removeFile()"
             >
 
@@ -265,24 +269,19 @@
 
 
       <!-- ====================================================
-           TRAITEMENT
+           TRAITEMENT (basé sur isLoading)
            ==================================================== -->
 
       <div
         class="processing-panel"
-        [class.show]="isProcessing"
+        [class.show]="isLoading"
       >
 
-        <div
-          class="proc-step"
-          *ngFor="let step of processingSteps; let i = index"
-          [class.active]="currentProcessingStep === i"
-          [class.complete]="currentProcessingStep > i"
-        >
+        <div class="proc-step active">
 
           <div class="dot-ring"></div>
 
-          {{ step }}
+          Analyse de l'IRM en cours, veuillez patienter…
 
         </div>
 
@@ -298,6 +297,7 @@
         <button
           type="button"
           class="btn btn-secondary"
+          [disabled]="isLoading"
           (click)="cancel()"
         >
           Annuler
@@ -307,7 +307,7 @@
         <button
           type="button"
           class="btn btn-primary"
-          [disabled]="!selectedPatientId || !selectedFile || isProcessing"
+          [disabled]="!selectedPatientId || !selectedFile || isLoading"
           (click)="startAnalysis()"
         >
 
@@ -320,7 +320,7 @@
             <path d="M13 2 3 14h7l-1 8 11-14h-7z" />
           </svg>
 
-          {{ isProcessing ? 'Analyse en cours…' : 'Analyser l’IRM' }}
+          {{ isLoading ? 'Analyse en cours…' : 'Analyser l’IRM' }}
 
         </button>
 

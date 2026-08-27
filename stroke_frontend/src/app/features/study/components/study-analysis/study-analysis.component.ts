@@ -4,6 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PatientService } from '../../../../services/patient.service';
 import { Patient } from '../../../../models/patient/patient.model';
 import { ToastService } from '../../../../services/toast.service';
+import { StudiesService } from '../../../../services/studies.service';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { ToastService } from '../../../../services/toast.service';
 })
 export class StudyAnalysisComponent implements OnInit {
 
-  constructor(private patientService: PatientService, private toastService:ToastService){}
+  constructor(private patientService: PatientService, private toastService:ToastService, private studiesService:StudiesService){}
 
   ngOnInit(): void {
   this.patientService.getMyPatients().subscribe({
@@ -65,16 +66,8 @@ export class StudyAnalysisComponent implements OnInit {
   selectedPatient: Patient | null = null;
   selectedFile: File | null = null;
   isDragging = false;
-  isProcessing = false;
-  currentProcessingStep = -1;
 
-  processingSteps: string[] = [
-    'Téléchargement de l’IRM…',
-    'Traitement de l’IRM…',
-    'Exécution du modèle IA…',
-    'Génération de la segmentation…',
-    'Enregistrement du résultat…'
-  ];
+  isLoading = false;
 
 
   onPatientChange(): void {
@@ -93,7 +86,7 @@ export class StudyAnalysisComponent implements OnInit {
 
   openFileSelector(): void {
 
-    if (this.isProcessing) {
+    if (this.isLoading) {
       return;
     }
 
@@ -120,7 +113,7 @@ export class StudyAnalysisComponent implements OnInit {
 
     event.preventDefault();
 
-    if (this.isProcessing) {
+    if (this.isLoading) {
       return;
     }
 
@@ -132,7 +125,7 @@ export class StudyAnalysisComponent implements OnInit {
 
     event.preventDefault();
 
-    if (this.isProcessing) {
+    if (this.isLoading) {
       return;
     }
 
@@ -154,7 +147,7 @@ export class StudyAnalysisComponent implements OnInit {
 
     this.isDragging = false;
 
-    if (this.isProcessing) {
+    if (this.isLoading) {
       return;
     }
 
@@ -195,9 +188,10 @@ export class StudyAnalysisComponent implements OnInit {
 
     if (!isNifti) {
 
-      alert(
-        'Format invalide. Veuillez sélectionner un fichier .nii ou .nii.gz.'
-      );
+      this.toastService.info(
+       'Veuillez sélectionner un fichier .nii ou .nii.gz.', 
+        'Format invalide'
+      )
 
       return false;
     }
@@ -208,7 +202,7 @@ export class StudyAnalysisComponent implements OnInit {
 
   removeFile(): void {
 
-    if (this.isProcessing) {
+    if (this.isLoading) {
       return;
     }
 
@@ -249,73 +243,107 @@ export class StudyAnalysisComponent implements OnInit {
 
   startAnalysis(): void {
 
-    if (
-      !this.selectedPatientId ||
-      !this.selectedFile ||
-      this.isProcessing
-    ) {
-      return;
+  if (
+    this.selectedPatientId === null ||
+    this.selectedFile === null ||
+    this.isLoading
+  ) {
+    return;
+  }
+
+  this.isLoading = true;
+
+  this.studiesService.analyzeStudy(
+    this.selectedPatientId,
+    this.selectedFile,
+    'DWI'
+  ).subscribe({
+    next: (study) => {
+
+      this.isLoading = false;
+
+      console.log('Analyse réussie :', study);
+
+      this.toastService.success(
+        'L’analyse de l’IRM est terminée avec succès.',
+        'Analyse terminée'
+      );
+
+      this.resetForm();
+    },
+
+    error: (error: HttpErrorResponse) => {
+
+      this.isLoading = false;
+
+      console.error(
+        'Erreur lors de l’analyse :',
+        error
+      );
+
+      if (error.status === 400) {
+        this.toastService.error(
+          error.error?.message || 'La requête est invalide.',
+          'Requête invalide'
+        );
+        return;
+      }
+
+      if (error.status === 403) {
+        this.toastService.error(
+          error.error?.message ||
+          'Vous n’avez pas l’autorisation d’analyser ce patient.',
+          'Accès refusé'
+        );
+        return;
+      }
+
+      if (error.status === 404) {
+        this.toastService.error(
+          error.error?.message || 'Patient introuvable.',
+          'Patient introuvable'
+        );
+        return;
+      }
+
+      if (error.status === 422) {
+        this.toastService.error(
+          error.error?.message ||
+          'Le traitement de l’IRM a échoué.',
+          'Échec de l’analyse'
+        );
+        return;
+      }
+
+      if (error.status === 500) {
+        this.toastService.error(
+          error.error?.message ||
+          'Une erreur interne est survenue sur le serveur.',
+          'Erreur serveur'
+        );
+        return;
+      }
+
+      this.toastService.error(
+        'Impossible de terminer l’analyse.',
+        'Erreur'
+      );
     }
+  });
+}
 
-    this.isProcessing = true;
+private resetForm(): void {
 
-    this.currentProcessingStep = 0;
+    this.selectedPatientId = null;
 
-    this.runProcessingStep();
+    this.selectedPatient = null;
+
+    this.removeFile();
   }
-
-
-  private runProcessingStep(): void {
-
-    if (
-      this.currentProcessingStep >=
-      this.processingSteps.length
-    ) {
-
-      this.finishProcessing();
-
-      return;
-    }
-
-    setTimeout(() => {
-
-      this.currentProcessingStep++;
-
-      this.runProcessingStep();
-
-    }, 850);
-  }
-
-
-  private finishProcessing(): void {
-
-    this.isProcessing = false;
-
-    this.currentProcessingStep =
-      this.processingSteps.length;
-
-    console.log('Analyse terminée.');
-
-    console.log(
-      'Patient :',
-      this.selectedPatient
-    );
-
-    console.log(
-      'Fichier :',
-      this.selectedFile
-    );
-
-    /*
-     * L'appel à StudiesService.analyzeStudy()
-     * sera ajouté ici dans l'étape suivante.
-     */
-  }
-
 
   cancel(): void {
 
-    if (this.isProcessing) {
+    if (this.isLoading) {
       return;
     }
 
