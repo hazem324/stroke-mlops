@@ -1,4 +1,16 @@
-import { Prediction } from "../prediction/prediction.model";
+import { Prediction } from '../prediction/prediction.model';
+
+export interface StudyPatient {
+  id: number;
+  patientCode: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  sex: string;
+  age: number;
+  weight: number;
+  phoneNumber: string | null;
+}
 
 export interface Study {
   id: number;
@@ -7,16 +19,15 @@ export interface Study {
   modality: string;
   status: string;
 
-  patientId: number;
-  patientCode: string;
-  patientFullName: string;
+  patient: StudyPatient;
 
   dwiFileName: string;
+  dwiStoragePath: string;
   dwiFileSize: number;
 
   prediction?: Prediction;
 
-  errorMessage?: string | null;
+  errorMessage: string | null;
 
   createdAt: string;
   updatedAt: string;

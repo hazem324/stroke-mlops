@@ -1,5 +1,6 @@
 import {
   Component,
+  Input,
   OnInit
 } from '@angular/core';
 
@@ -12,6 +13,7 @@ import { PatientService } from '../../../../services/patient.service';
 import { ToastService } from '../../../../services/toast.service';
 
 import { Patient } from '../../../../models/patient/patient.model';
+import { StudiesService } from '../../../../services/studies.service';
 
 @Component({
   selector: 'app-patient-detail-page',
@@ -20,14 +22,11 @@ import { Patient } from '../../../../models/patient/patient.model';
 })
 export class PatientDetailPageComponent implements OnInit {
 
-  // =========================================================
-  // PATIENT
-  // =========================================================
+  studyCount = 0;
 
   patient: Patient | null = null;
-
+  
   patientId!: number;
-
 
   // =========================================================
   // LOADING
@@ -48,6 +47,7 @@ export class PatientDetailPageComponent implements OnInit {
   // =========================================================
 
   constructor(
+    private studiesService: StudiesService,
     private route: ActivatedRoute,
     private router: Router,
     private patientService: PatientService,
@@ -96,8 +96,13 @@ export class PatientDetailPageComponent implements OnInit {
     }
 
     this.loadPatient();
+
+    this.loadStudyCount();
   }
 
+onStudyCountChange(count: number): void {
+  this.studyCount = count;
+}
 
   // =========================================================
   // GET PATIENT
@@ -289,4 +294,29 @@ export class PatientDetailPageComponent implements OnInit {
     );
   }
 
+  loadStudyCount(): void {
+
+  this.studiesService
+    .getStudiesByPatient(this.patientId)
+    .subscribe({
+
+      next: (response) => {
+
+        this.studyCount =
+          response.studies?.length ?? 0;
+
+      },
+
+      error: (error) => {
+
+        console.error(
+          'Error retrieving study count:',
+          error
+        );
+
+        this.studyCount = 0;
+      }
+
+    });
+}
 }

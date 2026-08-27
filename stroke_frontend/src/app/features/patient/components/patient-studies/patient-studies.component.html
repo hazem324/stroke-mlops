@@ -1,40 +1,202 @@
 <div class="card studies-card">
 
-  <!-- =========================
-       HEADER
-       ========================= -->
-
   <div class="card-head">
 
-    <h3>
-      Études IRM
-    </h3>
+    <div>
+      <h3>Études IRM</h3>
+    </div>
 
-    <span class="hint">
-      Historique des études
+    <span
+      class="study-count"
+      *ngIf="!loading">
+
+      {{ studies.length }}
+      {{ studies.length === 1 ? 'étude enregistrée' : 'études enregistrées' }}
+
     </span>
 
   </div>
 
 
-  <!-- =========================
-       EMPTY STATE
-       ========================= -->
+  <!-- Chargement -->
 
-  <div class="empty-state">
+  <div
+    *ngIf="loading"
+    class="empty-state">
+
+    Chargement des études...
+
+  </div>
+
+
+  <!-- Erreur -->
+
+  <div
+    *ngIf="!loading && error"
+    class="empty-state">
 
     <div class="empty-title">
+      Impossible de récupérer les études
+    </div>
 
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="loadStudies()">
+
+      Réessayer
+
+    </button>
+
+  </div>
+
+
+  <!-- Aucune étude -->
+
+  <div
+    *ngIf="
+      !loading &&
+      !error &&
+      studies.length === 0
+    "
+    class="empty-state">
+
+    <div class="empty-title">
       Aucune étude IRM
-
     </div>
 
     <div class="empty-description">
-
-      Les études IRM de ce patient
-      seront affichées ici.
-
+      Les études IRM de ce patient seront affichées ici.
     </div>
+
+  </div>
+
+
+  <!-- Tableau -->
+
+  <div
+    *ngIf="
+      !loading &&
+      !error &&
+      studies.length > 0
+    "
+    class="table-wrap">
+
+    <table class="studies-table">
+
+      <thead>
+
+        <tr>
+
+          <th>ID étude</th>
+
+          <th>Date</th>
+
+          <th>Modalité</th>
+
+          <th>Statut</th>
+
+          <th>Résultat</th>
+
+          <th class="action-header">
+            Action
+          </th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        <tr
+          *ngFor="let study of studies">
+
+          <!-- Study ID -->
+
+          <td>
+
+            <span class="study-code">
+              {{ study.studyCode }}
+            </span>
+
+          </td>
+
+
+          <!-- Date -->
+
+          <td>
+
+            {{ study.studyDate | date:'dd/MM/yyyy' }}
+
+          </td>
+
+
+          <!-- Modality -->
+
+          <td>
+
+            <span class="modality">
+              {{ study.modality }}
+            </span>
+
+          </td>
+
+
+          <!-- Status -->
+
+          <td>
+
+            <span
+              class="status-badge"
+              [ngClass]="getStatusClass(study.status)">
+
+              <span class="status-dot"></span>
+
+              {{ getStatusLabel(study.status) }}
+
+            </span>
+
+          </td>
+
+
+          <!-- Result -->
+
+          <td>
+
+            <span
+              class="result-badge"
+              [ngClass]="getLesionClass(study)">
+
+              <span class="result-dot"></span>
+
+              {{ getLesionLabel(study) }}
+
+            </span>
+
+          </td>
+
+
+          <!-- Action -->
+
+          <td class="action-cell">
+
+            <button
+              type="button"
+              class="btn-view"
+              (click)="viewStudy(study)">
+
+              Voir l'analyse
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
 
   </div>
 

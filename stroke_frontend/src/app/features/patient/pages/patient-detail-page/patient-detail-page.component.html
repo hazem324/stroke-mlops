@@ -1,15 +1,9 @@
 <div class="main">
 
-  <!-- =====================================================
-       PAGE HEADER
-       ===================================================== -->
-
   <div class="page-head">
 
     <div class="patient-page-title">
-
       <!-- Retour aux patients -->
-
       <a
         routerLink="/dashboard/patient"
         class="btn-ghost back-link">
@@ -29,18 +23,13 @@
         Retour aux patients
 
       </a>
-
-
       <!-- Patient -->
-
       <h1 *ngIf="patient">
 
         {{ patient.firstName }}
         {{ patient.lastName }}
 
       </h1>
-
-
       <p class="lede">
 
         Dossier patient et historique des études IRM.
@@ -48,11 +37,6 @@
       </p>
 
     </div>
-
-
-    <!-- =================================================
-         ACTIONS
-         ================================================= -->
 
     <div 
       class="page-actions bg-black"
@@ -66,7 +50,6 @@
         Modifier le patient
 
       </button>
-
 
       <button
         type="button"
@@ -93,11 +76,6 @@
 
   </div>
 
-
-  <!-- =====================================================
-       LOADING
-       ===================================================== -->
-
   <div
     *ngIf="loading"
     class="progress-line">
@@ -108,24 +86,16 @@
 
   </div>
 
-
-  <!-- =====================================================
-       PATIENT DETAIL
-       ===================================================== -->
-
   <app-patient-detail
     *ngIf="patient && !loading"
-    [patient]="patient">
+    [patient]="patient"
+    [studyCount]="studyCount">
   </app-patient-detail>
-
-
-  <!-- =====================================================
-       PATIENT STUDIES
-       ===================================================== -->
 
   <app-patient-studies
     *ngIf="patient && !loading"
-    [patientId]="patientId">
+    [patientId]="patientId"
+    >
   </app-patient-studies>
 
 </div>

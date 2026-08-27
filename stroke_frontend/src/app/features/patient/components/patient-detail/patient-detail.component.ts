@@ -12,4 +12,7 @@ export class PatientDetailComponent {
   @Input()
   patient!: Patient;
 
+  @Input()
+  studyCount = 0;
+
 }
