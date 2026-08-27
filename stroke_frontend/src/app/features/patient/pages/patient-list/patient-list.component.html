@@ -216,7 +216,7 @@
 
             <td>
 
-              —
+               {{ patient.studyCount }}
 
             </td>
 
@@ -227,9 +227,17 @@
 
             <td>
 
-              —
+  <span *ngIf="patient.latestAnalysis">
+    {{ patient.latestAnalysis | date:'dd/MM/yyyy' }}
+  </span>
 
-            </td>
+  <span
+    *ngIf="!patient.latestAnalysis"
+    class="muted">
+    Aucune analyse
+  </span>
+
+</td>
 
 
             <!-- =========================

@@ -21,3 +21,7 @@ export interface Study {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface StudiesResponse {
+  studies: Study[];
+}

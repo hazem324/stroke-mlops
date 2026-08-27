@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { Study } from '../models/studies/studies.model';
+import { StudiesResponse, Study } from '../models/studies/studies.model';
 export type Modality = 'DWI';
 
 @Injectable({
@@ -29,5 +29,18 @@ export class StudiesService {
     );
   }
 
+  getStudiesByPatient(patientId: number): Observable<StudiesResponse> {
+
+  return this.http.get<StudiesResponse>(
+    `${this.baseUri}/patients/${patientId}`
+  );
+}
+
+ getStudy(studyId: number): Observable<Study> {
+
+    return this.http.get<Study>(
+      `${this.baseUri}/${studyId}`
+    );
+  }
 
 }

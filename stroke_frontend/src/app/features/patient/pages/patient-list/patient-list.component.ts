@@ -4,6 +4,15 @@ import { Router } from '@angular/router';
 import { PatientService } from '../../../../services/patient.service';
 import { Patient } from '../../../../models/patient/patient.model';
 import { ToastService } from '../../../../services/toast.service';
+import { StudiesService } from '../../../../services/studies.service';
+import { Study } from '../../../../models/studies/studies.model';
+
+
+interface PatientRow extends Patient {
+  studyCount: number;
+  latestAnalysis: string | null;
+}
+
 
 @Component({
   selector: 'app-patient-list',
@@ -17,11 +26,12 @@ export class PatientListComponent implements OnInit {
 
   selectedPatientId: number | null = null;
 
-  patients: Patient[] = [];
+  patients: PatientRow[] = [];
 
   loading = false;
 
   constructor(
+    private studiesService: StudiesService,
     private patientService: PatientService,
     private toastService: ToastService, 
     private router: Router
@@ -50,36 +60,141 @@ export class PatientListComponent implements OnInit {
    */
   loadPatients(): void {
 
-    this.loading = true;
+  this.loading = true;
 
-    this.patientService.getMyPatients().subscribe({
+  this.patientService.getMyPatients().subscribe({
 
-      next: (response) => {
+    next: (response) => {
 
-        console.log('Patients retrieved successfully:', response);
+      const patients = response.patients ?? [];
 
-        this.patients = response.patients ?? [];
+      console.log(
+        'Patients retrieved successfully:',
+        patients
+      );
 
-        this.loading = false;
-      },
+      if (patients.length === 0) {
 
-      error: (error) => {
-
-        console.error(
-          'Error retrieving patients:',
-          error
-        );
-
+        this.patients = [];
         this.loading = false;
 
-        this.handlePatientError(
-          error,
-          'Impossible de récupérer les patients.'
-        );
+        return;
       }
 
-    });
+      this.loadStudiesForPatients(patients);
+    },
+
+    error: (error) => {
+
+      console.error(
+        'Error retrieving patients:',
+        error
+      );
+
+      this.loading = false;
+
+      this.handlePatientError(
+        error,
+        'Impossible de récupérer les patients.'
+      );
+    }
+
+  });
+}
+
+loadStudiesForPatients(
+  patients: Patient[]
+): void {
+
+  const requests = patients.map(
+    patient =>
+      this.studiesService.getStudiesByPatient(patient.id)
+  );
+
+  let completedRequests = 0;
+
+  const patientRows: PatientRow[] = patients.map(
+    patient => ({
+      ...patient,
+      studyCount: 0,
+      latestAnalysis: null
+    })
+  );
+
+  requests.forEach(
+    (request, index) => {
+
+      request.subscribe({
+
+        next: (response) => {
+
+          const studies =
+            response.studies ?? [];
+
+          patientRows[index].studyCount = studies.length;
+          patientRows[index].latestAnalysis = this.getLatestAnalysis(studies);
+
+          completedRequests++;
+
+          if (completedRequests === patients.length) {
+
+            this.patients = patientRows;
+
+            this.loading = false;
+
+            console.log(
+              'Patients with study information:',
+              this.patients
+            );
+          }
+        },
+
+        error: (error) => {
+
+          console.error(
+            `Error retrieving studies for patient ${patients[index].id}:`,
+            error
+          );
+
+          completedRequests++;
+
+          if (completedRequests === patients.length) {
+
+            this.patients = patientRows;
+
+            this.loading = false;
+          }
+        }
+
+      });
+    }
+  );
+}
+
+getLatestAnalysis(studies: Study[]): string | null {
+
+  if (!studies || studies.length === 0) {
+    return null;
   }
+
+  const latestStudy = studies.reduce(
+    (latest, current) => {
+
+      const latestDate =
+        new Date(latest.updatedAt).getTime();
+
+      const currentDate =
+        new Date(current.updatedAt).getTime();
+
+      return currentDate > latestDate
+        ? current
+        : latest;
+    }
+  );
+
+  return latestStudy.updatedAt;
+}
+
 
   onPatientCreated(): void {
   console.log('New patient created → refreshing list');

@@ -114,8 +114,6 @@ public class StudiesController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(Map.of(
-                            "message",
-                            "Studies retrieved successfully",
 
                             "studies",
                             studies
