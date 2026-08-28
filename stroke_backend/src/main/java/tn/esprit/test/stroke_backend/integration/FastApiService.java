@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
+import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -201,4 +202,63 @@ public class FastApiService {
 
         return builder.build();
     }
+
+    /**
+ * Lance la prédiction ET récupère les 3 fichiers générés,
+ * pour que Spring Boot les sauvegarde dans storage/.
+ */
+public FastApiPredictionResult predictAndFetchFiles(Path dwiFilePath) {
+
+    FastApiPredictionResponse metadata = predict(dwiFilePath);
+
+    byte[] predictionBytes = downloadFile(metadata.getPrediction_file());
+    byte[] overlayBytes    = downloadFile(metadata.getOverlay_file());
+    byte[] previewBytes    = downloadFile(metadata.getPreview_file());
+
+    return new FastApiPredictionResult(
+            metadata,
+            predictionBytes,
+            overlayBytes,
+            previewBytes
+    );
 }
+
+/**
+ * Télécharge un fichier de résultat depuis FastAPI (/predict/files/{filename}).
+ */
+private byte[] downloadFile(String filename) {
+
+    try {
+
+        byte[] bytes = restClient
+                .get()
+                .uri("/predict/files/{filename}", filename)
+                .retrieve()
+                .body(byte[].class);
+
+        if (bytes == null || bytes.length == 0) {
+            throw new RuntimeException(
+                    "Downloaded file is empty: " + filename
+            );
+        }
+
+        return bytes;
+
+    } catch (Exception e) {
+        throw new RuntimeException(
+                "Failed to download file from FastAPI: " + filename, e
+        );
+    }
+}
+
+
+public record FastApiPredictionResult(
+        FastApiPredictionResponse metadata,
+        byte[] predictionBytes,
+        byte[] overlayBytes,
+        byte[] previewBytes
+) {}
+
+
+}
+

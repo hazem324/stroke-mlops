@@ -239,7 +239,7 @@ public class StudiesService implements IStudiesService {
             String storagePath =
                     fileStorageService.storeDwiFile(
                             file,
-                            patient.getPatientCode(),
+                            String.valueOf(patient.getId()),
                             study.getStudyCode()
                     );
 
@@ -262,11 +262,16 @@ public class StudiesService implements IStudiesService {
         }
 
         // 10. CALL FASTAPI
+                // 10. CALL FASTAPI, DOWNLOAD FILES, SAVE TO storage/
         try {
 
-            log.info(  "Calling FastAPI for study {}",study.getId());
+            log.info("Calling FastAPI for study {}", study.getId());
+
             Path physicalPath = fileStorageService.getPhysicalPath(study.getDwiStoragePath());
-            FastApiPredictionResponse response = fastApiService.predict(physicalPath);
+
+            FastApiService.FastApiPredictionResult result = fastApiService.predictAndFetchFiles(physicalPath);
+
+            FastApiPredictionResponse response = result.metadata();
 
             // 11. VERIFY FASTAPI RESPONSE
             if (response == null) {
@@ -276,7 +281,6 @@ public class StudiesService implements IStudiesService {
                 );
             }
 
-
             if (!"success".equalsIgnoreCase(
                     response.getStatus())) {
 
@@ -285,36 +289,45 @@ public class StudiesService implements IStudiesService {
                 );
             }
 
+            // =================================================
+            // 12. SAVE FILES TO storage/patients/{id}/studies/{code}/analysis/
+            // =================================================
+
+            FileStorageService.AnalysisPaths paths =
+                    fileStorageService.storeAnalysisFiles(
+                            result.predictionBytes(),
+                            result.overlayBytes(),
+                            result.previewBytes(),
+                            String.valueOf(patient.getId()),
+                            study.getStudyCode()
+                    );
 
             // =================================================
-            // 12. CREATE PREDICTION
+            // 13. CREATE PREDICTION
             // =================================================
 
             Prediction prediction =
                     createPrediction(
                             study,
-                            response
+                            response,
+                            paths
                     );
-
 
             prediction =
                     predictionRepository.save(
                             prediction
                     );
 
-
-            // 13. COMPLETE STUDY
+            // 14. COMPLETE STUDY
             study.setStatus(StudiesStatus.COMPLETED);
             study.setErrorMessage(null);
             study = studiesRepository.save(study);
             log.info("MRI analysis completed - studyId={}", study.getId());
 
-
             return toResponseDTO(
                     study,
                     prediction
             );
-
 
         } catch (Exception e) {
 
@@ -326,9 +339,9 @@ public class StudiesService implements IStudiesService {
                     e
             );
 
-            study.setStatus(StudiesStatus.FAILED );
+            study.setStatus(StudiesStatus.FAILED);
             study.setErrorMessage(e.getMessage());
-            study =studiesRepository.save(study);
+            study = studiesRepository.save(study);
 
             /*
              * L'échec ML est un état métier.
@@ -389,16 +402,16 @@ public class StudiesService implements IStudiesService {
     }
 
     // CREATE PREDICTION
-    private Prediction createPrediction( Studies study,  FastApiPredictionResponse response) {
+    private Prediction createPrediction( Studies study,  FastApiPredictionResponse response, FileStorageService.AnalysisPaths paths) {
 
         Prediction prediction = new Prediction();
 
         prediction.setStudy( study );
 
-        // FILES
-        prediction.setPredictionFile( response.getPrediction_file() );
-        prediction.setPreviewFile( response.getPreview_file() );
-        prediction.setOverlayFile(  response.getOverlay_file() );
+        // FILES — real storage-relative paths, not FastAPI's bare filenames
+        prediction.setPredictionFile( paths.predictionFile() );
+        prediction.setPreviewFile( paths.previewFile() );
+        prediction.setOverlayFile(  paths.overlayFile() );
 
         // SHAPE
         List<Integer> shape = response.getPrediction_shape();

@@ -5,6 +5,8 @@ import time
 import uuid
 import traceback
 
+from fastapi.responses import FileResponse
+
 from fastapi import (
     APIRouter,
     File,
@@ -32,6 +34,26 @@ OUTPUT_DIR.mkdir(
     exist_ok=True,
 )
 
+
+@router.get("/files/{filename}")
+async def get_output_file(filename: str):
+    """
+    Serves a generated output file (prediction/overlay/preview) so
+    Spring Boot can download it right after /predict/ returns.
+    """
+    file_path = OUTPUT_DIR / filename
+
+    if not file_path.resolve().is_relative_to(OUTPUT_DIR.resolve()):
+        raise HTTPException(status_code=400, detail="Invalid filename")
+
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+
+    return FileResponse(
+        path=file_path,
+        filename=filename,
+        media_type="application/octet-stream",
+    )
 
 # TEST CONNECTION
 @router.post("/test")
@@ -66,11 +88,7 @@ async def test_prediction_connection(
 
 
 # REAL PREDICTION
-@router.post(
-    "/",
-    response_model=PredictionResponse,
-    status_code=status.HTTP_200_OK,
-)
+@router.post( "/", response_model=PredictionResponse, status_code=status.HTTP_200_OK,)
 async def predict_stroke(
     file: UploadFile = File(
         ...,

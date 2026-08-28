@@ -90,7 +90,7 @@ public class FileStorageService {
      * Cette méthode pourra être utilisée si FastAPI
      * renvoie le fichier et non seulement son chemin.
      */
-    public String storeSegmentationFile(
+  /* public String storeSegmentationFile(
             byte[] fileBytes,
             String patientCode,
             String studyCode) throws IOException {
@@ -119,7 +119,55 @@ public class FileStorageService {
                 .toString()
                 .replace("\\", "/");
     }
+   */
+       /**
+     * Sauvegarde les 3 fichiers reçus de FastAPI dans
+     * storage/patients/{patientId}/studies/{studyCode}/analysis/
+     */
+    public AnalysisPaths storeAnalysisFiles(
+            byte[] predictionBytes,
+            byte[] overlayBytes,
+            byte[] previewBytes,
+            String patientId,
+            String studyCode) throws IOException {
 
+        Path analysisDirectory =
+                baseStoragePath
+                    .resolve("patients")
+                    .resolve(patientId)
+                    .resolve("studies")
+                    .resolve(studyCode)
+                    .resolve("analysis");
+
+        Files.createDirectories(analysisDirectory);
+
+        Path predictionPath = analysisDirectory.resolve("prediction.nii.gz");
+        Path overlayPath    = analysisDirectory.resolve("overlay.nii.gz");
+        Path previewPath    = analysisDirectory.resolve("preview.png");
+
+        Files.write(predictionPath, predictionBytes);
+        Files.write(overlayPath, overlayBytes);
+        Files.write(previewPath, previewBytes);
+
+        return new AnalysisPaths(
+                relativize(predictionPath),
+                relativize(overlayPath),
+                relativize(previewPath)
+        );
+    }
+
+    private String relativize(Path path) {
+        return baseStoragePath
+                .relativize(path)
+                .toString()
+                .replace("\\", "/");
+    }
+
+    public record AnalysisPaths(
+            String predictionFile,
+            String overlayFile,
+            String previewFile
+    ) {}
 
     /**
      * Vérifie qu'un fichier existe.
