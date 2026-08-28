@@ -18,21 +18,11 @@ public class PredictionResponseDTO {
 
     Long id;
 
-
-    // =========================================================
-    // FILES
-    // =========================================================
-
     String predictionFile;
 
     String previewFile;
 
     String overlayFile;
-
-
-    // =========================================================
-    // SHAPE
-    // =========================================================
 
     Integer predictionShapeX;
 
@@ -42,21 +32,11 @@ public class PredictionResponseDTO {
 
     Integer previewSlice;
 
-
-    // =========================================================
-    // LESION
-    // =========================================================
-
     Boolean lesionDetected;
 
     Integer lesionVoxels;
 
     Double lesionVolumeMm3;
-
-
-    // =========================================================
-    // CENTROID
-    // =========================================================
 
     Double centroidIndexX;
 
@@ -70,11 +50,6 @@ public class PredictionResponseDTO {
 
     Double centroidPhysicalZ;
 
-
-    // =========================================================
-    // BOUNDING BOX
-    // =========================================================
-
     Integer boundingBoxMinX;
 
     Integer boundingBoxMaxX;
@@ -86,11 +61,6 @@ public class PredictionResponseDTO {
     Integer boundingBoxMinZ;
 
     Integer boundingBoxMaxZ;
-
-
-    // =========================================================
-    // PROCESSING
-    // =========================================================
 
     Double processingTime;
 

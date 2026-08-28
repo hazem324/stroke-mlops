@@ -4,8 +4,10 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpStatus;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -145,6 +147,33 @@ public class StudiesService implements IStudiesService {
                                 "Study not found"
                         ));
     }
+
+    // get analyse detaile
+    public ResponseEntity<StudyResponseDTO> getStudyById(Long studyId) {
+
+    try {
+        Studies study = studiesRepository
+                .findById(studyId)
+                .orElse(null);
+
+        if (study == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+
+        StudyResponseDTO responseDTO = toStudyResponseDTO(study);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(responseDTO);
+
+    } catch (Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(null);
+    }
+}
 
     // ANALYZE STUDY
     @Override
@@ -567,6 +596,188 @@ public class StudiesService implements IStudiesService {
     }
 
 
+    // mapping 
+    private StudyResponseDTO toStudyResponseDTO(Studies study) {
 
+    StudyResponseDTO dto = new StudyResponseDTO();
+
+    dto.setId(study.getId());
+
+    dto.setStudyCode(
+            study.getStudyCode()
+    );
+
+    dto.setStudyDate(
+            study.getStudyDate()
+    );
+
+    dto.setModality(
+            study.getModality()
+    );
+
+    dto.setStatus(
+            study.getStatus()
+    );
+
+    if (study.getPatient() != null) {
+
+        dto.setPatientId(
+                study.getPatient().getId()
+        );
+
+        dto.setPatientCode(
+                study.getPatient().getPatientCode()
+        );
+
+        dto.setPatientFullName(
+                study.getPatient().getFirstName()
+                        + " "
+                        + study.getPatient().getLastName()
+        );
+    }
+
+    dto.setDwiFileName(
+            study.getDwiFileName()
+    );
+
+    dto.setDwiFileSize(
+            study.getDwiFileSize()
+    );
+
+    dto.setErrorMessage(
+            study.getErrorMessage()
+    );
+
+    dto.setCreatedAt(
+            study.getCreatedAt()
+    );
+
+    dto.setUpdatedAt(
+            study.getUpdatedAt()
+    );
+
+    if (study.getPrediction() != null) {
+
+        dto.setPrediction(
+                toPredictionResponseDTO(
+                        study.getPrediction()
+                )
+        );
+    }
+
+    return dto;
+}
+
+private PredictionResponseDTO toPredictionResponseDTO(
+        Prediction prediction) {
+
+    PredictionResponseDTO dto =
+            new PredictionResponseDTO();
+
+    dto.setId(
+            prediction.getId()
+    );
+
+    dto.setPredictionFile(
+            prediction.getPredictionFile()
+    );
+
+    dto.setPreviewFile(
+            prediction.getPreviewFile()
+    );
+
+    dto.setOverlayFile(
+            prediction.getOverlayFile()
+    );
+
+    dto.setPredictionShapeX(
+            prediction.getPredictionShapeX()
+    );
+
+    dto.setPredictionShapeY(
+            prediction.getPredictionShapeY()
+    );
+
+    dto.setPredictionShapeZ(
+            prediction.getPredictionShapeZ()
+    );
+
+    dto.setPreviewSlice(
+            prediction.getPreviewSlice()
+    );
+
+    dto.setLesionDetected(
+            prediction.getLesionDetected()
+    );
+
+    dto.setLesionVoxels(
+            prediction.getLesionVoxels()
+    );
+
+    dto.setLesionVolumeMm3(
+            prediction.getLesionVolumeMm3()
+    );
+
+    dto.setCentroidIndexX(
+            prediction.getCentroidIndexX()
+    );
+
+    dto.setCentroidIndexY(
+            prediction.getCentroidIndexY()
+    );
+
+    dto.setCentroidIndexZ(
+            prediction.getCentroidIndexZ()
+    );
+
+    dto.setCentroidPhysicalX(
+            prediction.getCentroidPhysicalX()
+    );
+
+    dto.setCentroidPhysicalY(
+            prediction.getCentroidPhysicalY()
+    );
+
+    dto.setCentroidPhysicalZ(
+            prediction.getCentroidPhysicalZ()
+    );
+
+    dto.setBoundingBoxMinX(
+            prediction.getBoundingBoxMinX()
+    );
+
+    dto.setBoundingBoxMaxX(
+            prediction.getBoundingBoxMaxX()
+    );
+
+    dto.setBoundingBoxMinY(
+            prediction.getBoundingBoxMinY()
+    );
+
+    dto.setBoundingBoxMaxY(
+            prediction.getBoundingBoxMaxY()
+    );
+
+    dto.setBoundingBoxMinZ(
+            prediction.getBoundingBoxMinZ()
+    );
+
+    dto.setBoundingBoxMaxZ(
+            prediction.getBoundingBoxMaxZ()
+    );
+
+    dto.setProcessingTime(
+            prediction.getProcessingTime()
+    );
+
+   if (prediction.getCreatedAt() != null) {
+
+    dto.setCreatedAt(
+            prediction.getCreatedAt()
+    );
+}
+
+    return dto;
+}
 
 }
