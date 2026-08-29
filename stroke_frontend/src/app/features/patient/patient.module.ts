@@ -20,8 +20,8 @@ import { EditPatientModalComponent } from './components/edit-patient-modal/edit-
     PatientStudiesComponent,
     PatientDetailPageComponent,
     EditPatientModalComponent,
-    EditPatientModalComponent 
-  ],
+    EditPatientModalComponent
+    ],
 
   imports: [
     CommonModule,

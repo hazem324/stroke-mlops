@@ -6,6 +6,7 @@ import { Patient } from '../../../../models/patient/patient.model';
 import { ToastService } from '../../../../services/toast.service';
 import { StudiesService } from '../../../../services/studies.service';
 import { Study } from '../../../../models/studies/studies.model';
+import { NavigationService } from '../../../../services/navigation.service';
 
 
 interface PatientRow extends Patient {
@@ -31,6 +32,7 @@ export class PatientListComponent implements OnInit {
   loading = false;
 
   constructor(
+    private navigationService: NavigationService,
     private studiesService: StudiesService,
     private patientService: PatientService,
     private toastService: ToastService, 
@@ -307,4 +309,8 @@ onPatientUpdated(): void {
       'Erreur'
     );
   }
+
+  goToNewAnalysis(): void {
+  this.navigationService.goToNewAnalysis();
+}
 }

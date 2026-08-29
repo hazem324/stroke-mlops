@@ -20,7 +20,7 @@ const routes: Routes = [
       }, 
 
     {
-      path: 'new-analysis', 
+      path: 'analysis', 
       loadChildren: () =>
         import('../../features/study/study.module')
       .then(m => m.StudyModule)

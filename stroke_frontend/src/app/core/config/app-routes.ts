@@ -1,6 +1,6 @@
 export const APP_ROUTES = {
 
-  home :{ 
+  home: {
     home: ''
   },
 
@@ -9,9 +9,15 @@ export const APP_ROUTES = {
     register: '/auth/sign-up'
   },
 
-  dash : {
+  dash: {
     home: 'dashboard',
     patient: 'dashboard/patient'
+  },
+
+  analysis: {
+    home: 'dashboard/analysis',
+    newAnalysis: 'dashboard/analysis/new-analysis',
+    detailAnalysis: 'dashboard/analysis/detail-analyse'
   }
 
 } as const;

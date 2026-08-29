@@ -51,6 +51,8 @@ public class SecurityConfig {
                 ).permitAll()
                 .requestMatchers("/api/patient/**"
                 ).permitAll()
+                .requestMatchers("/storage/**")
+                .permitAll()
 
                 .requestMatchers("/api/studies/**")
                 .permitAll()

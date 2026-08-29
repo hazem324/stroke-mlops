@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { StudiesResponse, Study } from '../models/studies/studies.model';
+import { StudyDetail } from '../models/studies/study-detail.model';
 export type Modality = 'DWI';
 
 @Injectable({
@@ -43,4 +44,9 @@ export class StudiesService {
     );
   }
 
+  getDetaileAnalyse (studyId: number): Observable<StudyDetail> {
+    return this.http.get<StudyDetail> (
+      `${this.baseUri}/study-detail/${studyId}`
+    );
+  }
 }

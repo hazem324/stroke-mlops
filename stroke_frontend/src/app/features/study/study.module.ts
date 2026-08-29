@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 
 import { StudyRoutingModule } from './study-routing.module';
 import { StudyAnalysisComponent } from './components/study-analysis/study-analysis.component';
+import { AnalysisResultComponent } from './components/analysis-result/analysis-result.component';
 
 
 @NgModule({
   declarations: [
-    StudyAnalysisComponent
+    StudyAnalysisComponent,
+    AnalysisResultComponent
   ],
   imports: [
     FormsModule,

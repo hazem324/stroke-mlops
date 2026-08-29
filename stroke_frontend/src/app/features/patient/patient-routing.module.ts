@@ -8,7 +8,6 @@ const routes: Routes = [
     path: '',
     component: PatientListComponent
   },
-
  {
   path: ':id',
   component: PatientDetailPageComponent

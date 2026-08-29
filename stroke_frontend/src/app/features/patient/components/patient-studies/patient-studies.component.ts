@@ -1,6 +1,7 @@
 import { Component, Input, OnInit} from '@angular/core';
 import { Study } from '../../../../models/studies/studies.model';
 import { StudiesService } from '../../../../services/studies.service';
+import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
   selector: 'app-patient-studies',
@@ -20,7 +21,8 @@ export class PatientStudiesComponent implements OnInit {
 
 
   constructor(
-    private studiesService: StudiesService
+    private studiesService: StudiesService, 
+    private navigationService: NavigationService
   ) {}
 
 
@@ -192,12 +194,9 @@ export class PatientStudiesComponent implements OnInit {
    *
    * La navigation sera ajoutée ensuite.
    */
-  viewStudy(study: Study): void {
+  viewStudy(id: number): void {
 
-    console.log(
-      'Selected study:',
-      study
-    );
+    return this.navigationService.goToAnalysisDetail(id);
   }
 
 }

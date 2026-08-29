@@ -11,8 +11,8 @@ export class NavigationService {
     private router: Router
   ) {}
 
-
   /* Auth routes */
+
   goToLogin(): void {
     this.router.navigateByUrl(
       APP_ROUTES.auth.login
@@ -25,15 +25,41 @@ export class NavigationService {
     );
   }
 
+
+  /* Dashboard routes */
+
   goToHomeDash(): void {
     this.router.navigateByUrl(
-      APP_ROUTES.home.home
-    )
+      APP_ROUTES.dash.home
+    );
   }
 
-  goToPatient (): void {
+  goToPatient(): void {
     this.router.navigateByUrl(
       APP_ROUTES.dash.patient
-    )
+    );
   }
+
+
+  /* Analysis routes */
+
+  goToAnalysis(): void {
+    this.router.navigateByUrl(
+      APP_ROUTES.analysis.home
+    );
+  }
+
+  goToNewAnalysis(): void {
+    this.router.navigateByUrl(
+      APP_ROUTES.analysis.newAnalysis
+    );
+  }
+
+  goToAnalysisDetail(studyId: number): void {
+    this.router.navigate([
+      APP_ROUTES.analysis.detailAnalysis,
+      studyId
+    ]);
+  }
+
 }

@@ -1,0 +1,702 @@
+
+<!-- ÉTAT DE CHARGEMENT -->
+<div class="loading-state" *ngIf="loading">
+  <p>Chargement en cours...</p>
+</div>
+
+<!-- ÉTAT D'ERREUR -->
+<div class="error-state" *ngIf="error && !loading">
+  <p>{{ error }}</p>
+</div>
+
+<div class="analysis-page" *ngIf="study as study">
+
+  <!-- EN-TÊTE -->
+  <div class="page-header">
+
+    <div class="header-left">
+      <span class="eyebrow">ANALYSE IRM</span>
+
+      <h1>Résultat de l'analyse</h1>
+
+      <p>
+        Résultats de la segmentation des lésions cérébrales par intelligence artificielle
+      </p>
+    </div>
+
+    <div class="header-right">
+
+      <span class="status-badge completed">
+        <span class="status-dot"></span>
+        TERMINÉ
+      </span>
+
+      <button
+        type="button"
+        class="back-button"
+        (click)="goBack()"
+      >
+        ← Retour
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- INFORMATIONS DU PATIENT ET DE L'ÉTUDE -->
+  <div class="information-grid">
+
+    <!-- PATIENT -->
+    <div class="info-card">
+
+      <div class="card-icon patient-icon">
+        👤
+      </div>
+
+      <div class="card-content">
+
+        <h2>Informations du patient</h2>
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Code patient
+          </span>
+
+          <span class="info-value">
+            {{ study.patientCode }}
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Nom du patient
+          </span>
+
+          <span class="info-value">
+            {{ study.patientFullName }}
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Identifiant du patient
+          </span>
+
+          <span class="info-value">
+            #{{ study.patientId }}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ÉTUDE -->
+    <div class="info-card">
+
+      <div class="card-icon medical-icon">
+        🩺
+      </div>
+
+      <div class="card-content">
+
+        <h2>Informations de l'étude</h2>
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Code de l'étude
+          </span>
+
+          <span class="info-value">
+            {{ study.studyCode }}
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Modalité
+          </span>
+
+          <span class="info-value">
+            {{ study.modality }}
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Date de l'étude
+          </span>
+
+          <span class="info-value">
+            {{ formatDate(study.studyDate) }}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Tout ce qui dépend de study.prediction -->
+  <ng-container *ngIf="study.prediction as prediction">
+
+    <!-- IMAGE / SEGMENTATION -->
+    <section class="result-section">
+
+      <div class="section-header">
+
+        <div>
+
+          <span class="section-eyebrow">
+            SEGMENTATION
+          </span>
+
+          <h2>
+            Prédiction de l'IA
+          </h2>
+
+          <p>
+            Segmentation automatique de la lésion cérébrale générée par le modèle d'intelligence artificielle.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="segmentation-grid">
+
+        <!-- APERÇU -->
+        <!-- APERÇU -->
+<div class="preview-card">
+
+  <div class="preview-header">
+    <div>
+      <h3>Aperçu de la segmentation IA</h3>
+      <span>Coupe {{ prediction.previewSlice }}</span>
+    </div>
+    <span class="slice-badge">Coupe {{ prediction.previewSlice }}</span>
+  </div>
+
+  <!-- Sélecteur d'affichage -->
+  <div class="display-selector">
+    <label for="displayMode">Afficher :</label>
+    <select
+      id="displayMode"
+      [(ngModel)]="displayMode"
+      (ngModelChange)="onDisplayModeChange($event)"
+    >
+      <option value="dwi">Image DWI originale</option>
+      <option value="prediction">Prédiction (masque IA)</option>
+      <option value="overlay">Superposition (overlay)</option>
+      <option value="dwi_prediction">DWI + Prédiction (superposées)</option>
+    </select>
+  </div>
+
+  <div class="image-container niivue-container">
+    <canvas #niivueCanvas class="niivue-canvas"></canvas>
+  </div>
+
+  <div class="image-controls">
+
+    <div class="control-item">
+      <span class="control-label">Coupe</span>
+      <strong>{{ prediction.previewSlice }}</strong>
+    </div>
+
+    <div class="control-item">
+      <span class="control-label">Volume</span>
+      <strong>
+        {{ prediction.predictionShapeX }} × {{ prediction.predictionShapeY }} × {{ prediction.predictionShapeZ }}
+      </strong>
+    </div>
+
+  </div>
+
+</div>
+
+
+        <!-- LÉSION -->
+        <div class="lesion-card">
+
+          <div class="card-title">
+
+            <div>
+
+              <span class="section-eyebrow">
+                DÉTECTION
+              </span>
+
+              <h2>
+                Analyse de la lésion
+              </h2>
+
+            </div>
+
+            <span
+              class="lesion-status"
+              [class.detected]="prediction.lesionDetected"
+              [class.not-detected]="!prediction.lesionDetected"
+            >
+
+              <span class="status-dot"></span>
+
+              {{
+                prediction.lesionDetected
+                  ? 'Lésion détectée'
+                  : 'Aucune lésion'
+              }}
+
+            </span>
+
+          </div>
+
+
+          <div class="metric-list">
+
+            <!-- LÉSION DÉTECTÉE -->
+            <div class="metric-row">
+
+              <div class="metric-info">
+
+                <span class="metric-label">
+                  Lésion détectée
+                </span>
+
+                <span class="metric-description">
+                  Résultat de la détection par le modèle IA
+                </span>
+
+              </div>
+
+              <span
+                class="metric-badge"
+                [class.yes]="prediction.lesionDetected"
+                [class.no]="!prediction.lesionDetected"
+              >
+
+                {{
+                  prediction.lesionDetected
+                    ? 'OUI'
+                    : 'NON'
+                }}
+
+              </span>
+
+            </div>
+
+
+            <!-- VOXELS -->
+            <div class="metric-row">
+
+              <div class="metric-info">
+
+                <span class="metric-label">
+                  Voxels de la lésion
+                </span>
+
+                <span class="metric-description">
+                  Nombre de voxels détectés
+                </span>
+
+              </div>
+
+              <strong class="metric-value">
+                {{ prediction.lesionVoxels | number }}
+              </strong>
+
+            </div>
+
+
+            <!-- VOLUME -->
+            <div class="metric-row">
+
+              <div class="metric-info">
+
+                <span class="metric-label">
+                  Volume de la lésion
+                </span>
+
+                <span class="metric-description">
+                  Volume estimé de la lésion
+                </span>
+
+              </div>
+
+              <strong class="metric-value">
+                {{ prediction.lesionVolumeMm3 | number:'1.0-2' }}
+                mm³
+              </strong>
+
+            </div>
+
+
+            <!-- TEMPS DE TRAITEMENT -->
+            <div class="metric-row">
+
+              <div class="metric-info">
+
+                <span class="metric-label">
+                  Temps de traitement
+                </span>
+
+                <span class="metric-description">
+                  Temps d'exécution de l'inférence IA
+                </span>
+
+              </div>
+
+              <strong class="metric-value">
+                {{ prediction.processingTime }}
+                sec
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- DÉTAILS DE LA PRÉDICTION -->
+    <section class="details-section">
+
+      <div class="section-header">
+
+        <span class="section-eyebrow">
+          DÉTAILS DE LA PRÉDICTION
+        </span>
+
+        <h2>
+          Informations sur la segmentation
+        </h2>
+
+      </div>
+
+
+      <div class="details-grid">
+
+        <!-- COUPE D'APERÇU -->
+        <div class="detail-card">
+
+          <span class="detail-label">
+            Coupe d'aperçu
+          </span>
+
+          <strong class="detail-value">
+            {{ prediction.previewSlice }}
+          </strong>
+
+          <span class="detail-description">
+            Coupe représentative
+          </span>
+
+        </div>
+
+
+        <!-- TRAITEMENT -->
+        <div class="detail-card">
+
+          <span class="detail-label">
+            Temps de traitement
+          </span>
+
+          <strong class="detail-value">
+            {{ prediction.processingTime }} sec
+          </strong>
+
+          <span class="detail-description">
+            Inférence IA
+          </span>
+
+        </div>
+
+
+        <!-- MODÈLE -->
+        <div class="detail-card">
+
+          <span class="detail-label">
+            Modèle
+          </span>
+
+          <strong class="detail-value">
+            Stroke-DWI
+          </strong>
+
+          <span class="detail-description">
+            Modèle de segmentation
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CENTROÏDE -->
+    <section class="details-section">
+
+      <div class="section-header">
+
+        <span class="section-eyebrow">
+          LOCALISATION
+        </span>
+
+        <h2>
+          Localisation de la lésion
+        </h2>
+
+      </div>
+
+
+      <div class="location-grid">
+
+        <div class="location-card">
+
+          <h3>
+            Coordonnées en indices
+          </h3>
+
+
+          <div class="coordinate-row">
+
+            <span>X</span>
+
+            <strong>
+              {{ prediction.centroidIndexX | number:'1.2-2' }}
+            </strong>
+
+          </div>
+
+
+          <div class="coordinate-row">
+
+            <span>Y</span>
+
+            <strong>
+              {{ prediction.centroidIndexY | number:'1.2-2' }}
+            </strong>
+
+          </div>
+
+
+          <div class="coordinate-row">
+
+            <span>Z</span>
+
+            <strong>
+              {{ prediction.centroidIndexZ | number:'1.2-2' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="location-card">
+
+          <h3>
+            Coordonnées physiques
+          </h3>
+
+
+          <div class="coordinate-row">
+
+            <span>X</span>
+
+            <strong>
+              {{ prediction.centroidPhysicalX | number:'1.2-2' }}
+              mm
+            </strong>
+
+          </div>
+
+
+          <div class="coordinate-row">
+
+            <span>Y</span>
+
+            <strong>
+              {{ prediction.centroidPhysicalY | number:'1.2-2' }}
+              mm
+            </strong>
+
+          </div>
+
+
+          <div class="coordinate-row">
+
+            <span>Z</span>
+
+            <strong>
+              {{ prediction.centroidPhysicalZ | number:'1.2-2' }}
+              mm
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- BOÎTE ENGLOBANTE -->
+    <section class="details-section">
+
+      <div class="section-header">
+
+        <span class="section-eyebrow">
+          LIMITES DE LA LÉSION
+        </span>
+
+        <h2>
+          Boîte englobante
+        </h2>
+
+      </div>
+
+
+      <div class="bounding-box-grid">
+
+        <div class="bbox-item">
+
+          <span>X Min</span>
+
+          <strong>
+            {{ prediction.boundingBoxMinX }}
+          </strong>
+
+        </div>
+
+
+        <div class="bbox-item">
+
+          <span>X Max</span>
+
+          <strong>
+            {{ prediction.boundingBoxMaxX }}
+          </strong>
+
+        </div>
+
+
+        <div class="bbox-item">
+
+          <span>Y Min</span>
+
+          <strong>
+            {{ prediction.boundingBoxMinY }}
+          </strong>
+
+        </div>
+
+
+        <div class="bbox-item">
+
+          <span>Y Max</span>
+
+          <strong>
+            {{ prediction.boundingBoxMaxY }}
+          </strong>
+
+        </div>
+
+
+        <div class="bbox-item">
+
+          <span>Z Min</span>
+
+          <strong>
+            {{ prediction.boundingBoxMinZ }}
+          </strong>
+
+        </div>
+
+
+        <div class="bbox-item">
+
+          <span>Z Max</span>
+
+          <strong>
+            {{ prediction.boundingBoxMaxZ }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- image-->
+<section class="details-section">
+
+  <div class="section-header">
+
+    <span class="section-eyebrow">
+      FICHIERS
+    </span>
+
+    <h2>
+      Aperçu de l'analyse
+    </h2>
+
+  </div>
+
+  <div class="files-card">
+
+    <img
+      [src]="getPreviewUrl()"
+      alt="Aperçu de l'analyse"
+      class="analysis-preview"
+    >
+
+  </div>
+
+</section>
+
+
+    <!-- PIED DE PAGE -->
+    <div class="result-footer">
+
+      <span>
+        Analyse créée le :
+        {{ formatDate(prediction.createdAt) }}
+      </span>
+
+      <span>
+        ID de l'étude : #{{ study.id }}
+      </span>
+
+    </div>
+
+  </ng-container>
+
+</div>
