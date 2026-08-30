@@ -1,0 +1,591 @@
+<div class="dashboard-container">
+
+  <!-- ==================== HEADER ==================== -->
+  <div class="dashboard-header">
+    <div>
+      <h1>Tableau de bord</h1>
+      <p>Vue d'ensemble de votre activité</p>
+    </div>
+
+    <button
+      class="btn btn-primary"
+      type="button"
+      onclick="goToNewAnalyse()">
+      <i class="bi bi-plus-lg"></i>
+      Nouvelle analyse
+    </button>
+  </div>
+
+
+  <!-- ==================== STATISTIQUES ==================== -->
+  <div class="statistics-grid">
+
+    <ng-container *ngIf="statistics && !loadingStatistics; else statsSkeleton">
+
+      <!-- Patients -->
+      <div class="stat-card">
+
+        <div class="stat-icon patients-icon">
+          <i class="bi bi-people"></i>
+        </div>
+
+        <div class="stat-content">
+          <span class="stat-label">
+            Patients
+          </span>
+
+          <strong class="stat-value">
+            {{ statistics.totalPatients }}
+          </strong>
+
+          <span class="stat-description">
+            Patients enregistrés
+          </span>
+        </div>
+
+      </div>
+
+
+      <!-- Études -->
+      <div class="stat-card">
+
+        <div class="stat-icon studies-icon">
+          <i class="bi bi-file-earmark-medical"></i>
+        </div>
+
+        <div class="stat-content">
+          <span class="stat-label">
+            Études IRM
+          </span>
+
+          <strong class="stat-value">
+            {{ statistics.totalStudies }}
+          </strong>
+
+          <span class="stat-description">
+            Études réalisées
+          </span>
+        </div>
+
+      </div>
+
+
+      <!-- Analyses terminées -->
+      <div class="stat-card">
+
+        <div class="stat-icon completed-icon">
+          <i class="bi bi-check-circle"></i>
+        </div>
+
+        <div class="stat-content">
+          <span class="stat-label">
+            Analyses terminées
+          </span>
+
+          <strong class="stat-value">
+            {{ statistics.completedAnalyses }}
+          </strong>
+
+          <span class="stat-description">
+            Analyses complétées
+          </span>
+        </div>
+
+      </div>
+
+
+      <!-- Analyses en attente -->
+      <div class="stat-card">
+
+        <div class="stat-icon pending-icon">
+          <i class="bi bi-clock-history"></i>
+        </div>
+
+        <div class="stat-content">
+          <span class="stat-label">
+            En attente
+          </span>
+
+          <strong class="stat-value">
+            {{ statistics.pendingAnalyses }}
+          </strong>
+
+          <span class="stat-description">
+            Analyses à valider
+          </span>
+        </div>
+
+      </div>
+
+    </ng-container>
+
+
+    <!-- Skeleton statistiques -->
+    <ng-template #statsSkeleton>
+
+      <div
+        class="stat-card skeleton-card"
+        *ngFor="let i of [1, 2, 3, 4]">
+
+        <div class="stat-icon skeleton-block"></div>
+
+        <div class="stat-content">
+
+          <span class="skeleton-line skeleton-line-sm"></span>
+
+          <span class="skeleton-line skeleton-line-lg"></span>
+
+          <span class="skeleton-line skeleton-line-sm"></span>
+
+        </div>
+
+      </div>
+
+    </ng-template>
+
+  </div>
+
+
+  <!-- ==================== CONTENU PRINCIPAL ==================== -->
+  <div class="dashboard-grid">
+
+
+    <!-- ==================== ANALYSES RÉCENTES ==================== -->
+    <section class="dashboard-card recent-card">
+
+      <div class="card-header">
+
+        <div>
+          <h2>
+            Analyses récentes
+          </h2>
+
+          <p>
+            Les cinq dernières analyses effectuées
+          </p>
+        </div>
+
+        <button
+          class="btn btn-outline"
+          type="button">
+
+          Voir toutes
+
+          <i class="bi bi-arrow-right"></i>
+
+        </button>
+
+      </div>
+
+
+      <!-- Conteneur tableau -->
+      <div class="table-container">
+
+
+        <!-- ==================== CHARGEMENT ==================== -->
+        <div
+          class="table-loading"
+          *ngIf="loadingRecentAnalyses">
+
+          <div
+            class="skeleton-row"
+            *ngFor="let i of [1, 2, 3, 4, 5]">
+
+            <div class="skeleton-block skeleton-avatar"></div>
+
+            <span class="skeleton-line skeleton-line-lg"></span>
+
+            <span class="skeleton-line skeleton-line-sm"></span>
+
+            <span class="skeleton-line skeleton-line-sm"></span>
+
+            <span class="skeleton-line skeleton-line-md"></span>
+
+          </div>
+
+        </div>
+
+
+        <!-- ==================== AUCUNE ANALYSE ==================== -->
+        <div
+          class="table-empty"
+          *ngIf="
+            !loadingRecentAnalyses &&
+            recentAnalyses.length === 0
+          ">
+
+          <i class="bi bi-inbox"></i>
+
+          <span>
+            Aucune analyse récente à afficher.
+          </span>
+
+        </div>
+
+
+        <!-- ==================== TABLEAU ==================== -->
+        <table
+          *ngIf="
+            !loadingRecentAnalyses &&
+            recentAnalyses.length > 0
+          ">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Patient
+              </th>
+
+              <th>
+                Étude
+              </th>
+
+              <th>
+                Date
+              </th>
+
+              <th>
+                Résultat
+              </th>
+
+              <th>
+                Modalité
+              </th>
+
+              <th></th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            <tr
+              *ngFor="let analysis of recentAnalyses">
+
+
+              <!-- ==================== PATIENT ==================== -->
+              <td>
+
+                <div class="patient-cell">
+
+                  <div class="patient-avatar">
+
+                    {{ getInitials(analysis.patientName) }}
+
+                  </div>
+
+
+                  <div>
+
+                    <strong>
+                      {{ analysis.patientName }}
+                    </strong>
+
+                    <span>
+                      {{ analysis.patientCode }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+
+              <!-- ==================== ÉTUDE ==================== -->
+              <td>
+
+                <span class="study-code">
+
+                  {{ analysis.studyCode }}
+
+                </span>
+
+              </td>
+
+
+              <!-- ==================== DATE ==================== -->
+              <td>
+
+                {{ formatStudyDate(analysis.studyDate) }}
+
+              </td>
+
+
+              <!-- ==================== RÉSULTAT ==================== -->
+              <td>
+
+                <span
+                  class="result-badge"
+                  [ngClass]="getResultClass(analysis)">
+
+                  {{ getResultLabel(analysis) }}
+
+                </span>
+
+              </td>
+
+
+              <!-- ==================== MODALITÉ ==================== -->
+              <td>
+
+                {{ analysis.modality }}
+
+              </td>
+
+
+              <!-- ==================== ACTION ==================== -->
+              <td>
+
+                <button
+                  class="view-button"
+                  type="button"
+                  (click)="goToAnalysisDetail(analysis.studyId)"
+                  >
+
+                  Voir
+
+                  <i class="bi bi-chevron-right"></i>
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ==================== COLONNE DROITE ==================== -->
+    <aside class="sidebar">
+
+
+      <!-- ==================== ÉTAT DU MODÈLE IA ==================== -->
+      <section class="dashboard-card model-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <h2>
+              État du modèle IA
+            </h2>
+
+            <p>
+              Service de segmentation
+            </p>
+
+          </div>
+
+
+          <span class="online-badge">
+
+            <span class="online-dot"></span>
+
+            En ligne
+
+          </span>
+
+        </div>
+
+
+        <!-- Nom du modèle -->
+        <div class="model-name">
+
+          <div class="model-icon">
+
+            <i class="bi bi-cpu"></i>
+
+          </div>
+
+
+          <div>
+
+            <strong>
+              Stroke-DWI
+            </strong>
+
+            <span>
+              Version 1.0
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- Détails -->
+        <div class="model-details">
+
+
+          <div class="detail-item">
+
+            <span>
+              Architecture
+            </span>
+
+            <strong>
+              3D U-Net
+            </strong>
+
+          </div>
+
+
+          <div class="detail-item">
+
+            <span>
+              Framework
+            </span>
+
+            <strong>
+              PyTorch / MONAI
+            </strong>
+
+          </div>
+
+
+          <div class="detail-item">
+
+            <span>
+              Temps moyen
+            </span>
+
+            <strong>
+              8,4 secondes
+            </strong>
+
+          </div>
+
+
+          <div class="detail-item">
+
+            <span>
+              Modalité
+            </span>
+
+            <strong>
+              DWI
+            </strong>
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ==================== FILE DE VALIDATION ==================== -->
+      <section class="dashboard-card review-card">
+
+
+        <div class="card-header">
+
+          <div>
+
+            <h2>
+              File de validation
+            </h2>
+
+            <p>
+              Validation médicale requise
+            </p>
+
+          </div>
+
+
+          <div class="review-icon">
+
+            <i class="bi bi-clipboard-check"></i>
+
+          </div>
+
+        </div>
+
+
+        <!-- Nombre d'analyses en attente -->
+        <div
+          class="review-count"
+          *ngIf="
+            statistics && !loadingStatistics;
+            else reviewSkeleton
+          ">
+
+          <strong>
+            {{ statistics.pendingAnalyses }}
+          </strong>
+
+
+          <div>
+
+            <span>
+              analyses
+            </span>
+
+            <small>
+              en attente de validation
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <!-- Skeleton -->
+        <ng-template #reviewSkeleton>
+
+          <div class="review-count">
+
+            <span
+              class="skeleton-block skeleton-number">
+            </span>
+
+
+            <div>
+
+              <span
+                class="skeleton-line skeleton-line-sm">
+              </span>
+
+              <span
+                class="skeleton-line skeleton-line-sm">
+              </span>
+
+            </div>
+
+          </div>
+
+        </ng-template>
+
+
+        <!-- Bouton validation -->
+        <button
+          class="review-button"
+          type="button">
+
+          Ouvrir la file de validation
+
+          <i class="bi bi-arrow-right"></i>
+
+        </button>
+
+
+      </section>
+
+    </aside>
+
+  </div>
+
+</div>

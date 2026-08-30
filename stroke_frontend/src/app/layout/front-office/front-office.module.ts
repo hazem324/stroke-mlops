@@ -6,12 +6,14 @@ import { FrontOfficeRoutingModule } from './front-office-routing.module';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
+import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     LayoutComponent,
     HeaderComponent,
-    SideBarComponent
+    SideBarComponent,
+    DashboardComponent
   ],
 
   imports: [

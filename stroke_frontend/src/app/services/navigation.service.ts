@@ -44,9 +44,9 @@ export class NavigationService {
   /* Analysis routes */
 
   goToAnalysis(): void {
-    this.router.navigateByUrl(
-      APP_ROUTES.analysis.home
-    );
+   // this.router.navigateByUrl(
+    //  APP_ROUTES.analysis.
+    // );
   }
 
   goToNewAnalysis(): void {

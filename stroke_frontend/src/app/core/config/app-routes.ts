@@ -10,12 +10,11 @@ export const APP_ROUTES = {
   },
 
   dash: {
-    home: 'dashboard',
+    home: 'dashboard/home',
     patient: 'dashboard/patient'
   },
 
   analysis: {
-    home: 'dashboard/analysis',
     newAnalysis: 'dashboard/analysis/new-analysis',
     detailAnalysis: 'dashboard/analysis/detail-analyse'
   }
