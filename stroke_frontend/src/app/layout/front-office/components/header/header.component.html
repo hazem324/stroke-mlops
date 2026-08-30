@@ -1,31 +1,21 @@
 <header class="topbar">
 
-  <!-- =========================
-       TITRE DE LA PAGE
-       ========================= -->
-
+  <!-- Titre de la page -->
   <div class="topbar-page">
 
     <div class="topbar-title">
-      Patients
+      {{ pageTitle }}
     </div>
 
     <div class="topbar-crumb">
-      Gérer les dossiers patients
+      {{ pageSubtitle }}
     </div>
 
   </div>
 
 
-  <!-- =========================
-       PARTIE DROITE
-       ========================= -->
-
+  <!-- Partie droite -->
   <div class="topbar-right">
-
-    <!-- =========================
-         UTILISATEUR
-         ========================= -->
 
     <button
       type="button"
@@ -34,7 +24,6 @@
       <div class="avatar">
         DR
       </div>
-
 
       <div class="user-info">
 
@@ -48,9 +37,6 @@
 
       </div>
 
-
-      <!-- Flèche -->
-
       <svg
         class="user-arrow"
         viewBox="0 0 24 24"
@@ -60,9 +46,7 @@
         stroke-linecap="round"
         stroke-linejoin="round">
 
-        <path
-          d="M6 9l6 6 6-6">
-        </path>
+        <path d="M6 9l6 6 6-6"></path>
 
       </svg>
 
