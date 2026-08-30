@@ -92,6 +92,12 @@
   font-size: 20px;
 }
 
+.stat-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
 .patients-icon {
   background: #eff6ff;
   color: #2563eb;

@@ -169,4 +169,8 @@ export class DashboardComponent implements OnInit {
   goToNewAnalyse() : void {
     return this.navigationService.goToNewAnalysis();
   }
+
+  goToHistory() : void {
+    return this.navigationService.goToAnalysisHistory();
+  }
 }
