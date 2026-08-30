@@ -53,13 +53,12 @@ public class SecurityConfig {
                 ).permitAll()
                 .requestMatchers("/storage/**")
                 .permitAll()
-
                 .requestMatchers("/api/studies/**")
                 .permitAll()
-
                 .requestMatchers("/api/dashboard/**")
                 .permitAll()
-
+                .requestMatchers("/api/user/**")
+                .permitAll()
                 .requestMatchers(
                     "/swagger-ui/**",
                     "/swagger-ui.html",
