@@ -3,6 +3,7 @@ package tn.esprit.test.stroke_backend.services;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import tn.esprit.test.stroke_backend.dto.study.AnalysisHistoryDTO;
 import tn.esprit.test.stroke_backend.dto.study.PredictionResponseDTO;
 import tn.esprit.test.stroke_backend.dto.study.StudyRequest;
 import tn.esprit.test.stroke_backend.dto.study.StudyResponseDTO;
@@ -778,6 +780,61 @@ private PredictionResponseDTO toPredictionResponseDTO(
 }
 
     return dto;
+}
+
+public ResponseEntity<?> getAnalysisHistory() {
+
+    try {
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        Long doctorId = currentUser.getId();
+
+        List<Studies> studies = studiesRepository.findAllStudiesByDoctor(doctorId);
+
+        List<AnalysisHistoryDTO> analyses = studies.stream()
+                .map(study -> new AnalysisHistoryDTO(
+                        study.getId(),
+                        study.getPatient().getId(),
+                        study.getPatient().getPatientCode(),
+                        study.getPatient().getFirstName()
+                                + " "
+                                + study.getPatient().getLastName(),
+                        study.getStudyCode(),
+                        study.getStudyDate(),
+                        study.getModality() != null
+                                ? study.getModality().name()
+                                : null,
+                        study.getStatus() != null
+                                ? study.getStatus().name()
+                                : null,
+                        study.getPrediction() != null
+                                ? study.getPrediction().getLesionDetected()
+                                : null,
+                        study.getCreatedAt()
+                ))
+                .toList();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(analyses);
+
+    } catch (Exception e) {
+
+        log.error(
+                "Erreur lors de la récupération de l'historique des analyses",
+                e
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(
+                        Map.of(
+                                "message",
+                                "Erreur lors de la récupération de l'historique des analyses."
+                        )
+                );
+    }
 }
 
 }

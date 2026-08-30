@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { StudyAnalysisComponent } from './components/study-analysis/study-analysis.component';
 import { AnalysisResultComponent } from './components/analysis-result/analysis-result.component';
+import { StudyHistoryComponent } from './components/study-history/study-history.component';
 
 const routes: Routes = [
 
@@ -15,6 +16,11 @@ const routes: Routes = [
   {
     path: 'new-analysis',
     component: StudyAnalysisComponent
+  },
+
+  {
+    path: 'analysis-history',
+    component: StudyHistoryComponent
   },
 
   {

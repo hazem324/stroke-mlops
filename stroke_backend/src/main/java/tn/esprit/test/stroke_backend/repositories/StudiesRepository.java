@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import tn.esprit.test.stroke_backend.entities.Studies;
 import tn.esprit.test.stroke_backend.entities.User;
@@ -26,4 +27,12 @@ public interface StudiesRepository extends JpaRepository<Studies, Long> {
     boolean existsByStudyCode(String studyCode);
 
     Optional<Studies> findById(Long id);
+
+    @Query("""
+        SELECT s
+        FROM Studies s
+        WHERE s.patient.doctor.id = :doctorId
+        ORDER BY s.createdAt DESC
+    """)
+    List<Studies> findAllStudiesByDoctor(Long doctorId);
 }

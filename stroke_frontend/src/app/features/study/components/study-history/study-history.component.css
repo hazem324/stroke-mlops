@@ -1,0 +1,358 @@
+/* ============================================================
+   ANALYSIS HISTORY
+   Feature-specific styles only.
+   Global styles come from styles.scss.
+   ============================================================ */
+
+
+/* =========================
+   Page header
+   ========================= */
+
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin-bottom: 22px;
+
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.page-head h1 {
+  font-size: 23px;
+}
+
+.page-head .lede {
+  margin-top: 3px;
+
+  color: var(--c-ink-soft);
+
+  font-size: 13.5px;
+}
+
+
+/* =========================
+   Filters
+   ========================= */
+
+.filters-row {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 18px;
+
+  flex-wrap: wrap;
+}
+
+.search-input {
+  position: relative;
+
+  flex: 1;
+
+  min-width: 200px;
+  max-width: 320px;
+}
+
+.search-input svg {
+  position: absolute;
+
+  left: 12px;
+  top: 50%;
+
+  width: 15px;
+  height: 15px;
+
+  transform: translateY(-50%);
+
+  color: var(--c-ink-faint);
+}
+
+.search-input .input {
+  padding-left: 36px;
+}
+
+.filter-input {
+  max-width: 170px;
+}
+
+.date-input {
+  max-width: 170px;
+}
+
+
+/* =========================
+   Analysis table
+   ========================= */
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table.data {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  font-size: 13.2px;
+}
+
+table.data thead th {
+  padding: 11px 16px;
+
+  text-align: left;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+
+  color: var(--c-ink-faint);
+
+  background: var(--c-bg-alt);
+
+  border-bottom: 1px solid var(--c-line);
+}
+
+table.data tbody td {
+  padding: 14px 16px;
+
+  vertical-align: middle;
+
+  border-bottom: 1px solid var(--c-line-soft);
+}
+
+table.data tbody tr:last-child td {
+  border-bottom: none;
+}
+
+table.data tbody tr {
+  transition: background var(--transition-fast);
+}
+
+table.data tbody tr:hover {
+  background: var(--c-primary-50);
+}
+
+
+/* =========================
+   Table cells
+   ========================= */
+
+.id-tag {
+  font-family: var(--f-mono);
+
+  font-size: 12.3px;
+  font-weight: 600;
+
+  color: var(--c-primary-700);
+}
+
+.cell-primary {
+  font-weight: 600;
+}
+
+.cell-sub {
+  font-size: 11.8px;
+
+  color: var(--c-ink-faint);
+}
+
+
+/* =========================
+   Result badges
+   ========================= */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 4px 10px;
+
+  border-radius: 20px;
+
+  font-size: 11.5px;
+  font-weight: 700;
+
+  line-height: 1.4;
+
+  white-space: nowrap;
+}
+
+.badge .dot {
+  width: 6px;
+  height: 6px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+}
+
+
+/* Lesion */
+
+.badge-lesion {
+  color: var(--c-accent);
+
+  background: var(--c-accent-100);
+}
+
+.badge-lesion .dot {
+  background: var(--c-accent);
+}
+
+
+/* No lesion */
+
+.badge-no-lesion {
+  color: var(--c-ink-soft);
+
+  background: var(--c-bg-alt);
+}
+
+.no-lesion-dot {
+  background: var(--c-ink-faint);
+}
+
+
+/* =========================
+   Status badges
+   ========================= */
+
+.badge-completed {
+  color: var(--c-success);
+
+  background: var(--c-success-100);
+}
+
+.badge-completed .dot {
+  background: var(--c-success);
+}
+
+
+.badge-processing {
+  color: var(--c-primary-600);
+
+  background: var(--c-primary-100);
+}
+
+.badge-processing .dot {
+  background: var(--c-primary-500);
+}
+
+
+.badge-failed {
+  color: var(--c-accent);
+
+  background: var(--c-accent-100);
+}
+
+.badge-failed .dot {
+  background: var(--c-accent);
+}
+
+
+.badge-review {
+  color: var(--c-warning);
+
+  background: var(--c-warning-100);
+}
+
+.badge-review .dot {
+  background: var(--c-warning);
+}
+
+
+.badge-validated {
+  color: var(--c-primary-700);
+
+  background: #E7F0FF;
+}
+
+.badge-validated .dot {
+  background: var(--c-primary-700);
+}
+
+
+/* =========================
+   Actions
+   ========================= */
+
+.action-column {
+  text-align: right !important;
+}
+
+
+/* =========================
+   Pagination
+   ========================= */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 16px;
+}
+
+.pagination-buttons {
+  display: flex;
+
+  gap: 8px;
+}
+
+
+/* =========================
+   Empty state
+   ========================= */
+
+.empty-state {
+  padding: 40px 16px !important;
+
+  text-align: center;
+
+  color: var(--c-ink-faint);
+}
+
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 880px) {
+
+  .page-head {
+    align-items: flex-start;
+  }
+
+  .filters-row {
+    align-items: stretch;
+  }
+
+  .search-input {
+    width: 100%;
+
+    max-width: none;
+  }
+
+  .filter-input,
+  .date-input {
+    flex: 1;
+
+    max-width: none;
+  }
+
+  .pagination {
+    align-items: flex-start;
+
+    gap: 12px;
+
+    flex-direction: column;
+  }
+}

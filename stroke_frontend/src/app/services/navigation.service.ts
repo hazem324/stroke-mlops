@@ -62,4 +62,10 @@ export class NavigationService {
     ]);
   }
 
+  goToAnalysisHistory(): void {
+    this.router.navigateByUrl(
+      APP_ROUTES.dash.history
+    );
+  }
+
 }

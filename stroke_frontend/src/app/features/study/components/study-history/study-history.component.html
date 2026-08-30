@@ -1,0 +1,349 @@
+<div class="main">
+
+  <!-- Page header -->
+  <div class="page-head">
+
+    <div>
+      <h1>Analysis History</h1>
+
+      <p class="lede">
+        {{ resultCount }} analyses complétées, filtrez par patient, date,
+        résultat ou statut.
+      </p>
+    </div>
+
+  </div>
+
+
+  <!-- Filters -->
+  <div class="filters-row">
+
+    <!-- Search -->
+    <div class="search-input">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8">
+
+        <circle cx="11" cy="11" r="7"></circle>
+
+        <path d="m21 21-4.3-4.3"></path>
+
+      </svg>
+
+      <input
+        class="input"
+        type="text"
+        placeholder="Rechercher patient ou study ID…"
+        [(ngModel)]="searchTerm">
+
+    </div>
+
+
+    <!-- Result filter -->
+    <select
+      class="input filter-input"
+      [(ngModel)]="selectedResult">
+
+      <option value="All results">
+        All results
+      </option>
+
+      <option value="Lesion detected">
+        Lesion detected
+      </option>
+
+      <option value="No lesion">
+        No lesion
+      </option>
+
+    </select>
+
+
+    <!-- Status filter -->
+    <select
+      class="input filter-input"
+      [(ngModel)]="selectedStatus">
+
+      <option value="All statuses">
+        All statuses
+      </option>
+
+      <option value="Completed">
+        Completed
+      </option>
+
+      <option value="Processing">
+        Processing
+      </option>
+
+      <option value="Failed">
+        Failed
+      </option>
+
+      <option value="Waiting for review">
+        Waiting for review
+      </option>
+
+      <option value="Validated">
+        Validated
+      </option>
+
+    </select>
+
+
+    <!-- Date -->
+    <input
+      class="input date-input"
+      type="date"
+      [(ngModel)]="selectedDate">
+
+  </div>
+
+
+  <!-- Table -->
+  <div class="card">
+
+    <div class="table-wrap">
+
+      <table class="data">
+
+        <thead>
+
+          <tr>
+
+            <th>Study ID</th>
+
+            <th>Patient</th>
+
+            <th>Date</th>
+
+            <th>Result</th>
+
+            <th>Model</th>
+
+            <th>Status</th>
+
+            <th class="action-column">
+              Action
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <!-- Data rows -->
+          <tr *ngFor="let analysis of filteredAnalyses">
+
+            <!-- Study ID -->
+            <td class="id-tag">
+              {{ analysis.sid }}
+            </td>
+
+
+            <!-- Patient -->
+            <td class="cell-primary">
+
+              {{ analysis.name }}
+
+              <div class="cell-sub">
+                {{ analysis.pid }}
+              </div>
+
+            </td>
+
+
+            <!-- Date -->
+            <td>
+              {{ analysis.date }}
+            </td>
+
+
+            <!-- Result -->
+            <td>
+
+              <span
+                *ngIf="analysis.result === 'lesion'"
+                class="badge badge-lesion">
+
+                <span class="dot"></span>
+
+                Lesion detected
+
+              </span>
+
+
+              <span
+                *ngIf="analysis.result === 'none'"
+                class="badge badge-no-lesion">
+
+                <span
+                  class="dot no-lesion-dot">
+                </span>
+
+                No lesion
+
+              </span>
+
+
+              <span
+                *ngIf="analysis.result === 'pending'"
+                class="cell-sub">
+
+                —
+
+              </span>
+
+            </td>
+
+
+            <!-- Model -->
+            <td class="mono cell-sub">
+              {{ analysis.model }}
+            </td>
+
+
+            <!-- Status -->
+            <td>
+
+              <span
+                *ngIf="analysis.status === 'Completed'"
+                class="badge badge-completed">
+
+                <span class="dot"></span>
+
+                Completed
+
+              </span>
+
+
+              <span
+                *ngIf="analysis.status === 'Processing'"
+                class="badge badge-processing">
+
+                <span class="dot"></span>
+
+                Processing
+
+              </span>
+
+
+              <span
+                *ngIf="analysis.status === 'Failed'"
+                class="badge badge-failed">
+
+                <span class="dot"></span>
+
+                Failed
+
+              </span>
+
+
+              <span
+                *ngIf="analysis.status === 'Review'"
+                class="badge badge-review">
+
+                <span class="dot"></span>
+
+                Waiting for review
+
+              </span>
+
+
+              <span
+                *ngIf="analysis.status === 'Validated'"
+                class="badge badge-validated">
+
+                <span class="dot"></span>
+
+                Validated
+
+              </span>
+
+            </td>
+
+
+            <!-- Action -->
+            <td class="action-column">
+
+              <button
+                class="btn btn-secondary btn-sm"
+                type="button"
+                (click)="goToAnalysis(analysis)">
+
+                View
+
+              </button>
+
+            </td>
+
+          </tr>
+
+
+          <!-- Empty state -->
+          <tr *ngIf="filteredAnalyses.length === 0">
+
+            <td
+              colspan="7"
+              class="empty-state">
+
+              Aucune analyse trouvée.
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+
+  <!-- Pagination -->
+  <div class="pagination">
+
+    <span class="cell-sub">
+
+      Showing
+      {{ filteredCount }}
+      of
+      {{ resultCount }}
+      analyses
+
+    </span>
+
+
+    <div class="pagination-buttons">
+
+      <button
+        class="btn btn-secondary btn-sm"
+        type="button"
+        disabled>
+
+        Previous
+
+      </button>
+
+
+      <button
+        class="btn btn-secondary btn-sm"
+        type="button"
+        (click)="nextPage()">
+
+        Next
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { StudiesResponse, Study } from '../models/studies/studies.model';
 import { StudyDetail } from '../models/studies/study-detail.model';
+import { RecentAnalysis } from '../models/studies/RecentAnalysis.model';
 export type Modality = 'DWI';
 
 @Injectable({
@@ -48,5 +49,11 @@ export class StudiesService {
     return this.http.get<StudyDetail> (
       `${this.baseUri}/study-detail/${studyId}`
     );
+  }
+
+  getAnalysesHistory(): Observable<RecentAnalysis[]> {
+    return this.http.get<RecentAnalysis[]>(
+       `${this.baseUri}/analysis-history`
+    )
   }
 }

@@ -11,7 +11,8 @@ export const APP_ROUTES = {
 
   dash: {
     home: 'dashboard/home',
-    patient: 'dashboard/patient'
+    patient: 'dashboard/patient',
+    history : 'dashboard/analysis/analysis-history'
   },
 
   analysis: {

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { FrontOfficeRoutingModule } from './front-office-routing.module';
 
@@ -18,7 +19,8 @@ import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 
   imports: [
     CommonModule,
-    FrontOfficeRoutingModule
+    FrontOfficeRoutingModule,
+    FormsModule
   ]
 })
 export class FrontOfficeModule { }
