@@ -21,34 +21,23 @@
       type="button"
       class="user-chip">
 
+      <!-- Avatar -->
       <div class="avatar">
-        DR
+        {{ getUserInitials() }}
       </div>
 
+      <!-- Informations utilisateur -->
       <div class="user-info">
 
         <div class="u-name">
-          Dr. Amine Rekik
+          {{ getUserFullName() }}
         </div>
 
         <div class="u-role">
-          Radiologue
+          {{ getUserRole() }}
         </div>
 
       </div>
-
-      <svg
-        class="user-arrow"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.2"
-        stroke-linecap="round"
-        stroke-linejoin="round">
-
-        <path d="M6 9l6 6 6-6"></path>
-
-      </svg>
 
     </button>
 
