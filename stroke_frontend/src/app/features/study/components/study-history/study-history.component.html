@@ -1,10 +1,10 @@
 <div class="main">
 
-  <!-- Page header -->
+  <!-- En-tête de la page -->
   <div class="page-head">
 
     <div>
-      <h1>Analysis History</h1>
+      <h1>Historique des analyses</h1>
 
       <p class="lede">
         {{ resultCount }} analyses complétées, filtrez par patient, date,
@@ -15,10 +15,10 @@
   </div>
 
 
-  <!-- Filters -->
+  <!-- Filtres -->
   <div class="filters-row">
 
-    <!-- Search -->
+    <!-- Recherche -->
     <div class="search-input">
 
       <svg
@@ -36,59 +36,59 @@
       <input
         class="input"
         type="text"
-        placeholder="Rechercher patient ou study ID…"
+        placeholder="Rechercher un patient ou un identifiant d'étude…"
         [(ngModel)]="searchTerm">
 
     </div>
 
 
-    <!-- Result filter -->
+    <!-- Filtre par résultat -->
     <select
       class="input filter-input"
       [(ngModel)]="selectedResult">
 
       <option value="All results">
-        All results
+        Tous les résultats
       </option>
 
       <option value="Lesion detected">
-        Lesion detected
+        Lésion détectée
       </option>
 
       <option value="No lesion">
-        No lesion
+        Aucune lésion
       </option>
 
     </select>
 
 
-    <!-- Status filter -->
+    <!-- Filtre par statut -->
     <select
       class="input filter-input"
       [(ngModel)]="selectedStatus">
 
       <option value="All statuses">
-        All statuses
+        Tous les statuts
       </option>
 
       <option value="Completed">
-        Completed
+        Terminée
       </option>
 
       <option value="Processing">
-        Processing
+        En cours
       </option>
 
       <option value="Failed">
-        Failed
+        Échec
       </option>
 
       <option value="Waiting for review">
-        Waiting for review
+        En attente de validation
       </option>
 
       <option value="Validated">
-        Validated
+        Validée
       </option>
 
     </select>
@@ -103,7 +103,7 @@
   </div>
 
 
-  <!-- Table -->
+  <!-- Tableau -->
   <div class="card">
 
     <div class="table-wrap">
@@ -114,17 +114,17 @@
 
           <tr>
 
-            <th>Study ID</th>
+            <th>Identifiant de l'étude</th>
 
             <th>Patient</th>
 
             <th>Date</th>
 
-            <th>Result</th>
+            <th>Résultat</th>
 
-            <th>Model</th>
+            <th>Modèle</th>
 
-            <th>Status</th>
+            <th>Statut</th>
 
             <th class="action-column">
               Action
@@ -137,10 +137,10 @@
 
         <tbody>
 
-          <!-- Data rows -->
+          <!-- Lignes des données -->
           <tr *ngFor="let analysis of filteredAnalyses">
 
-            <!-- Study ID -->
+            <!-- Identifiant de l'étude -->
             <td class="id-tag">
               {{ analysis.sid }}
             </td>
@@ -164,7 +164,7 @@
             </td>
 
 
-            <!-- Result -->
+            <!-- Résultat -->
             <td>
 
               <span
@@ -173,7 +173,7 @@
 
                 <span class="dot"></span>
 
-                Lesion detected
+                Lésion détectée
 
               </span>
 
@@ -186,7 +186,7 @@
                   class="dot no-lesion-dot">
                 </span>
 
-                No lesion
+                Aucune lésion
 
               </span>
 
@@ -202,13 +202,13 @@
             </td>
 
 
-            <!-- Model -->
+            <!-- Modèle -->
             <td class="mono cell-sub">
               {{ analysis.model }}
             </td>
 
 
-            <!-- Status -->
+            <!-- Statut -->
             <td>
 
               <span
@@ -217,7 +217,7 @@
 
                 <span class="dot"></span>
 
-                Completed
+                Terminée
 
               </span>
 
@@ -228,7 +228,7 @@
 
                 <span class="dot"></span>
 
-                Processing
+                En cours
 
               </span>
 
@@ -239,7 +239,7 @@
 
                 <span class="dot"></span>
 
-                Failed
+                Échec
 
               </span>
 
@@ -250,7 +250,7 @@
 
                 <span class="dot"></span>
 
-                Waiting for review
+                En attente de validation
 
               </span>
 
@@ -261,7 +261,7 @@
 
                 <span class="dot"></span>
 
-                Validated
+                Validée
 
               </span>
 
@@ -276,7 +276,7 @@
                 type="button"
                 (click)="goToAnalysis(analysis)">
 
-                View
+                Voir
 
               </button>
 
@@ -285,7 +285,7 @@
           </tr>
 
 
-          <!-- Empty state -->
+          <!-- État vide -->
           <tr *ngIf="filteredAnalyses.length === 0">
 
             <td
@@ -312,9 +312,9 @@
 
     <span class="cell-sub">
 
-      Showing
+      Affichage de
       {{ filteredCount }}
-      of
+      sur
       {{ resultCount }}
       analyses
 
@@ -328,7 +328,7 @@
         type="button"
         disabled>
 
-        Previous
+        Précédent
 
       </button>
 
@@ -338,7 +338,7 @@
         type="button"
         (click)="nextPage()">
 
-        Next
+        Suivant
 
       </button>
 

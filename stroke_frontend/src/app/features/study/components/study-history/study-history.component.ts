@@ -285,4 +285,5 @@ export class StudyHistoryComponent implements OnInit {
 
     return `${parts[2]}-${parts[1]}-${parts[0]}`;
   }
+
 }
