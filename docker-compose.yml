@@ -1,0 +1,114 @@
+services:
+
+  mysql:
+    image: mysql:8.4.11
+    container_name: stroke-mysql-app
+
+    environment:
+      MYSQL_DATABASE: stroke_mlops
+      MYSQL_USER: stroke_user
+      MYSQL_PASSWORD: stroke_password
+      MYSQL_ROOT_PASSWORD: root_password
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - stroke-mysql-data:/var/lib/mysql
+
+    networks:
+      - stroke-network
+
+    restart: unless-stopped
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "stroke_user",
+          "-pstroke_password"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  fastapi-service:
+    build:
+      context: ./fastapi-service
+      dockerfile: Dockerfile
+
+    container_name: stroke-fastapi
+
+    expose:
+      - "8000"
+
+    ports:
+      - "8000:8000"
+
+    networks:
+      - stroke-network
+
+    restart: unless-stopped
+
+  backend-service:
+    build:
+      context: ./stroke_backend
+      dockerfile: Dockerfile
+
+    container_name: stroke-backend
+
+    ports:
+      - "8082:8082"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/stroke_mlops
+      SPRING_DATASOURCE_USERNAME: stroke_user
+      SPRING_DATASOURCE_PASSWORD: stroke_password
+
+      APP_FASTAPI_BASE_URL: http://fastapi-service:8000
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      fastapi-service:
+        condition: service_started
+
+    volumes:
+      - ./stroke_backend/storage:/app/storage
+
+    networks:
+      - stroke-network
+
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./stroke_frontend
+      dockerfile: Dockerfile
+
+    container_name: stroke-frontend
+
+    ports:
+      - "4200:80"
+
+    depends_on:
+      - backend-service
+
+    networks:
+      - stroke-network
+
+    restart: unless-stopped
+
+volumes:
+  stroke-mysql-data:
+    name: stroke-mysql-data
+
+networks:
+  stroke-network:
+    name: stroke-network
+    driver: bridge
