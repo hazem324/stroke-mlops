@@ -31,11 +31,6 @@ public class Prediction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-
-    // =========================================================
-    // STUDY
-    // =========================================================
-
     @OneToOne
     @JoinColumn(
         name = "study_id",
@@ -44,21 +39,11 @@ public class Prediction {
     )
     Studies study;
 
-
-    // =========================================================
-    // FILES
-    // =========================================================
-
     String predictionFile;
 
     String previewFile;
 
     String overlayFile;
-
-
-    // =========================================================
-    // PREDICTION SHAPE
-    // =========================================================
 
     Integer predictionShapeX;
 
@@ -68,21 +53,11 @@ public class Prediction {
 
     Integer previewSlice;
 
-
-    // =========================================================
-    // LESION
-    // =========================================================
-
     Boolean lesionDetected;
 
     Integer lesionVoxels;
 
     Double lesionVolumeMm3;
-
-
-    // =========================================================
-    // CENTROID - INDEX
-    // =========================================================
 
     Double centroidIndexX;
 
@@ -90,21 +65,11 @@ public class Prediction {
 
     Double centroidIndexZ;
 
-
-    // =========================================================
-    // CENTROID - PHYSICAL
-    // =========================================================
-
     Double centroidPhysicalX;
 
     Double centroidPhysicalY;
 
     Double centroidPhysicalZ;
-
-
-    // =========================================================
-    // BOUNDING BOX
-    // =========================================================
 
     Integer boundingBoxMinX;
 
@@ -118,17 +83,7 @@ public class Prediction {
 
     Integer boundingBoxMaxZ;
 
-
-    // =========================================================
-    // EXECUTION
-    // =========================================================
-
     Double processingTime;
-
-
-    // =========================================================
-    // DATE
-    // =========================================================
 
     LocalDateTime createdAt;
 
