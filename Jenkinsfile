@@ -262,60 +262,60 @@ pipeline {
         // 11. DOCKER BUILD - FASTAPI
         // =========================================================
 
-        stage('Docker - FastAPI') {
-            steps {
+        // stage('Docker - FastAPI') {
+        //     steps {
 
-                dir('fastapi-service') {
+        //         dir('fastapi-service') {
 
-                    sh '''
-                        echo "Building FastAPI Docker image..."
+        //             sh '''
+        //                 echo "Building FastAPI Docker image..."
 
-                        docker build \
-                            -t ${FASTAPI_IMAGE} .
-                    '''
-                }
-            }
-        }
+        //                 docker build \
+        //                     -t ${FASTAPI_IMAGE} .
+        //             '''
+        //         }
+        //     }
+        // }
 
 
         // =========================================================
         // 12. DOCKER BUILD - BACKEND
         // =========================================================
 
-        stage('Docker - Backend') {
-            steps {
+        // stage('Docker - Backend') {
+        //     steps {
 
-                dir('stroke_backend') {
+        //         dir('stroke_backend') {
 
-                    sh '''
-                        echo "Building Spring Boot Docker image..."
+        //             sh '''
+        //                 echo "Building Spring Boot Docker image..."
 
-                        docker build \
-                            -t ${BACKEND_IMAGE} .
-                    '''
-                }
-            }
-        }
+        //                 docker build \
+        //                     -t ${BACKEND_IMAGE} .
+        //             '''
+        //         }
+        //     }
+        // }
 
 
         // =========================================================
         // 13. DOCKER BUILD - FRONTEND
         // =========================================================
 
-        stage('Docker - Frontend') {
-            steps {
+        // stage('Docker - Frontend') {
+        //     steps {
 
-                dir('stroke_frontend') {
+        //         dir('stroke_frontend') {
 
-                    sh '''
-                        echo "Building Angular Docker image..."
+        //             sh '''
+        //                 echo "Building Angular Docker image..."
 
-                        docker build \
-                            -t ${FRONTEND_IMAGE} .
-                    '''
-                }
-            }
-        }
+        //                 docker build \
+        //                     -t ${FRONTEND_IMAGE} .
+        //             '''
+        //         }
+        //     }
+        // }
 
 
         // =========================================================
