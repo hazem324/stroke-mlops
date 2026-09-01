@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stroke-config
+  namespace: stroke-mlops
+data:
+  MYSQL_DATABASE: "stroke_mlops"
+  MYSQL_USER: "stroke_user"
+
+  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/stroke_mlops"
+
+  APP_FASTAPI_BASE_URL: "http://fastapi:8000"

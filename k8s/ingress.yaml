@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: stroke-ingress
+  namespace: stroke-mlops
+
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+
+spec:
+  ingressClassName: nginx
+
+  rules:
+    - host: stroke.local
+
+      http:
+        paths:
+
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8082
+
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80

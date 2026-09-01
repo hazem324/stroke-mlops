@@ -37,15 +37,15 @@ services:
       timeout: 5s
       retries: 10
 
+
   fastapi-service:
     build:
       context: ./fastapi-service
       dockerfile: Dockerfile
 
-    container_name: stroke-fastapi
+    image: hazem231/stroke-fastapi:1.2
 
-    expose:
-      - "8000"
+    container_name: stroke-fastapi
 
     ports:
       - "8000:8000"
@@ -55,10 +55,13 @@ services:
 
     restart: unless-stopped
 
+
   backend-service:
     build:
       context: ./stroke_backend
       dockerfile: Dockerfile
+
+    image: hazem231/stroke-backend:1.0
 
     container_name: stroke-backend
 
@@ -86,10 +89,13 @@ services:
 
     restart: unless-stopped
 
+
   frontend:
     build:
       context: ./stroke_frontend
       dockerfile: Dockerfile
+
+    image: hazem231/stroke-frontend:1.0
 
     container_name: stroke-frontend
 
@@ -104,9 +110,11 @@ services:
 
     restart: unless-stopped
 
+
 volumes:
   stroke-mysql-data:
     name: stroke-mysql-data
+
 
 networks:
   stroke-network:
