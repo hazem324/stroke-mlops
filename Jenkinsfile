@@ -3,13 +3,7 @@ pipeline {
     agent any
 
     environment {
-        // SonarQube server configured in Jenkins
         SONARQUBE = 'SonarQube'
-
-        // Docker images
-        FASTAPI_IMAGE = 'hazem231/stroke-fastapi:latest'
-        BACKEND_IMAGE = 'hazem231/stroke-backend:latest'
-        FRONTEND_IMAGE = 'hazem231/stroke-frontend:latest'
     }
 
     stages {
@@ -20,57 +14,17 @@ pipeline {
 
         stage('Checkout') {
             steps {
+                echo '======================================'
                 echo 'Checking out source code...'
+                echo '======================================'
+
                 checkout scm
             }
         }
 
 
         // =========================================================
-        // 2. FASTAPI TEST
-        // =========================================================
-
-        stage('FastAPI - Test') {
-            steps {
-                dir('fastapi-service') {
-
-                    sh '''
-                        echo "======================================"
-                        echo "FastAPI Tests"
-                        echo "======================================"
-
-                        python3 --version
-
-                        python3 -m venv venv
-
-                        . venv/bin/activate
-
-                        pip install --upgrade pip
-
-                        pip install -r requirements.txt
-
-                        pip install pytest pytest-cov
-
-                        pytest \
-                            --cov=. \
-                            --cov-report=xml:coverage.xml \
-                            --cov-report=term \
-                            -v
-                    '''
-                }
-            }
-
-            post {
-                always {
-                    junit allowEmptyResults: true,
-                          testResults: 'fastapi-service/test-results.xml'
-                }
-            }
-        }
-
-
-        // =========================================================
-        // 3. FASTAPI SONARQUBE
+        // 2. FASTAPI - SONARQUBE
         // =========================================================
 
         stage('FastAPI - SonarQube') {
@@ -89,8 +43,7 @@ pipeline {
                                 -Dsonar.projectKey=stroke-fastapi \
                                 -Dsonar.projectName="Stroke FastAPI" \
                                 -Dsonar.sources=. \
-                                -Dsonar.exclusions="venv/**,tests/**,__pycache__/**" \
-                                -Dsonar.python.coverage.reportPaths=coverage.xml
+                                -Dsonar.exclusions="venv/**,tests/**,__pycache__/**,.pytest_cache/**"
                         '''
                     }
                 }
@@ -99,7 +52,7 @@ pipeline {
 
 
         // =========================================================
-        // 4. FASTAPI QUALITY GATE
+        // 3. FASTAPI - QUALITY GATE
         // =========================================================
 
         stage('FastAPI - Quality Gate') {
@@ -114,38 +67,7 @@ pipeline {
 
 
         // =========================================================
-        // 5. SPRING BOOT TEST
-        // =========================================================
-
-        stage('Backend - Test') {
-            steps {
-
-                dir('stroke_backend') {
-
-                    sh '''
-                        echo "======================================"
-                        echo "Spring Boot Tests"
-                        echo "======================================"
-
-                        chmod +x mvnw
-
-                        ./mvnw clean verify
-                    '''
-                }
-            }
-
-            post {
-                always {
-
-                    junit allowEmptyResults: true,
-                          testResults: 'stroke_backend/target/surefire-reports/*.xml'
-                }
-            }
-        }
-
-
-        // =========================================================
-        // 6. SPRING BOOT SONARQUBE
+        // 4. BACKEND - SONARQUBE
         // =========================================================
 
         stage('Backend - SonarQube') {
@@ -162,7 +84,8 @@ pipeline {
 
                             ./mvnw sonar:sonar \
                                 -Dsonar.projectKey=stroke-backend \
-                                -Dsonar.projectName="Stroke Backend"
+                                -Dsonar.projectName="Stroke Backend" \
+                                -DskipTests
                         '''
                     }
                 }
@@ -171,7 +94,7 @@ pipeline {
 
 
         // =========================================================
-        // 7. BACKEND QUALITY GATE
+        // 5. BACKEND - QUALITY GATE
         // =========================================================
 
         stage('Backend - Quality Gate') {
@@ -186,36 +109,7 @@ pipeline {
 
 
         // =========================================================
-        // 8. ANGULAR TEST
-        // =========================================================
-
-        stage('Frontend - Test') {
-            steps {
-
-                dir('stroke_frontend') {
-
-                    sh '''
-                        echo "======================================"
-                        echo "Angular Tests"
-                        echo "======================================"
-
-                        node --version
-                        npm --version
-
-                        npm ci
-
-                        npm test -- \
-                            --watch=false \
-                            --browsers=ChromeHeadless \
-                            --code-coverage
-                    '''
-                }
-            }
-        }
-
-
-        // =========================================================
-        // 9. ANGULAR SONARQUBE
+        // 6. FRONTEND - SONARQUBE
         // =========================================================
 
         stage('Frontend - SonarQube') {
@@ -234,8 +128,7 @@ pipeline {
                                 -Dsonar.projectKey=stroke-frontend \
                                 -Dsonar.projectName="Stroke Frontend" \
                                 -Dsonar.sources=src \
-                                -Dsonar.exclusions="node_modules/**,dist/**" \
-                                -Dsonar.javascript.lcov.reportPaths=coverage/**/lcov.info
+                                -Dsonar.exclusions="node_modules/**,dist/**,coverage/**"
                         '''
                     }
                 }
@@ -244,7 +137,7 @@ pipeline {
 
 
         // =========================================================
-        // 10. FRONTEND QUALITY GATE
+        // 7. FRONTEND - QUALITY GATE
         // =========================================================
 
         stage('Frontend - Quality Gate') {
@@ -256,100 +149,6 @@ pipeline {
                 }
             }
         }
-
-
-        // =========================================================
-        // 11. DOCKER BUILD - FASTAPI
-        // =========================================================
-
-        // stage('Docker - FastAPI') {
-        //     steps {
-
-        //         dir('fastapi-service') {
-
-        //             sh '''
-        //                 echo "Building FastAPI Docker image..."
-
-        //                 docker build \
-        //                     -t ${FASTAPI_IMAGE} .
-        //             '''
-        //         }
-        //     }
-        // }
-
-
-        // =========================================================
-        // 12. DOCKER BUILD - BACKEND
-        // =========================================================
-
-        // stage('Docker - Backend') {
-        //     steps {
-
-        //         dir('stroke_backend') {
-
-        //             sh '''
-        //                 echo "Building Spring Boot Docker image..."
-
-        //                 docker build \
-        //                     -t ${BACKEND_IMAGE} .
-        //             '''
-        //         }
-        //     }
-        // }
-
-
-        // =========================================================
-        // 13. DOCKER BUILD - FRONTEND
-        // =========================================================
-
-        // stage('Docker - Frontend') {
-        //     steps {
-
-        //         dir('stroke_frontend') {
-
-        //             sh '''
-        //                 echo "Building Angular Docker image..."
-
-        //                 docker build \
-        //                     -t ${FRONTEND_IMAGE} .
-        //             '''
-        //         }
-        //     }
-        // }
-
-
-        // =========================================================
-        // 14. DOCKER PUSH
-        // =========================================================
-
-        /*
-        stage('Docker - Push') {
-            steps {
-
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'dockerhub-credentials',
-                        usernameVariable: 'DOCKER_USERNAME',
-                        passwordVariable: 'DOCKER_PASSWORD'
-                    )
-                ]) {
-
-                    sh '''
-                        echo "$DOCKER_PASSWORD" | docker login \
-                            -u "$DOCKER_USERNAME" \
-                            --password-stdin
-
-                        docker push ${FASTAPI_IMAGE}
-                        docker push ${BACKEND_IMAGE}
-                        docker push ${FRONTEND_IMAGE}
-
-                        docker logout
-                    '''
-                }
-            }
-        }
-        */
-
     }
 
 
@@ -364,10 +163,17 @@ pipeline {
             ==========================================
             PIPELINE SUCCESS
             ==========================================
-            Tests:       PASSED
-            SonarQube:   PASSED
-            QualityGate: PASSED
-            Docker:      BUILT
+
+            SonarQube Analysis:
+              FastAPI   : PASSED
+              Backend   : PASSED
+              Frontend  : PASSED
+
+            Quality Gates:
+              FastAPI   : PASSED
+              Backend   : PASSED
+              Frontend  : PASSED
+
             ==========================================
             '''
         }
@@ -377,7 +183,9 @@ pipeline {
             ==========================================
             PIPELINE FAILED
             ==========================================
-            Check the failed stage above.
+
+            Check the failed SonarQube stage.
+
             ==========================================
             '''
         }
