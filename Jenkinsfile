@@ -6,6 +6,10 @@ pipeline {
         SONARQUBE = 'SonarQube'
     }
 
+    tools {
+        sonarQube 'sonar-scanner'
+    }
+
     stages {
 
         // =========================================================

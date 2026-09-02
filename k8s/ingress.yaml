@@ -16,11 +16,11 @@ spec:
       http:
         paths:
 
-          - path: /api
+          - path: /stroke_ml
             pathType: Prefix
             backend:
               service:
-                name: backend
+                name: backend-service
                 port:
                   number: 8082
 

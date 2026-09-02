@@ -2,20 +2,26 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Copy requirements first to leverage Docker layer caching
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
 COPY requirements.txt .
 
-RUN mkdir -p  /app/outputs
-# Install Python dependencies
+# PyTorch CPU only
+RUN pip install --no-cache-dir \
+    torch==2.13.0 \
+    --index-url https://download.pytorch.org/whl/cpu
+
+# Other dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application files
 COPY app/ ./app/
 COPY models/ ./models/
 COPY run.py .
 
-# FastAPI port
+RUN mkdir -p /app/outputs
+
 EXPOSE 8000
 
-# Start the application
 CMD ["python", "run.py"]
