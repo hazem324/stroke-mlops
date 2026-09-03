@@ -124,28 +124,45 @@ pipeline {
                     echo "Angular Tests"
                     echo "======================================"
 
-                    echo "Current directory:"
+                    echo "Jenkins directory:"
                     pwd
 
-                    echo "Frontend files:"
+                    echo "Checking frontend files:"
                     ls -la
 
-                    echo "Checking package.json..."
                     test -f package.json
+                    test -f package-lock.json
+
+                    echo "package.json found:"
+                    ls -lh package.json
+
+                    echo "package-lock.json found:"
+                    ls -lh package-lock.json
 
                     echo "Running Angular tests inside Docker..."
 
                     docker run --rm \
-                        -v "$(pwd):/app" \
-                        -w /app \
+                        --mount type=bind,source="$(pwd)",target=/workspace \
+                        --mount type=volume,source=angular_node_modules,target=/workspace/node_modules \
+                        -w /workspace \
                         trion/ng-cli-karma:latest \
                         sh -c '
-                            echo "Inside Docker:"
+                            set -e
+
+                            echo "======================================"
+                            echo "Inside Angular Docker container"
+                            echo "======================================"
+
                             pwd
                             ls -la
+
+                            echo "Checking package.json..."
                             test -f package.json
 
+                            echo "Installing dependencies..."
                             npm install --prefer-offline --no-audit --progress=false
+
+                            echo "Running Angular tests..."
 
                             npm run test -- \
                                 --watch=false \
