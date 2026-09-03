@@ -6,6 +6,11 @@ pipeline {
         SONARQUBE = 'SonarQube'
     }
 
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
     stages {
 
         // =========================================================
@@ -14,6 +19,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
+
                 echo '======================================'
                 echo 'Checking out source code...'
                 echo '======================================'
@@ -24,10 +30,103 @@ pipeline {
 
 
         // =========================================================
-        // 2. FASTAPI - SONARQUBE
+        // 2. TESTS
+        // =========================================================
+
+        stage('Tests') {
+
+            parallel {
+
+                // -------------------------------------------------
+                // FASTAPI TESTS
+                // -------------------------------------------------
+
+                stage('FastAPI Tests') {
+
+                    steps {
+
+                        dir('fastapi-service') {
+
+                            sh '''
+                                echo "======================================"
+                                echo "FastAPI Tests"
+                                echo "======================================"
+
+                                python3 -m pytest tests/ \
+                                    --verbose
+                            '''
+                        }
+                    }
+                }
+
+
+                // -------------------------------------------------
+                // BACKEND TESTS
+                // -------------------------------------------------
+
+                stage('Backend Tests') {
+
+                    steps {
+
+                        dir('stroke_backend') {
+
+                            sh '''
+                                echo "======================================"
+                                echo "Spring Boot Tests"
+                                echo "======================================"
+
+                                chmod +x mvnw
+
+                                ./mvnw clean verify
+                            '''
+                        }
+                    }
+                }
+
+
+                // -------------------------------------------------
+                // FRONTEND TESTS
+                // -------------------------------------------------
+
+                stage('Frontend Tests') {
+
+                    steps {
+
+                        dir('stroke_frontend') {
+
+                            timeout(time: 20, unit: 'MINUTES') {
+
+                                withEnv(['PUPPETEER_SKIP_DOWNLOAD=false']) {
+
+                                    sh '''
+                                        echo "======================================"
+                                        echo "Angular Tests"
+                                        echo "======================================"
+
+                                        npm ci --prefer-offline --no-audit --progress=false
+
+                                        npm run test -- \
+                                            --watch=false \
+                                            --code-coverage \
+                                            --browsers=ChromeHeadlessNoSandbox \
+                                            --source-map=false \
+                                            --progress=false
+                                    '''
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        // =========================================================
+        // 3. FASTAPI - SONARQUBE
         // =========================================================
 
         stage('FastAPI - SonarQube') {
+
             steps {
 
                 dir('fastapi-service') {
@@ -57,10 +156,11 @@ pipeline {
 
 
         // =========================================================
-        // 3. FASTAPI - QUALITY GATE
+        // 4. FASTAPI - QUALITY GATE
         // =========================================================
 
         stage('FastAPI - Quality Gate') {
+
             steps {
 
                 timeout(time: 5, unit: 'MINUTES') {
@@ -72,10 +172,11 @@ pipeline {
 
 
         // =========================================================
-        // 4. BACKEND - SONARQUBE
+        // 5. BACKEND - SONARQUBE
         // =========================================================
 
         stage('Backend - SonarQube') {
+
             steps {
 
                 dir('stroke_backend') {
@@ -86,6 +187,8 @@ pipeline {
                             echo "======================================"
                             echo "Spring Boot SonarQube Analysis"
                             echo "======================================"
+
+                            chmod +x mvnw
 
                             ./mvnw sonar:sonar \
                                 -Dsonar.projectKey=stroke-backend \
@@ -99,10 +202,11 @@ pipeline {
 
 
         // =========================================================
-        // 5. BACKEND - QUALITY GATE
+        // 6. BACKEND - QUALITY GATE
         // =========================================================
 
         stage('Backend - Quality Gate') {
+
             steps {
 
                 timeout(time: 5, unit: 'MINUTES') {
@@ -114,10 +218,11 @@ pipeline {
 
 
         // =========================================================
-        // 6. FRONTEND - SONARQUBE
+        // 7. FRONTEND - SONARQUBE
         // =========================================================
 
         stage('Frontend - SonarQube') {
+
             steps {
 
                 dir('stroke_frontend') {
@@ -147,10 +252,11 @@ pipeline {
 
 
         // =========================================================
-        // 7. FRONTEND - QUALITY GATE
+        // 8. FRONTEND - QUALITY GATE
         // =========================================================
 
         stage('Frontend - Quality Gate') {
+
             steps {
 
                 timeout(time: 5, unit: 'MINUTES') {
@@ -175,7 +281,12 @@ pipeline {
                     PIPELINE SUCCESS
             ==========================================
 
-            SonarQube Analysis:
+            Tests:
+              FastAPI   : PASSED
+              Backend   : PASSED
+              Frontend  : PASSED
+
+            SonarQube:
               FastAPI   : PASSED
               Backend   : PASSED
               Frontend  : PASSED
@@ -189,6 +300,7 @@ pipeline {
             '''
         }
 
+
         failure {
 
             echo '''
@@ -196,11 +308,17 @@ pipeline {
                     PIPELINE FAILED
             ==========================================
 
-            Check the failed SonarQube stage.
+            Check the failed stage.
+
+            Possible causes:
+              - Tests failed
+              - SonarQube analysis failed
+              - Quality Gate failed
 
             ==========================================
             '''
         }
+
 
         aborted {
 
@@ -210,6 +328,7 @@ pipeline {
             ==========================================
             '''
         }
+
 
         always {
 
