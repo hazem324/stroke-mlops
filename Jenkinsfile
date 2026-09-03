@@ -6,15 +6,7 @@ pipeline {
         SONARQUBE = 'SonarQube'
     }
 
-    tools {
-        sonarRunner 'sonar-scanner'
-    }
-
     stages {
-
-        // =========================================================
-        // 1. CHECKOUT
-        // =========================================================
 
         stage('Checkout') {
             steps {
@@ -26,61 +18,44 @@ pipeline {
             }
         }
 
-
-        // =========================================================
-        // 2. FASTAPI - SONARQUBE
-        // =========================================================
-
         stage('FastAPI - SonarQube') {
             steps {
-
                 dir('fastapi-service') {
 
-                    withSonarQubeEnv("${SONARQUBE}") {
+                    script {
+                        def scannerHome = tool 'sonar-scanner'
 
-                        sh '''
-                            echo "======================================"
-                            echo "FastAPI SonarQube Analysis"
-                            echo "======================================"
+                        withSonarQubeEnv("${SONARQUBE}") {
+                            sh """
+                                echo "======================================"
+                                echo "FastAPI SonarQube Analysis"
+                                echo "======================================"
 
-                            sonar-scanner \
-                                -Dsonar.projectKey=stroke-fastapi \
-                                -Dsonar.projectName="Stroke FastAPI" \
-                                -Dsonar.sources=. \
-                                -Dsonar.exclusions="venv/**,tests/**,__pycache__/**,.pytest_cache/**"
-                        '''
+                                ${scannerHome}/bin/sonar-scanner \
+                                    -Dsonar.projectKey=stroke-fastapi \
+                                    -Dsonar.projectName="Stroke FastAPI" \
+                                    -Dsonar.sources=. \
+                                    -Dsonar.exclusions="venv/**,tests/**,__pycache__/**,.pytest_cache/**"
+                            """
+                        }
                     }
                 }
             }
         }
 
-
-        // =========================================================
-        // 3. FASTAPI - QUALITY GATE
-        // =========================================================
-
         stage('FastAPI - Quality Gate') {
             steps {
-
                 timeout(time: 5, unit: 'MINUTES') {
-
                     waitForQualityGate abortPipeline: true
                 }
             }
         }
 
-
-        // =========================================================
-        // 4. BACKEND - SONARQUBE
-        // =========================================================
-
         stage('Backend - SonarQube') {
             steps {
-
                 dir('stroke_backend') {
 
                     withSonarQubeEnv("${SONARQUBE}") {
-
                         sh '''
                             echo "======================================"
                             echo "Spring Boot SonarQube Analysis"
@@ -96,69 +71,47 @@ pipeline {
             }
         }
 
-
-        // =========================================================
-        // 5. BACKEND - QUALITY GATE
-        // =========================================================
-
         stage('Backend - Quality Gate') {
             steps {
-
                 timeout(time: 5, unit: 'MINUTES') {
-
                     waitForQualityGate abortPipeline: true
                 }
             }
         }
 
-
-        // =========================================================
-        // 6. FRONTEND - SONARQUBE
-        // =========================================================
-
         stage('Frontend - SonarQube') {
             steps {
-
                 dir('stroke_frontend') {
 
-                    withSonarQubeEnv("${SONARQUBE}") {
+                    script {
+                        def scannerHome = tool 'sonar-scanner'
 
-                        sh '''
-                            echo "======================================"
-                            echo "Angular SonarQube Analysis"
-                            echo "======================================"
+                        withSonarQubeEnv("${SONARQUBE}") {
+                            sh """
+                                echo "======================================"
+                                echo "Angular SonarQube Analysis"
+                                echo "======================================"
 
-                            sonar-scanner \
-                                -Dsonar.projectKey=stroke-frontend \
-                                -Dsonar.projectName="Stroke Frontend" \
-                                -Dsonar.sources=src \
-                                -Dsonar.exclusions="node_modules/**,dist/**,coverage/**"
-                        '''
+                                ${scannerHome}/bin/sonar-scanner \
+                                    -Dsonar.projectKey=stroke-frontend \
+                                    -Dsonar.projectName="Stroke Frontend" \
+                                    -Dsonar.sources=src \
+                                    -Dsonar.exclusions="node_modules/**,dist/**,coverage/**"
+                            """
+                        }
                     }
                 }
             }
         }
 
-
-        // =========================================================
-        // 7. FRONTEND - QUALITY GATE
-        // =========================================================
-
         stage('Frontend - Quality Gate') {
             steps {
-
                 timeout(time: 5, unit: 'MINUTES') {
-
                     waitForQualityGate abortPipeline: true
                 }
             }
         }
     }
-
-
-    // =============================================================
-    // POST
-    // =============================================================
 
     post {
 
