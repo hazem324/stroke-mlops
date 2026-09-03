@@ -113,35 +113,55 @@ pipeline {
                 // FRONTEND TESTS
                 // =================================================
 
-                stage('Frontend Tests') {
+             stage('Frontend Tests') {
     steps {
         dir('stroke_frontend') {
             timeout(time: 20, unit: 'MINUTES') {
                 sh '''
                     set -e
+
                     echo "======================================"
                     echo "Angular Tests"
                     echo "======================================"
+
+                    echo "Current directory:"
+                    pwd
+
+                    echo "Frontend files:"
+                    ls -la
+
+                    echo "Checking package.json..."
+                    test -f package.json
+
                     echo "Running Angular tests inside Docker..."
+
                     docker run --rm \
-                        -v "$PWD:/app" \
+                        -v "$(pwd):/app" \
                         -w /app \
                         trion/ng-cli-karma:latest \
-                        sh -c "
-                            npm install --prefer-offline --no-audit --progress=false &&
+                        sh -c '
+                            echo "Inside Docker:"
+                            pwd
+                            ls -la
+                            test -f package.json
+
+                            npm install --prefer-offline --no-audit --progress=false
+
                             npm run test -- \
                                 --watch=false \
                                 --code-coverage \
                                 --browsers=ChromeHeadlessNoSandbox \
                                 --source-map=false \
                                 --progress=false
-                        "
+                        '
+
                     echo "Angular tests completed successfully."
                 '''
             }
         }
     }
-}            }
+}    
+      }
         }
 
 
