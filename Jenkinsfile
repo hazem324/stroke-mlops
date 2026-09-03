@@ -114,43 +114,34 @@ pipeline {
                 // =================================================
 
                 stage('Frontend Tests') {
-
-                    steps {
-
-                        dir('stroke_frontend') {
-
-                            timeout(time: 20, unit: 'MINUTES') {
-
-                                sh '''
-                                    set -e
-
-                                    echo "======================================"
-                                    echo "Angular Tests"
-                                    echo "======================================"
-
-                                    echo "Running Angular tests inside Docker..."
-
-                                    docker run --rm \
-                                        -v "$PWD:/app" \
-                                        -w /app \
-                                        trion/ng-cli-karma:latest \
-                                        sh -c "
-                                            npm ci --prefer-offline --no-audit --progress=false &&
-                                            npm run test -- \
-                                                --watch=false \
-                                                --code-coverage \
-                                                --browsers=ChromeHeadlessNoSandbox \
-                                                --source-map=false \
-                                                --progress=false
-                                        "
-
-                                    echo "Angular tests completed successfully."
-                                '''
-                            }
-                        }
-                    }
-                }
+    steps {
+        dir('stroke_frontend') {
+            timeout(time: 20, unit: 'MINUTES') {
+                sh '''
+                    set -e
+                    echo "======================================"
+                    echo "Angular Tests"
+                    echo "======================================"
+                    echo "Running Angular tests inside Docker..."
+                    docker run --rm \
+                        -v "$PWD:/app" \
+                        -w /app \
+                        trion/ng-cli-karma:latest \
+                        sh -c "
+                            npm install --prefer-offline --no-audit --progress=false &&
+                            npm run test -- \
+                                --watch=false \
+                                --code-coverage \
+                                --browsers=ChromeHeadlessNoSandbox \
+                                --source-map=false \
+                                --progress=false
+                        "
+                    echo "Angular tests completed successfully."
+                '''
             }
+        }
+    }
+}            }
         }
 
 
