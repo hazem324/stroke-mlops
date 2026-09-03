@@ -8,6 +8,10 @@ pipeline {
 
     stages {
 
+        // =========================================================
+        // 1. CHECKOUT
+        // =========================================================
+
         stage('Checkout') {
             steps {
                 echo '======================================'
@@ -18,14 +22,22 @@ pipeline {
             }
         }
 
+
+        // =========================================================
+        // 2. FASTAPI - SONARQUBE
+        // =========================================================
+
         stage('FastAPI - SonarQube') {
             steps {
+
                 dir('fastapi-service') {
 
                     script {
+
                         def scannerHome = tool 'sonar-scanner'
 
                         withSonarQubeEnv("${SONARQUBE}") {
+
                             sh """
                                 echo "======================================"
                                 echo "FastAPI SonarQube Analysis"
@@ -35,7 +47,7 @@ pipeline {
                                     -Dsonar.projectKey=stroke-fastapi \
                                     -Dsonar.projectName="Stroke FastAPI" \
                                     -Dsonar.sources=. \
-                                    -Dsonar.exclusions="venv/**,tests/**,__pycache__/**,.pytest_cache/**"
+                                    -Dsonar.exclusions="venv/**,tests/**,__pycache__/**,.pytest_cache/**,outputs/**,models/**,coverage/**,**/*.png,**/*.jpg,**/*.jpeg,**/*.nii,**/*.nii.gz,**/*.pth,**/*.pt,**/*.h5,**/*.pkl,**/*.coverage"
                             """
                         }
                     }
@@ -43,19 +55,33 @@ pipeline {
             }
         }
 
+
+        // =========================================================
+        // 3. FASTAPI - QUALITY GATE
+        // =========================================================
+
         stage('FastAPI - Quality Gate') {
             steps {
+
                 timeout(time: 5, unit: 'MINUTES') {
+
                     waitForQualityGate abortPipeline: true
                 }
             }
         }
 
+
+        // =========================================================
+        // 4. BACKEND - SONARQUBE
+        // =========================================================
+
         stage('Backend - SonarQube') {
             steps {
+
                 dir('stroke_backend') {
 
                     withSonarQubeEnv("${SONARQUBE}") {
+
                         sh '''
                             echo "======================================"
                             echo "Spring Boot SonarQube Analysis"
@@ -71,22 +97,37 @@ pipeline {
             }
         }
 
+
+        // =========================================================
+        // 5. BACKEND - QUALITY GATE
+        // =========================================================
+
         stage('Backend - Quality Gate') {
             steps {
+
                 timeout(time: 5, unit: 'MINUTES') {
+
                     waitForQualityGate abortPipeline: true
                 }
             }
         }
 
+
+        // =========================================================
+        // 6. FRONTEND - SONARQUBE
+        // =========================================================
+
         stage('Frontend - SonarQube') {
             steps {
+
                 dir('stroke_frontend') {
 
                     script {
+
                         def scannerHome = tool 'sonar-scanner'
 
                         withSonarQubeEnv("${SONARQUBE}") {
+
                             sh """
                                 echo "======================================"
                                 echo "Angular SonarQube Analysis"
@@ -104,21 +145,34 @@ pipeline {
             }
         }
 
+
+        // =========================================================
+        // 7. FRONTEND - QUALITY GATE
+        // =========================================================
+
         stage('Frontend - Quality Gate') {
             steps {
+
                 timeout(time: 5, unit: 'MINUTES') {
+
                     waitForQualityGate abortPipeline: true
                 }
             }
         }
     }
 
+
+    // =============================================================
+    // POST
+    // =============================================================
+
     post {
 
         success {
+
             echo '''
             ==========================================
-            PIPELINE SUCCESS
+                    PIPELINE SUCCESS
             ==========================================
 
             SonarQube Analysis:
@@ -136,9 +190,10 @@ pipeline {
         }
 
         failure {
+
             echo '''
             ==========================================
-            PIPELINE FAILED
+                    PIPELINE FAILED
             ==========================================
 
             Check the failed SonarQube stage.
@@ -147,7 +202,17 @@ pipeline {
             '''
         }
 
+        aborted {
+
+            echo '''
+            ==========================================
+                    PIPELINE ABORTED
+            ==========================================
+            '''
+        }
+
         always {
+
             echo 'CI/CD pipeline finished.'
         }
     }
