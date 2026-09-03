@@ -133,17 +133,10 @@ pipeline {
                     test -f package.json
                     test -f package-lock.json
 
-                    echo "package.json found:"
-                    ls -lh package.json
-
-                    echo "package-lock.json found:"
-                    ls -lh package-lock.json
-
-                    echo "======================================"
-                    echo "Node.js version"
-                    echo "======================================"
-
+                    echo "Node.js version:"
                     node --version
+
+                    echo "npm version:"
                     npm --version
 
                     echo "======================================"
@@ -153,24 +146,19 @@ pipeline {
                     npm ci --no-audit --prefer-offline --progress=false
 
                     echo "======================================"
-                    echo "Running Angular tests"
+                    echo "Running Frontend Tests"
                     echo "======================================"
 
-                    npm run test -- \
-                        --watch=false \
-                        --code-coverage \
-                        --browsers=ChromeHeadlessNoSandbox \
-                        --source-map=false \
-                        --progress=false
+                    npm test -- --runInBand
 
                     echo "======================================"
-                    echo "Angular tests completed successfully."
+                    echo "Frontend tests completed successfully."
                     echo "======================================"
                 '''
             }
         }
     }
-}    
+}
       }
         }
 
