@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: hazem231/stroke-frontend:1.1
+          image: hazem231/stroke-frontend:1.3
 
           imagePullPolicy: Always
 
