@@ -17,7 +17,7 @@ public class FileStorageService {
     private final Path baseStoragePath;
 
     public FileStorageService(
-            @Value("${app.storage.base-path:storage}")
+            @Value("${app.storage.base-path}")
             String basePath) {
 
         this.baseStoragePath =

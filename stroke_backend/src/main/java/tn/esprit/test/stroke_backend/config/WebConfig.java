@@ -9,13 +9,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${app.storage.location}")
+    @Value("${app.storage.base-path}")
     private String storageLocation;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
         registry.addResourceHandler("/storage/**")
-                .addResourceLocations("file:" + storageLocation);
+                .addResourceLocations("file:"  + storageLocation + "/");
     }
 }
