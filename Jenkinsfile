@@ -114,9 +114,13 @@ pipeline {
                 // =================================================
 
              stage('Frontend Tests') {
+
     steps {
+
         dir('stroke_frontend') {
+
             timeout(time: 20, unit: 'MINUTES') {
+
                 sh '''
                     set -e
 
@@ -127,13 +131,25 @@ pipeline {
                     echo "Current directory:"
                     pwd
 
-                    echo "Checking frontend files:"
+                    echo "======================================"
+                    echo "Checking frontend files"
+                    echo "======================================"
+
                     ls -la
 
                     test -f package.json
                     test -f package-lock.json
 
-                    echo "Node.js version:"
+                    echo "package.json found:"
+                    ls -lh package.json
+
+                    echo "package-lock.json found:"
+                    ls -lh package-lock.json
+
+                    echo "======================================"
+                    echo "Node.js version"
+                    echo "======================================"
+
                     node --version
 
                     echo "npm version:"
@@ -143,16 +159,24 @@ pipeline {
                     echo "Installing dependencies"
                     echo "======================================"
 
-                    npm ci --no-audit --prefer-offline --progress=false
+                    npm ci \
+                        --prefer-offline \
+                        --no-audit \
+                        --progress=false
 
                     echo "======================================"
-                    echo "Running Frontend Tests"
+                    echo "Running Angular tests"
                     echo "======================================"
 
-                    npm test -- --runInBand
+                    npm run test -- \
+                        --watch=false \
+                        --code-coverage \
+                        --browsers=ChromeHeadlessNoSandbox \
+                        --source-map=false \
+                        --progress=false
 
                     echo "======================================"
-                    echo "Frontend tests completed successfully."
+                    echo "Angular tests completed successfully."
                     echo "======================================"
                 '''
             }
