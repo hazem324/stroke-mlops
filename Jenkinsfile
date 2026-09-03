@@ -124,7 +124,7 @@ pipeline {
                     echo "Angular Tests"
                     echo "======================================"
 
-                    echo "Jenkins directory:"
+                    echo "Current directory:"
                     pwd
 
                     echo "Checking frontend files:"
@@ -139,40 +139,33 @@ pipeline {
                     echo "package-lock.json found:"
                     ls -lh package-lock.json
 
-                    echo "Running Angular tests inside Docker..."
+                    echo "======================================"
+                    echo "Node.js version"
+                    echo "======================================"
 
-                    docker run --rm \
-                        --mount type=bind,source="$(pwd)",target=/workspace \
-                        --mount type=volume,source=angular_node_modules,target=/workspace/node_modules \
-                        -w /workspace \
-                        trion/ng-cli-karma:latest \
-                        sh -c '
-                            set -e
+                    node --version
+                    npm --version
 
-                            echo "======================================"
-                            echo "Inside Angular Docker container"
-                            echo "======================================"
+                    echo "======================================"
+                    echo "Installing dependencies"
+                    echo "======================================"
 
-                            pwd
-                            ls -la
+                    npm ci --no-audit --prefer-offline --progress=false
 
-                            echo "Checking package.json..."
-                            test -f package.json
+                    echo "======================================"
+                    echo "Running Angular tests"
+                    echo "======================================"
 
-                            echo "Installing dependencies..."
-                            npm install --prefer-offline --no-audit --progress=false
+                    npm run test -- \
+                        --watch=false \
+                        --code-coverage \
+                        --browsers=ChromeHeadlessNoSandbox \
+                        --source-map=false \
+                        --progress=false
 
-                            echo "Running Angular tests..."
-
-                            npm run test -- \
-                                --watch=false \
-                                --code-coverage \
-                                --browsers=ChromeHeadlessNoSandbox \
-                                --source-map=false \
-                                --progress=false
-                        '
-
+                    echo "======================================"
                     echo "Angular tests completed successfully."
+                    echo "======================================"
                 '''
             }
         }
