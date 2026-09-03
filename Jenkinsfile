@@ -4,6 +4,13 @@ pipeline {
 
     environment {
         SONARQUBE = 'SonarQube'
+
+        // Docker images utilisées uniquement pour les tests
+        FASTAPI_TEST_IMAGE = 'python:3.12-slim'
+        FRONTEND_TEST_IMAGE = 'trion/ng-cli-karma:latest'
+
+        // MySQL utilisé pendant les tests Spring Boot
+        MYSQL_TEST_CONTAINER = 'stroke-mysql-test'
     }
 
     options {
@@ -37,9 +44,9 @@ pipeline {
 
             parallel {
 
-                // -------------------------------------------------
+                // =================================================
                 // FASTAPI TESTS
-                // -------------------------------------------------
+                // =================================================
 
                 stage('FastAPI Tests') {
 
@@ -48,53 +55,63 @@ pipeline {
                         dir('fastapi-service') {
 
                             sh '''
+                                set -e
+
                                 echo "======================================"
                                 echo "FastAPI Tests"
                                 echo "======================================"
 
-                                echo "Building FastAPI test image..."
-
-                                docker build \
-                                    -t stroke-fastapi-test .
-
-                                echo "Running FastAPI tests..."
+                                echo "Installing Python dependencies inside Docker..."
 
                                 docker run --rm \
-                                    stroke-fastapi-test \
-                                    python3 -m pytest tests/ --verbose
+                                    -v "$PWD:/app" \
+                                    -w /app \
+                                    python:3.12-slim \
+                                    sh -c "
+                                        pip install --no-cache-dir -r requirements.txt &&
+                                        pip install --no-cache-dir pytest &&
+                                        python -m pytest tests/ --verbose
+                                    "
+
+                                echo "FastAPI tests completed successfully."
                             '''
                         }
                     }
                 }
 
 
-                // -------------------------------------------------
+                // =================================================
                 // BACKEND TESTS
-                // -------------------------------------------------
+                // =================================================
 
                 stage('Backend Tests') {
 
-                    steps {
+    steps {
 
-                        dir('stroke_backend') {
+        dir('stroke_backend') {
 
-                            sh '''
-                                echo "======================================"
-                                echo "Spring Boot Tests"
-                                echo "======================================"
+            sh '''
+                set -e
 
-                                chmod +x mvnw
+                echo "======================================"
+                echo "Spring Boot Tests"
+                echo "======================================"
 
-                                ./mvnw clean verify
-                            '''
-                        }
-                    }
-                }
+                chmod +x mvnw
+
+                ./mvnw clean test \
+                    -Dspring.profiles.active=test
+
+                echo "Backend tests completed successfully."
+            '''
+        }
+    }
+}
 
 
-                // -------------------------------------------------
+                // =================================================
                 // FRONTEND TESTS
-                // -------------------------------------------------
+                // =================================================
 
                 stage('Frontend Tests') {
 
@@ -105,21 +122,29 @@ pipeline {
                             timeout(time: 20, unit: 'MINUTES') {
 
                                 sh '''
+                                    set -e
+
                                     echo "======================================"
                                     echo "Angular Tests"
                                     echo "======================================"
 
-                                    npm ci \
-                                        --prefer-offline \
-                                        --no-audit \
-                                        --progress=false
+                                    echo "Running Angular tests inside Docker..."
 
-                                    npm run test -- \
-                                        --watch=false \
-                                        --code-coverage \
-                                        --browsers=ChromeHeadlessNoSandbox \
-                                        --source-map=false \
-                                        --progress=false
+                                    docker run --rm \
+                                        -v "$PWD:/app" \
+                                        -w /app \
+                                        trion/ng-cli-karma:latest \
+                                        sh -c "
+                                            npm ci --prefer-offline --no-audit --progress=false &&
+                                            npm run test -- \
+                                                --watch=false \
+                                                --code-coverage \
+                                                --browsers=ChromeHeadlessNoSandbox \
+                                                --source-map=false \
+                                                --progress=false
+                                        "
+
+                                    echo "Angular tests completed successfully."
                                 '''
                             }
                         }
