@@ -52,8 +52,16 @@ pipeline {
                                 echo "FastAPI Tests"
                                 echo "======================================"
 
-                                python3 -m pytest tests/ \
-                                    --verbose
+                                echo "Building FastAPI test image..."
+
+                                docker build \
+                                    -t stroke-fastapi-test .
+
+                                echo "Running FastAPI tests..."
+
+                                docker run --rm \
+                                    stroke-fastapi-test \
+                                    python3 -m pytest tests/ --verbose
                             '''
                         }
                     }
@@ -96,23 +104,23 @@ pipeline {
 
                             timeout(time: 20, unit: 'MINUTES') {
 
-                                withEnv(['PUPPETEER_SKIP_DOWNLOAD=false']) {
+                                sh '''
+                                    echo "======================================"
+                                    echo "Angular Tests"
+                                    echo "======================================"
 
-                                    sh '''
-                                        echo "======================================"
-                                        echo "Angular Tests"
-                                        echo "======================================"
+                                    npm ci \
+                                        --prefer-offline \
+                                        --no-audit \
+                                        --progress=false
 
-                                        npm ci --prefer-offline --no-audit --progress=false
-
-                                        npm run test -- \
-                                            --watch=false \
-                                            --code-coverage \
-                                            --browsers=ChromeHeadlessNoSandbox \
-                                            --source-map=false \
-                                            --progress=false
-                                    '''
-                                }
+                                    npm run test -- \
+                                        --watch=false \
+                                        --code-coverage \
+                                        --browsers=ChromeHeadlessNoSandbox \
+                                        --source-map=false \
+                                        --progress=false
+                                '''
                             }
                         }
                     }
@@ -269,7 +277,7 @@ pipeline {
 
 
     // =============================================================
-    // POST
+    // POST ACTIONS
     // =============================================================
 
     post {
@@ -311,9 +319,11 @@ pipeline {
             Check the failed stage.
 
             Possible causes:
-              - Tests failed
+              - FastAPI tests failed
+              - Backend tests failed
+              - Frontend tests failed
               - SonarQube analysis failed
-              - Quality Gate failed
+              - SonarQube Quality Gate failed
 
             ==========================================
             '''
