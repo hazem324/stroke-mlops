@@ -62,27 +62,44 @@ pipeline {
 }
 
                 stage('FastAPI Tests') {
-                    steps {
-                        dir('fastapi-service') {
-                            timeout(time: 20, unit: 'MINUTES') {
-                                sh '''
-                                    set -e
-                                    if ! command -v python3 >/dev/null 2>&1; then
-                                        exit 1
-                                    fi
-                                    if [ ! -d .venv ]; then
-                                        python3 -m ensurepip --upgrade || true
-                                        python3 -m venv .venv || python3 -m pip install --user virtualenv
-                                        [ -d .venv ] || python3 -m virtualenv .venv
-                                    fi
-                                    . .venv/bin/activate
-                                    python -m pip install --disable-pip-version-check -r requirements.txt pytest pytest-cov httpx
-                                    python -m pytest tests -q --cov=app --cov-report=term-missing --cov-report=xml:coverage.xml
-                                '''
-                            }
-                        }
-                    }
-                }
+    steps {
+        dir('fastapi-service') {
+            timeout(time: 20, unit: 'MINUTES') {
+                sh '''
+                    set -e
+
+                    echo "Python version:"
+                    python3 --version
+
+                    echo "Cleaning old virtual environment..."
+                    rm -rf .venv
+
+                    echo "Creating virtual environment..."
+                    python3 -m venv .venv
+
+                    echo "Activating virtual environment..."
+                    . .venv/bin/activate
+
+                    echo "Upgrading pip..."
+                    python -m pip install --disable-pip-version-check --upgrade pip
+
+                    echo "Installing dependencies..."
+                    python -m pip install --disable-pip-version-check \
+                        -r requirements.txt \
+                        pytest \
+                        pytest-cov \
+                        httpx
+
+                    echo "Running FastAPI tests..."
+                    python -m pytest tests -q \
+                        --cov=app \
+                        --cov-report=term-missing \
+                        --cov-report=xml:coverage.xml
+                '''
+            }
+        }
+    }
+}
             }
         }
 
