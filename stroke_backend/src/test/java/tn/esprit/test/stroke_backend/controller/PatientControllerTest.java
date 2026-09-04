@@ -19,6 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import tn.esprit.test.stroke_backend.StrokeBackendApplication;
 import tn.esprit.test.stroke_backend.dto.patient.PatientRequest;
 import tn.esprit.test.stroke_backend.dto.patient.PatientUpdateRequest;
 import tn.esprit.test.stroke_backend.entities.Patient;
@@ -27,7 +28,7 @@ import tn.esprit.test.stroke_backend.exceptions.ForbiddenException;
 import tn.esprit.test.stroke_backend.exceptions.PatientNotFoundException;
 import tn.esprit.test.stroke_backend.services.PatientService;
 
-@SpringBootTest
+@SpringBootTest(classes = StrokeBackendApplication.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = false)
 class PatientControllerTest {
@@ -35,8 +36,7 @@ class PatientControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @MockitoBean
     private PatientService patientService;

@@ -41,8 +41,13 @@ pipeline {
                                 sh '''
                                     set -e
                                     test -f package.json
+                                    if ! command -v chromium >/dev/null 2>&1; then
+                                        apt-get update
+                                        DEBIAN_FRONTEND=noninteractive apt-get install -y chromium chromium-driver
+                                    fi
+                                    export CHROME_BIN="$(command -v chromium || command -v google-chrome || command -v chromium-browser)"
                                     npm ci --no-audit --progress=false
-                                    npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox --code-coverage --progress=false --source-map=false
+                                    npm test -- --watch=false --browsers=ChromeHeadless --code-coverage --progress=false --source-map=false
                                 '''
                             }
                         }
@@ -55,7 +60,14 @@ pipeline {
                             timeout(time: 20, unit: 'MINUTES') {
                                 sh '''
                                     set -e
-                                    python3 -m venv .venv || true
+                                    if ! command -v python3 >/dev/null 2>&1; then
+                                        exit 1
+                                    fi
+                                    if [ ! -d .venv ]; then
+                                        python3 -m ensurepip --upgrade || true
+                                        python3 -m venv .venv || python3 -m pip install --user virtualenv
+                                        [ -d .venv ] || python3 -m virtualenv .venv
+                                    fi
                                     . .venv/bin/activate
                                     python -m pip install --disable-pip-version-check -r requirements.txt pytest pytest-cov httpx
                                     python -m pytest tests -q --cov=app --cov-report=term-missing --cov-report=xml:coverage.xml

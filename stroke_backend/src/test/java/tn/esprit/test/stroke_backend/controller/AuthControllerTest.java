@@ -16,6 +16,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import tn.esprit.test.stroke_backend.StrokeBackendApplication;
 import tn.esprit.test.stroke_backend.dto.auth.LoginRequest;
 import tn.esprit.test.stroke_backend.dto.auth.LoginResponse;
 import tn.esprit.test.stroke_backend.dto.auth.RegisterRequest;
@@ -26,7 +27,7 @@ import tn.esprit.test.stroke_backend.exceptions.EmailAlreadyExistsException;
 import tn.esprit.test.stroke_backend.exceptions.InvalidCredentialsException;
 import tn.esprit.test.stroke_backend.services.servicesInterface.IAuthService;
 
-@SpringBootTest
+@SpringBootTest(classes = StrokeBackendApplication.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = false)
 class AuthControllerTest {
@@ -34,8 +35,7 @@ class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @MockitoBean
     private IAuthService authService;
