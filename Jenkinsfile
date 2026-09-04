@@ -69,23 +69,42 @@ pipeline {
                                 sh '''
                                     set -e
                                     if ! command -v python3 >/dev/null 2>&1; then
+                                        echo "Python 3 is required for FastAPI tests but is not installed on this Jenkins agent."
                                         exit 1
                                     fi
 
-                                    if command -v sudo >/dev/null 2>&1; then
-                                        sudo apt-get update
-                                        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3-venv python3-pip python3-dev
-                                    elif [ "$(id -u)" = "0" ]; then
-                                        apt-get update
-                                        DEBIAN_FRONTEND=noninteractive apt-get install -y python3-venv python3-pip python3-dev
-                                    else
-                                        echo "Python venv support is required for FastAPI tests but this Jenkins agent cannot install system packages."
-                                        exit 1
-                                    fi
+                                    install_python_venv() {
+                                        if command -v sudo >/dev/null 2>&1; then
+                                            sudo apt-get update
+                                            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3-venv python3-pip python3-dev
+                                            return 0
+                                        fi
+
+                                        if [ "$(id -u)" = "0" ]; then
+                                            apt-get update
+                                            DEBIAN_FRONTEND=noninteractive apt-get install -y python3-venv python3-pip python3-dev
+                                            return 0
+                                        fi
+
+                                        return 1
+                                    }
 
                                     rm -rf .venv
-                                    python3 -m venv .venv || python3 -m pip install --user virtualenv
-                                    [ -d .venv ] || python3 -m virtualenv .venv
+
+                                    if python3 -m venv .venv >/dev/null 2>&1; then
+                                        :
+                                    elif python3 -m ensurepip --upgrade >/dev/null 2>&1; then
+                                        python3 -m venv .venv
+                                    elif python3 -m pip --version >/dev/null 2>&1; then
+                                        python3 -m pip install --user --upgrade pip virtualenv
+                                        python3 -m virtualenv .venv
+                                    elif install_python_venv; then
+                                        python3 -m venv .venv
+                                    else
+                                        echo "Python venv support is required for FastAPI tests and this Jenkins agent cannot install system packages."
+                                        echo "Please use an agent with Python 3 + venv support, or pre-create a working virtual environment on the node."
+                                        exit 1
+                                    fi
 
                                     . .venv/bin/activate
                                     python -m pip install --disable-pip-version-check --upgrade pip
