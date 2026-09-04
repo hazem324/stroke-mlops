@@ -35,24 +35,31 @@ pipeline {
                 }
 
                 stage('Frontend Tests') {
-                    steps {
-                        dir('stroke_frontend') {
-                            timeout(time: 20, unit: 'MINUTES') {
-                                sh '''
-                                    set -e
-                                    test -f package.json
-                                    if ! command -v chromium >/dev/null 2>&1; then
-                                        apt-get update
-                                        DEBIAN_FRONTEND=noninteractive apt-get install -y chromium chromium-driver
-                                    fi
-                                    export CHROME_BIN="$(command -v chromium || command -v google-chrome || command -v chromium-browser)"
-                                    npm ci --no-audit --progress=false
-                                    npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox --code-coverage --progress=false --source-map=false
-                                '''
-                            }
-                        }
-                    }
-                }
+    steps {
+        dir('stroke_frontend') {
+            timeout(time: 20, unit: 'MINUTES') {
+                sh '''
+                    set -e
+
+                    test -f package.json
+
+                    command -v chromium
+                    chromium --version
+
+                    export CHROME_BIN="$(command -v chromium)"
+
+                    npm ci --no-audit --progress=false
+
+                    npm test -- \
+                        --watch=false \
+                        --code-coverage \
+                        --progress=false \
+                        --source-map=false
+                '''
+            }
+        }
+    }
+}
 
                 stage('FastAPI Tests') {
                     steps {
