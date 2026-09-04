@@ -2,11 +2,13 @@ from io import BytesIO
 
 import numpy as np
 
+from app.core.config import get_settings
 from app.main import app
 from app.routes import prediction as prediction_module
 from fastapi.testclient import TestClient
 
 client = TestClient(app)
+settings = get_settings()
 
 
 def test_health_endpoint():
@@ -14,7 +16,7 @@ def test_health_endpoint():
     assert response.status_code == 200
     payload = response.json()
     assert payload["status"] == "healthy"
-    assert payload["service"] == "stroke-segmentation-api"
+    assert payload["service"] == settings.app_name
 
 
 def test_prediction_rejects_non_nii_input():
