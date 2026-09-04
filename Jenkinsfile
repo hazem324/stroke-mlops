@@ -139,23 +139,49 @@ pipeline {
         }
 
         stage('Frontend - SonarQube') {
-            steps {
-                dir('stroke_frontend') {
-                    withSonarQubeEnv("${SONARQUBE}") {
-                        sh '''
-                            sonar-scanner \
-                                -Dsonar.projectKey=stroke-frontend \
-                                -Dsonar.projectName="Stroke Frontend" \
-                                -Dsonar.sources=src/app \
-                                -Dsonar.tests=src/app \
-                                -Dsonar.test.inclusions="**/*.spec.ts" \
-                                -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                                -Dsonar.exclusions="**/*.spec.ts,**/node_modules/**,**/dist/**,**/coverage/**"
-                        '''
-                    }
+    steps {
+        dir('stroke_frontend') {
+
+            withSonarQubeEnv("${SONARQUBE}") {
+
+                withEnv([
+                    "PATH+SONAR=${tool 'SonarScanner'}/bin"
+                ]) {
+
+                    sh '''
+                        set -e
+
+                        echo "======================================"
+                        echo "Frontend - SonarQube"
+                        echo "======================================"
+
+                        echo "Checking SonarScanner..."
+                        which sonar-scanner
+                        sonar-scanner --version
+
+                        echo "Checking coverage..."
+                        test -f coverage/lcov.info
+
+                        echo "Running SonarQube analysis..."
+
+                        sonar-scanner \
+                            -Dsonar.projectKey=stroke-frontend \
+                            -Dsonar.projectName="Stroke Frontend" \
+                            -Dsonar.sources=src/app \
+                            -Dsonar.tests=src/app \
+                            -Dsonar.test.inclusions="**/*.spec.ts" \
+                            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                            -Dsonar.exclusions="**/*.spec.ts,**/node_modules/**,**/dist/**,**/coverage/**" \
+                            -Dsonar.sourceEncoding=UTF-8
+
+                        echo "Frontend SonarQube analysis completed."
+                    '''
                 }
             }
         }
+    }
+}
+
 
         stage('FastAPI - SonarQube') {
             steps {
