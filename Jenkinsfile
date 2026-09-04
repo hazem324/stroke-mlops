@@ -35,31 +35,32 @@ pipeline {
                 }
 
                 stage('Frontend Tests') {
-    steps {
-        dir('stroke_frontend') {
-            timeout(time: 20, unit: 'MINUTES') {
-                sh '''
-                    set -e
+                    steps {
+                        dir('stroke_frontend') {
+                            timeout(time: 20, unit: 'MINUTES') {
+                                sh '''
+                                    set -e
 
-                    test -f package.json
+                                    test -f package.json
 
-                    command -v chromium
-                    chromium --version
+                                    command -v chromium
+                                    chromium --version
 
-                    export CHROME_BIN="$(command -v chromium)"
+                                    export CHROME_BIN="$(command -v chromium)"
 
-                    npm ci --no-audit --progress=false
+                                    npm ci --no-audit --progress=false
 
-                    npm test -- \
-                        --watch=false \
-                        --code-coverage \
-                        --progress=false \
-                        --source-map=false
-                '''
-            }
-        }
-    }
-}
+                                    npm test -- \
+                                        --watch=false \
+                                        --browsers=ChromeHeadlessNoSandbox \
+                                        --code-coverage \
+                                        --progress=false \
+                                        --source-map=false
+                                '''
+                            }
+                        }
+                    }
+                }
 
                 stage('FastAPI Tests') {
                     steps {
@@ -70,12 +71,14 @@ pipeline {
                                     if ! command -v python3 >/dev/null 2>&1; then
                                         exit 1
                                     fi
-                                    if [ ! -d .venv ]; then
-                                        python3 -m ensurepip --upgrade || true
-                                        python3 -m venv .venv || python3 -m pip install --user virtualenv
-                                        [ -d .venv ] || python3 -m virtualenv .venv
-                                    fi
+
+                                    rm -rf .venv
+                                    python3 -m ensurepip --upgrade || true
+                                    python3 -m venv .venv || python3 -m pip install --user virtualenv
+                                    [ -d .venv ] || python3 -m virtualenv .venv
+
                                     . .venv/bin/activate
+                                    python -m pip install --disable-pip-version-check --upgrade pip
                                     python -m pip install --disable-pip-version-check -r requirements.txt pytest pytest-cov httpx
                                     python -m pytest tests -q --cov=app --cov-report=term-missing --cov-report=xml:coverage.xml
                                 '''
