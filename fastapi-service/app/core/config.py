@@ -5,23 +5,23 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # Application
-    app_name: str
-    app_version: str
-    app_description: str
+    app_name: str = "stroke-segmentation-api"
+    app_version: str = "1.0.0"
+    app_description: str = "REST API for ischemic stroke lesion segmentation from DWI MRI"
 
     # Server
-    host: str
-    port: int
+    host: str = "0.0.0.0"
+    port: int = 8080
 
     # Environment
-    environment: str
-    debug: bool
+    environment: str = "development"
+    debug: bool = False
 
     # ML Model
-    model_name: str
-    model_path: str
-    device: str
-    prediction_threshold: float
+    model_name: str = "stroke-unet3d"
+    model_path: str = "models/unet3d_dwi_best.pth"
+    device: str = "cpu"
+    prediction_threshold: float = 0.5
 
     model_config = SettingsConfigDict(
         env_file=".env",

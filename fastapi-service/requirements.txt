@@ -36,6 +36,7 @@ graphql-relay==3.2.0
 greenlet==3.5.5
 gunicorn==26.0.0
 h11==0.16.0
+httpx==0.28.1
 huey==3.3.4
 idna==3.18
 importlib_metadata==9.0.0

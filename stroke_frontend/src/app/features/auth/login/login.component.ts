@@ -9,7 +9,7 @@ import { LoginRequest } from '../../../models/auth/login-request.model';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.css'
 })
 export class LoginComponent {
 

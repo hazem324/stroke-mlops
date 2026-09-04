@@ -82,6 +82,11 @@ class PredictionResponse(BaseModel):
 
     lesion: LesionAnalysis
 
+    lesion_count: int | None = Field(
+        default=None,
+        example=1,
+    )
+
     execution_time_seconds: float = Field(
         ...,
         example=2.31,

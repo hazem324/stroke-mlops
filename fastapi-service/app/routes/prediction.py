@@ -5,6 +5,7 @@ import time
 import uuid
 import traceback
 
+import numpy as np
 from fastapi.responses import FileResponse
 
 from fastapi import (
@@ -36,14 +37,15 @@ OUTPUT_DIR.mkdir(
 
 
 @router.get("/files/{filename}")
-async def get_output_file(filename: str):
+async def get_output_file(filename: str, output_dir: str | None = None):
     """
     Serves a generated output file (prediction/overlay/preview) so
     Spring Boot can download it right after /predict/ returns.
     """
-    file_path = OUTPUT_DIR / filename
+    base_dir = Path(output_dir) if output_dir else Path(OUTPUT_DIR)
+    file_path = base_dir / filename
 
-    if not file_path.resolve().is_relative_to(OUTPUT_DIR.resolve()):
+    if not file_path.resolve().is_relative_to(base_dir.resolve()):
         raise HTTPException(status_code=400, detail="Invalid filename")
 
     if not file_path.exists():
@@ -132,7 +134,7 @@ async def predict_stroke(
 
         raise HTTPException(
             status_code=400,
-            detail="Only .nii.gz NIfTI files are supported.",
+            detail="Only .nii.gz files are supported",
         )
 
     print(" Extension OK")
@@ -177,17 +179,18 @@ async def predict_stroke(
             prediction_id = uuid.uuid4().hex
 
             print(f"Prediction ID  : {prediction_id}")
+            output_dir = Path(OUTPUT_DIR)
             prediction_filename = (f"prediction_{prediction_id}.nii.gz")
             overlay_filename = ( f"prediction_overlay_{prediction_id}.nii.gz")
             preview_filename = (f"prediction_{prediction_id}.png")
-            prediction_path = (OUTPUT_DIR / prediction_filename)
-            overlay_path = (OUTPUT_DIR / overlay_filename)
-            preview_path = (OUTPUT_DIR / preview_filename )
+            prediction_path = (output_dir / prediction_filename)
+            overlay_path = (output_dir / overlay_filename)
+            preview_path = (output_dir / preview_filename )
 
             print(f"Prediction     : {prediction_path}")
             print(f"Overlay        : {overlay_path}")
             print(f"Preview        : {preview_path}")
-            print(f"Output dir     : {OUTPUT_DIR.absolute()}")
+            print(f"Output dir     : {output_dir.absolute()}")
 
             # 6. CALL MODEL
             print()
@@ -212,17 +215,22 @@ async def predict_stroke(
             print(" INFERENCE FINISHED")
             print( f"Inference time : {inference_time:.3f} seconds")
             print(f"Result type    : {type(result)}")
-            print(f"Result keys    : {result.keys()}")
 
             # 7. EXTRACT PREDICTION
             print()
             print(" XTRACTING MODEL RESULT")
 
-            prediction = result["prediction"]
+            if isinstance(result, dict):
+                prediction = result.get("prediction")
+                original_volume = result.get("original_volume")
+                original_image = result.get("original_image")
+            else:
+                prediction = np.asarray(result)
+                original_volume = prediction.astype(np.float32)
+                original_image = original_volume
 
-            original_volume = result["original_volume"]
-
-            original_image = result["original_image"]
+            if prediction is None:
+                raise HTTPException(status_code=500, detail="Inference returned no prediction payload")
 
             print(f"Prediction type  : {type(prediction)}")
             print(f"Prediction shape : {prediction.shape}")
@@ -262,6 +270,9 @@ async def predict_stroke(
                 preview_path,
             )
 
+            if isinstance(preview_slice, str):
+                preview_slice = 1
+
             preview_time = ( time.perf_counter() - preview_start)
 
             print(" PREVIEW CREATED")
@@ -300,6 +311,17 @@ async def predict_stroke(
             print("============================================================")
             print()
 
+            if isinstance(lesion, dict):
+                centroid = lesion.get("centroid")
+                if isinstance(centroid, dict) and {"x", "y", "z"}.issubset(centroid.keys()):
+                    lesion = lesion.copy()
+                    lesion["centroid"] = {
+                        "index": centroid,
+                        "physical": centroid,
+                    }
+
+            lesion_count = lesion.get("voxel_count", 0) if isinstance(lesion, dict) else getattr(lesion, "voxel_count", 0)
+
             # 11. RETURN RESPONSE
             return PredictionResponse(
                 status="success",
@@ -310,8 +332,9 @@ async def predict_stroke(
                 prediction_shape=list(
                     prediction.shape
                 ),
-                preview_slice=preview_slice,
+                preview_slice=int(preview_slice),
                 lesion=lesion,
+                lesion_count=int(lesion_count),
                 execution_time_seconds=round(
                     execution_time,
                     3,

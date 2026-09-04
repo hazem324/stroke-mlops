@@ -16,7 +16,7 @@ import { ToastService } from '../../../services/toast.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: './register.component.css'
 })
 export class RegisterComponent {
 
