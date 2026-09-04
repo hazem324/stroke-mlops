@@ -47,7 +47,7 @@ pipeline {
                                     fi
                                     export CHROME_BIN="$(command -v chromium || command -v google-chrome || command -v chromium-browser)"
                                     npm ci --no-audit --progress=false
-                                    npm test -- --watch=false --browsers=ChromeHeadless --code-coverage --progress=false --source-map=false
+                                    npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox --code-coverage --progress=false --source-map=false
                                 '''
                             }
                         }
