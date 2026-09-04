@@ -42,8 +42,16 @@ pipeline {
                                     set -e
                                     test -f package.json
                                     if ! command -v chromium >/dev/null 2>&1; then
-                                        apt-get update
-                                        DEBIAN_FRONTEND=noninteractive apt-get install -y chromium chromium-driver
+                                        if command -v sudo >/dev/null 2>&1; then
+                                            sudo apt-get update
+                                            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y chromium chromium-driver
+                                        elif [ "$(id -u)" = "0" ]; then
+                                            apt-get update
+                                            DEBIAN_FRONTEND=noninteractive apt-get install -y chromium chromium-driver
+                                        else
+                                            echo "Chromium is required for frontend tests but this Jenkins agent is neither root nor using sudo."
+                                            exit 1
+                                        fi
                                     fi
                                     export CHROME_BIN="$(command -v chromium || command -v google-chrome || command -v chromium-browser)"
                                     npm ci --no-audit --progress=false
@@ -64,6 +72,13 @@ pipeline {
                                         exit 1
                                     fi
                                     if [ ! -d .venv ]; then
+                                        if command -v sudo >/dev/null 2>&1; then
+                                            sudo apt-get update
+                                            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3-venv python3-dev
+                                        elif [ "$(id -u)" = "0" ]; then
+                                            apt-get update
+                                            DEBIAN_FRONTEND=noninteractive apt-get install -y python3-venv python3-dev
+                                        fi
                                         python3 -m ensurepip --upgrade || true
                                         python3 -m venv .venv || python3 -m pip install --user virtualenv
                                         [ -d .venv ] || python3 -m virtualenv .venv

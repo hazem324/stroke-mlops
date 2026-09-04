@@ -1,6 +1,7 @@
 package tn.esprit.test.stroke_backend.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -9,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,7 @@ class PatientControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @MockitoBean
     private PatientService patientService;
@@ -87,7 +89,7 @@ class PatientControllerTest {
         request.setWeight(70.0);
         request.setPhoneNumber("0600000000");
 
-        when(patientService.updatePatient(1L, any(PatientUpdateRequest.class)))
+        when(patientService.updatePatient(eq(1L), any(PatientUpdateRequest.class)))
             .thenThrow(new ForbiddenException("Only a doctor can update patients"));
 
         mockMvc.perform(put("/api/patient/1")
