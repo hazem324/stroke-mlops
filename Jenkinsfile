@@ -49,35 +49,63 @@ pipeline {
                 // =================================================
 
                 stage('FastAPI Tests') {
+    steps {
+        dir('fastapi-service') {
+            timeout(time: 20, unit: 'MINUTES') {
+                sh '''
+                    set -e
 
-                    steps {
+                    echo "======================================"
+                    echo "FastAPI Tests"
+                    echo "======================================"
 
-                        dir('fastapi-service') {
+                    echo "Current directory:"
+                    pwd
 
-                            sh '''
-                                set -e
+                    echo "FastAPI project files:"
+                    ls -la
 
-                                echo "======================================"
-                                echo "FastAPI Tests"
-                                echo "======================================"
+                    echo "Checking required files..."
 
-                                echo "Installing Python dependencies inside Docker..."
+                    test -f requirements.txt
+                    test -f run.py
+                    test -d tests
+                    test -f tests/test_health.py
 
-                                docker run --rm \
-                                    -v "$PWD:/app" \
-                                    -w /app \
-                                    python:3.12-slim \
-                                    sh -c "
-                                        pip install --no-cache-dir -r requirements.txt &&
-                                        pip install --no-cache-dir pytest &&
-                                        python -m pytest tests/ --verbose
-                                    "
+                    echo "Running FastAPI tests inside Docker..."
 
-                                echo "FastAPI tests completed successfully."
-                            '''
-                        }
-                    }
-                }
+                    docker run --rm \
+                        -v "$(pwd):/app" \
+                        -w /app \
+                        python:3.12-slim \
+                        sh -c '
+                            set -e
+
+                            echo "======================================"
+                            echo "Inside Python Docker container"
+                            echo "======================================"
+
+                            echo "Python version:"
+                            python --version
+
+                            echo "Installing dependencies..."
+                            pip install --no-cache-dir -r requirements.txt
+
+                            echo "Installing pytest..."
+                            pip install --no-cache-dir pytest
+
+                            echo "Running tests..."
+                            python -m pytest tests/ --verbose
+                        '
+
+                    echo "======================================"
+                    echo "FastAPI tests completed successfully."
+                    echo "======================================"
+                '''
+            }
+        }
+    }
+}
 
 
                 // =================================================
