@@ -141,42 +141,49 @@ pipeline {
         stage('Frontend - SonarQube') {
     steps {
         dir('stroke_frontend') {
-
             withSonarQubeEnv("${SONARQUBE}") {
+                sh '''
+                    set -e
 
-                withEnv([
-                    "PATH+SONAR=${tool 'sonar-scanner'}/bin"
-                ]) {
+                    echo "======================================"
+                    echo "Frontend - SonarQube"
+                    echo "======================================"
 
-                    sh '''
-                        set -e
+                    echo "Checking Node/npm..."
+                    node --version
+                    npm --version
 
-                        echo "======================================"
-                        echo "Frontend - SonarQube"
-                        echo "======================================"
+                    echo "Checking sonar-scanner..."
+                    npx sonar-scanner --version
 
-                        echo "Checking sonar-scanner..."
-                        which sonar-scanner
-                        sonar-scanner --version
+                    echo "Searching for LCOV coverage..."
+                    find coverage -type f -name "lcov.info" -print
 
-                        echo "Checking coverage..."
-                        test -f coverage/lcov.info
+                    LCOV_FILE=$(find coverage -type f -name "lcov.info" | head -n 1)
 
-                        echo "Running SonarQube analysis..."
+                    if [ -z "$LCOV_FILE" ]; then
+                        echo "ERROR: lcov.info not found!"
+                        echo "Contents of coverage directory:"
+                        find coverage -maxdepth 3 -type f -print || true
+                        exit 1
+                    fi
 
-                        sonar-scanner \
-                            -Dsonar.projectKey=stroke-frontend \
-                            -Dsonar.projectName="Stroke Frontend" \
-                            -Dsonar.sources=src/app \
-                            -Dsonar.tests=src/app \
-                            -Dsonar.test.inclusions="**/*.spec.ts" \
-                            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                            -Dsonar.exclusions="**/*.spec.ts,**/node_modules/**,**/dist/**,**/coverage/**" \
-                            -Dsonar.sourceEncoding=UTF-8
+                    echo "Found LCOV file: $LCOV_FILE"
 
-                        echo "Frontend SonarQube analysis completed."
-                    '''
-                }
+                    echo "Running SonarQube analysis..."
+
+                    npx sonar-scanner \
+                        -Dsonar.projectKey=stroke-frontend \
+                        -Dsonar.projectName="Stroke Frontend" \
+                        -Dsonar.sources=src/app \
+                        -Dsonar.tests=src/app \
+                        -Dsonar.test.inclusions="**/*.spec.ts" \
+                        -Dsonar.exclusions="**/*.spec.ts,**/node_modules/**,**/dist/**,**/coverage/**" \
+                        -Dsonar.javascript.lcov.reportPaths="$LCOV_FILE" \
+                        -Dsonar.sourceEncoding=UTF-8
+
+                    echo "Frontend SonarQube analysis completed."
+                '''
             }
         }
     }
