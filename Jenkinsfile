@@ -199,22 +199,46 @@ pipeline {
 
 
         stage('FastAPI - SonarQube') {
-            steps {
-                dir('fastapi-service') {
-                    withSonarQubeEnv("${SONARQUBE}") {
-                        sh '''
-                            sonar-scanner \
-                                -Dsonar.projectKey=stroke-fastapi \
-                                -Dsonar.projectName="Stroke FastAPI" \
-                                -Dsonar.sources=app \
-                                -Dsonar.tests=tests \
-                                -Dsonar.python.coverage.reportPaths=coverage.xml \
-                                -Dsonar.exclusions="**/__pycache__/**,**/.venv/**,**/outputs/**,**/models/**,**/*.pth,**/*.nii*,**/*.png,**/*.jpg"
-                        '''
-                    }
+    steps {
+        dir('fastapi-service') {
+            withSonarQubeEnv("${SONARQUBE}") {
+
+                withEnv([
+                    "PATH+SONAR=${tool 'sonar-scanner'}/bin"
+                ]) {
+
+                    sh '''
+                        set -e
+
+                        echo "======================================"
+                        echo "FastAPI - SonarQube"
+                        echo "======================================"
+
+                        echo "Checking sonar-scanner..."
+                        which sonar-scanner
+                        sonar-scanner --version
+
+                        echo "Checking coverage..."
+                        test -f coverage.xml
+                        echo "coverage.xml found"
+
+                        echo "Running SonarQube analysis..."
+
+                        sonar-scanner \
+                            -Dsonar.projectKey=stroke-fastapi \
+                            -Dsonar.projectName="Stroke FastAPI" \
+                            -Dsonar.sources=app \
+                            -Dsonar.tests=tests \
+                            -Dsonar.python.coverage.reportPaths=coverage.xml \
+                            -Dsonar.exclusions="**/__pycache__/**,**/.venv/**,**/outputs/**,**/models/**,**/*.pth,**/*.nii*,**/*.png,**/*.jpg"
+
+                        echo "FastAPI SonarQube analysis completed."
+                    '''
                 }
             }
         }
+    }
+}
 
         stage('Quality Gate') {
             steps {
