@@ -145,7 +145,7 @@ pipeline {
             withSonarQubeEnv("${SONARQUBE}") {
 
                 withEnv([
-                    "PATH+SONAR=${tool 'SonarScanner'}/bin"
+                    "PATH+SONAR=${tool 'sonar-scanner'}/bin"
                 ]) {
 
                     sh '''
@@ -155,7 +155,7 @@ pipeline {
                         echo "Frontend - SonarQube"
                         echo "======================================"
 
-                        echo "Checking SonarScanner..."
+                        echo "Checking sonar-scanner..."
                         which sonar-scanner
                         sonar-scanner --version
 
