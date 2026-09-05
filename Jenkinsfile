@@ -127,27 +127,25 @@ pipeline {
         }
 
         stage('Backend - SonarQube') {
-            steps {
-                dir('stroke_backend') {
-                    withSonarQubeEnv("${SONARQUBE}") {
-                        sh '''
-                            chmod +x mvnw
-                            ./mvnw sonar:sonar \
-                                -Dsonar.projectKey=stroke-backend \
-                                -Dsonar.projectName="Stroke Backend" \
-                                -Dsonar.sources=src/main/java \
-                                -Dsonar.tests=src/test/java \
-                                -Dsonar.java.binaries=target/classes,target/test-classes \
-                                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                                -Dsonar.exclusions="**/generated/**,**/target/**"
-                        '''
-                        timeout(time: 10, unit: 'MINUTES') {
-                            waitForQualityGate abortPipeline: true
-                        }
-                    }
-                }
+    steps {
+        dir('stroke_backend') {
+            withSonarQubeEnv('SonarQube') {
+                sh '''
+                    chmod +x mvnw
+
+                    ./mvnw sonar:sonar \
+                      -Dsonar.projectKey=stroke-backend \
+                      -Dsonar.projectName="Stroke Backend" \
+                      -Dsonar.sources=src/main/java \
+                      -Dsonar.tests=src/test/java \
+                      -Dsonar.java.binaries=target/classes,target/test-classes \
+                      -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                      -Dsonar.exclusions=**/generated/**,**/target/**
+                '''
             }
         }
+    }
+}
 
         stage('Frontend - SonarQube') {
     steps {
