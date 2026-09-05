@@ -11,6 +11,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 echo 'Checking out source code...'
@@ -20,13 +21,16 @@ pipeline {
 
         stage('Tests') {
             parallel {
+
                 stage('Backend Tests') {
                     steps {
                         dir('stroke_backend') {
                             timeout(time: 600, unit: 'MINUTES') {
                                 sh '''
                                     set -e
+
                                     chmod +x mvnw
+
                                     ./mvnw clean verify -q
                                 '''
                             }
@@ -55,7 +59,7 @@ pipeline {
                                         --browsers=ChromeHeadlessNoSandbox \
                                         --code-coverage \
                                         --progress=false \
-                                        --source-map=false 
+                                        --source-map=false
 
                                     echo "======================================"
                                     echo "Coverage files generated:"
@@ -76,6 +80,7 @@ pipeline {
                             timeout(time: 600, unit: 'MINUTES') {
                                 sh '''
                                     set -e
+
                                     if ! command -v python3 >/dev/null 2>&1; then
                                         echo "Python 3 is required for FastAPI tests but is not installed on this Jenkins agent."
                                         exit 1
@@ -115,9 +120,19 @@ pipeline {
                                     fi
 
                                     . .venv/bin/activate
+
                                     python -m pip install --disable-pip-version-check --upgrade pip
-                                    python -m pip install --disable-pip-version-check -r requirements.txt -r requirements-test.txt httpx
-                                    python -m pytest tests -q --cov=app --cov-report=term-missing --cov-report=xml:coverage.xml
+
+                                    python -m pip install \
+                                        --disable-pip-version-check \
+                                        -r requirements.txt \
+                                        -r requirements-test.txt \
+                                        httpx
+
+                                    python -m pytest tests -q \
+                                        --cov=app \
+                                        --cov-report=term-missing \
+                                        --cov-report=xml:coverage.xml
                                 '''
                             }
                         }
@@ -126,137 +141,175 @@ pipeline {
             }
         }
 
-        stage('Backend - SonarQube') {
-    steps {
-        dir('stroke_backend') {
-            withSonarQubeEnv('SonarQube') {
-                sh '''
-                    chmod +x mvnw
 
-                    ./mvnw sonar:sonar \
-                      -Dsonar.projectKey=stroke-backend \
-                      -Dsonar.projectName="Stroke Backend" \
-                      -Dsonar.sources=src/main/java \
-                      -Dsonar.tests=src/test/java \
-                      -Dsonar.java.binaries=target/classes,target/test-classes \
-                      -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                      -Dsonar.exclusions=**/generated/**,**/target/**
-                '''
+        /*
+         * ============================================
+         * BACKEND SONARQUBE
+         * ============================================
+         */
+
+        stage('Backend - SonarQube') {
+            steps {
+                dir('stroke_backend') {
+
+                    withSonarQubeEnv("${SONARQUBE}") {
+
+                        sh '''
+                            set -e
+
+                            echo "======================================"
+                            echo "Backend - SonarQube"
+                            echo "======================================"
+
+                            chmod +x mvnw
+
+                            ./mvnw sonar:sonar \
+                                -Dsonar.projectKey=stroke-backend \
+                                -Dsonar.projectName="Stroke Backend" \
+                                -Dsonar.sources=src/main/java \
+                                -Dsonar.tests=src/test/java \
+                                -Dsonar.java.binaries=target/classes,target/test-classes \
+                                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                                -Dsonar.exclusions=**/generated/**,**/target/**
+
+                            echo "Backend SonarQube analysis completed."
+                        '''
+                    }
+                }
             }
         }
-    }
-}
+
+
+        /*
+         * ============================================
+         * FRONTEND SONARQUBE
+         * ============================================
+         */
 
         stage('Frontend - SonarQube') {
-    steps {
-        dir('stroke_frontend') {
-            withSonarQubeEnv("${SONARQUBE}") {
-                sh '''
-                    set -e
+            steps {
+                dir('stroke_frontend') {
 
-                    echo "======================================"
-                    echo "Frontend - SonarQube"
-                    echo "======================================"
+                    withSonarQubeEnv("${SONARQUBE}") {
 
-                    echo "Checking Node/npm..."
-                    node --version
-                    npm --version
+                        sh '''
+                            set -e
 
-                    echo "Checking sonar-scanner..."
-                    npx sonar-scanner --version
+                            echo "======================================"
+                            echo "Frontend - SonarQube"
+                            echo "======================================"
 
-                    echo "Searching for LCOV coverage..."
-                    find coverage -type f -name "lcov.info" -print
+                            echo "Checking Node/npm..."
+                            node --version
+                            npm --version
 
-                    LCOV_FILE=$(find coverage -type f -name "lcov.info" | head -n 1)
+                            echo "Checking sonar-scanner..."
+                            npx sonar-scanner --version
 
-                    if [ -z "$LCOV_FILE" ]; then
-                        echo "ERROR: lcov.info not found!"
-                        echo "Contents of coverage directory:"
-                        find coverage -maxdepth 3 -type f -print || true
-                        exit 1
-                    fi
+                            echo "Searching for LCOV coverage..."
+                            find coverage -type f -name "lcov.info" -print
 
-                    echo "Found LCOV file: $LCOV_FILE"
+                            LCOV_FILE=$(find coverage -type f -name "lcov.info" | head -n 1)
 
-                    echo "Running SonarQube analysis..."
+                            if [ -z "$LCOV_FILE" ]; then
+                                echo "ERROR: lcov.info not found!"
+                                echo "Contents of coverage directory:"
+                                find coverage -maxdepth 3 -type f -print || true
+                                exit 1
+                            fi
 
-                    npx sonar-scanner \
-                        -Dsonar.projectKey=Stroke-Frontend \
-                        -Dsonar.projectName="Stroke Frontend" \
-                        -Dsonar.sources=src/app \
-                        -Dsonar.tests=src/app \
-                        -Dsonar.test.inclusions="**/*.spec.ts" \
-                        -Dsonar.exclusions="**/*.spec.ts,**/node_modules/**,**/dist/**,**/coverage/**" \
-                        -Dsonar.javascript.lcov.reportPaths="$LCOV_FILE" \
-                        -Dsonar.sourceEncoding=UTF-8
+                            echo "Found LCOV file: $LCOV_FILE"
 
-                    echo "Frontend SonarQube analysis completed."
-                '''
-                timeout(time: 10, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
+                            echo "Running SonarQube analysis..."
+
+                            npx sonar-scanner \
+                                -Dsonar.projectKey=Stroke-Frontend \
+                                -Dsonar.projectName="Stroke Frontend" \
+                                -Dsonar.sources=src/app \
+                                -Dsonar.tests=src/app \
+                                -Dsonar.test.inclusions="**/*.spec.ts" \
+                                -Dsonar.exclusions="**/*.spec.ts,**/node_modules/**,**/dist/**,**/coverage/**" \
+                                -Dsonar.javascript.lcov.reportPaths="$LCOV_FILE" \
+                                -Dsonar.sourceEncoding=UTF-8
+
+                            echo "Frontend SonarQube analysis completed."
+                        '''
+                    }
                 }
             }
         }
-    }
-}
 
 
-       stage('FastAPI - SonarQube') {
-    steps {
-        dir('fastapi-service') {
+        /*
+         * ============================================
+         * FASTAPI SONARQUBE
+         * ============================================
+         */
 
-            withSonarQubeEnv("${SONARQUBE}") {
+        stage('FastAPI - SonarQube') {
+            steps {
+                dir('fastapi-service') {
 
-                withEnv([
-                    "PATH+SONAR=${tool 'sonar-scanner'}/bin"
-                ]) {
+                    withSonarQubeEnv("${SONARQUBE}") {
 
-                    sh '''
-                        set -e
+                        withEnv([
+                            "PATH+SONAR=${tool 'sonar-scanner'}/bin"
+                        ]) {
 
-                        echo "======================================"
-                        echo "FastAPI - SonarQube"
-                        echo "======================================"
+                            sh '''
+                                set -e
 
-                        echo "Checking sonar-scanner..."
-                        which sonar-scanner
-                        sonar-scanner --version
+                                echo "======================================"
+                                echo "FastAPI - SonarQube"
+                                echo "======================================"
 
-                        echo "Checking coverage..."
-                        test -f coverage.xml
-                        echo "coverage.xml found"
+                                echo "Checking sonar-scanner..."
+                                which sonar-scanner
+                                sonar-scanner --version
 
-                        echo "Running SonarQube analysis..."
+                                echo "Checking coverage..."
+                                test -f coverage.xml
+                                echo "coverage.xml found"
 
-                        sonar-scanner \
-                            -Dsonar.projectKey=stroke-fastapi \
-                            -Dsonar.projectName="Stroke FastAPI" \
-                            -Dsonar.sources=app \
-                            -Dsonar.tests=tests \
-                            -Dsonar.python.coverage.reportPaths=coverage.xml \
-                            -Dsonar.exclusions="**/__pycache__/**,**/.venv/**,**/outputs/**,**/models/**,**/*.pth,**/*.nii*,**/*.png,**/*.jpg"
+                                echo "Running SonarQube analysis..."
 
-                        echo "FastAPI SonarQube analysis completed."
-                    '''
+                                sonar-scanner \
+                                    -Dsonar.projectKey=stroke-fastapi \
+                                    -Dsonar.projectName="Stroke FastAPI" \
+                                    -Dsonar.sources=app \
+                                    -Dsonar.tests=tests \
+                                    -Dsonar.python.coverage.reportPaths=coverage.xml \
+                                    -Dsonar.exclusions="**/__pycache__/**,**/.venv/**,**/outputs/**,**/models/**,**/*.pth,**/*.nii*,**/*.png,**/*.jpg"
+
+                                echo "FastAPI SonarQube analysis completed."
+                            '''
+                        }
+                    }
                 }
             }
-
-            timeout(time: 30, unit: 'MINUTES') {
-                waitForQualityGate abortPipeline: true
-            }
         }
-    }
-}
 
+
+        /*
+         * ============================================
+         * SINGLE QUALITY GATE
+         * ============================================
+         */
 
         stage('Quality Gate') {
             steps {
-                timeout(time: 10, unit: 'MINUTES') {
+                timeout(time: 30, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
             }
         }
+
+
+        /*
+         * ============================================
+         * DOCKER
+         * ============================================
+         */
 
         stage('Docker Build and Push') {
             steps {
@@ -268,9 +321,11 @@ pipeline {
     }
 
     post {
+
         success {
             echo 'CI pipeline completed successfully.'
         }
+
         failure {
             echo 'CI pipeline failed. Review the stage logs and SonarQube quality gate.'
         }
