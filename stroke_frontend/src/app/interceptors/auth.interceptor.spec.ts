@@ -24,4 +24,16 @@ describe('authInterceptor', () => {
       expect(outgoing.headers.get('Authorization')).toBe('Bearer abc123');
     });
   });
+
+  it('leaves requests unchanged when no token exists', () => {
+    const authService = jasmine.createSpyObj<AuthService>('AuthService', ['getToken']);
+    authService.getToken.and.returnValue(null);
+    TestBed.configureTestingModule({
+      providers: [{ provide: AuthService, useValue: authService }]
+    });
+    const req = new HttpRequest('GET', '/api/test');
+    const next = jasmine.createSpy('next').and.callFake((request) => of(new HttpResponse({ status: 200, body: request.headers.keys() })));
+    TestBed.runInInjectionContext(() => authInterceptor(req, next as any)).subscribe();
+    expect(next.calls.mostRecent().args[0].headers.has('Authorization')).toBeFalse();
+  });
 });

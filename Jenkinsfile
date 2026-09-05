@@ -27,7 +27,7 @@ pipeline {
                                 sh '''
                                     set -e
                                     chmod +x mvnw
-                                    ./mvnw test -q
+                                    ./mvnw clean verify -q
                                 '''
                             }
                         }

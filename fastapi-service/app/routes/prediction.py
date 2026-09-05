@@ -90,7 +90,16 @@ async def test_prediction_connection(
 
 
 # REAL PREDICTION
-@router.post( "/", response_model=PredictionResponse, status_code=status.HTTP_200_OK,)
+@router.post(
+    "/",
+    response_model=PredictionResponse,
+    status_code=status.HTTP_200_OK,
+    responses={
+        500: {
+            "description": "Internal server error during prediction",
+        },
+    },
+)
 async def predict_stroke(
     file: UploadFile = File(
         ...,
