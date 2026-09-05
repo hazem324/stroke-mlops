@@ -238,7 +238,7 @@ pipeline {
 
                         echo "FastAPI SonarQube analysis completed."
                     '''
-                    timeout(time: 10, unit: 'MINUTES') {
+                    timeout(time: 30, unit: 'MINUTES') {
                         waitForQualityGate abortPipeline: true
                     }
                 }
