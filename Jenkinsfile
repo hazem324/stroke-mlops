@@ -202,9 +202,10 @@ pipeline {
 }
 
 
-        stage('FastAPI - SonarQube') {
+       stage('FastAPI - SonarQube') {
     steps {
         dir('fastapi-service') {
+
             withSonarQubeEnv("${SONARQUBE}") {
 
                 withEnv([
@@ -238,14 +239,16 @@ pipeline {
 
                         echo "FastAPI SonarQube analysis completed."
                     '''
-                    timeout(time: 30, unit: 'MINUTES') {
-                        waitForQualityGate abortPipeline: true
-                    }
                 }
+            }
+
+            timeout(time: 30, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
             }
         }
     }
 }
+
 
         stage('Quality Gate') {
             steps {
