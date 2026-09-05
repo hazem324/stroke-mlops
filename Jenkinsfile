@@ -182,7 +182,7 @@ pipeline {
                     echo "Running SonarQube analysis..."
 
                     npx sonar-scanner \
-                        -Dsonar.projectKey=stroke-frontend \
+                        -Dsonar.projectKey=Stroke-Frontend \
                         -Dsonar.projectName="Stroke Frontend" \
                         -Dsonar.sources=src/app \
                         -Dsonar.tests=src/app \
