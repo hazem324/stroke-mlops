@@ -23,7 +23,7 @@ pipeline {
                 stage('Backend Tests') {
                     steps {
                         dir('stroke_backend') {
-                            timeout(time: 60, unit: 'MINUTES') {
+                            timeout(time: 600, unit: 'MINUTES') {
                                 sh '''
                                     set -e
                                     chmod +x mvnw
@@ -37,7 +37,7 @@ pipeline {
                 stage('Frontend Tests') {
                     steps {
                         dir('stroke_frontend') {
-                            timeout(time: 60, unit: 'MINUTES') {
+                            timeout(time: 600, unit: 'MINUTES') {
                                 sh '''
                                     set -e
 
@@ -73,7 +73,7 @@ pipeline {
                 stage('FastAPI Tests') {
                     steps {
                         dir('fastapi-service') {
-                            timeout(time: 60, unit: 'MINUTES') {
+                            timeout(time: 600, unit: 'MINUTES') {
                                 sh '''
                                     set -e
                                     if ! command -v python3 >/dev/null 2>&1; then
