@@ -116,7 +116,7 @@ pipeline {
 
                                     . .venv/bin/activate
                                     python -m pip install --disable-pip-version-check --upgrade pip
-                                    python -m pip install --disable-pip-version-check -r requirements.txt pytest pytest-cov httpx
+                                    python -m pip install --disable-pip-version-check -r requirements.txt -r requirements-test.txt httpx
                                     python -m pytest tests -q --cov=app --cov-report=term-missing --cov-report=xml:coverage.xml
                                 '''
                             }
@@ -141,6 +141,9 @@ pipeline {
                                 -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
                                 -Dsonar.exclusions="**/generated/**,**/target/**"
                         '''
+                        timeout(time: 10, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: true
+                        }
                     }
                 }
             }
@@ -181,7 +184,7 @@ pipeline {
                     echo "Running SonarQube analysis..."
 
                     npx sonar-scanner \
-                        -Dsonar.projectKey=Stroke-Frontend \
+                        -Dsonar.projectKey=stroke-frontend \
                         -Dsonar.projectName="Stroke Frontend" \
                         -Dsonar.sources=src/app \
                         -Dsonar.tests=src/app \
@@ -192,6 +195,9 @@ pipeline {
 
                     echo "Frontend SonarQube analysis completed."
                 '''
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
     }
@@ -234,6 +240,9 @@ pipeline {
 
                         echo "FastAPI SonarQube analysis completed."
                     '''
+                    timeout(time: 10, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
                 }
             }
         }

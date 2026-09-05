@@ -4,10 +4,11 @@ import numpy as np
 import pytest
 import SimpleITK as sitk
 import torch
+from fastapi import HTTPException
 
 from app.ml import model_loader
 from app.routes.download import download_output
-from app.routes.prediction import get_output_file, predict_stroke
+from app.routes.prediction import get_output_file
 from app.services import inference, lesion_analysis, visualization
 
 
@@ -114,41 +115,40 @@ def test_model_architecture_factory(monkeypatch):
 
 
 def test_model_loader_missing_and_cached(monkeypatch, tmp_path):
-    model_loader._MODEL = None
+    monkeypatch.setattr(model_loader, "_MODEL", None)
     settings = model_loader.get_settings()
     monkeypatch.setattr(settings, "model_path", str(tmp_path / "missing.pth"))
     with pytest.raises(FileNotFoundError):
         model_loader.load_model()
 
     cached = torch.nn.Identity()
-    model_loader._MODEL = cached
+    monkeypatch.setattr(model_loader, "_MODEL", cached)
     assert model_loader.get_model() is cached
-    model_loader._MODEL = None
 
 
 @pytest.mark.asyncio
-async def test_file_routes_reject_missing_and_traversal(tmp_path):
-    with pytest.raises(Exception) as missing:
+async def test_file_routes_reject_missing_and_traversal(tmp_path, monkeypatch):
+    with pytest.raises(HTTPException) as missing:
         await get_output_file("missing.nii.gz", str(tmp_path))
-    assert getattr(missing.value, "status_code", None) == 404
+    assert missing.value.status_code == 404
 
-    with pytest.raises(Exception) as traversal:
+    with pytest.raises(HTTPException) as traversal:
         await get_output_file("../secret.nii.gz", str(tmp_path))
-    assert getattr(traversal.value, "status_code", None) == 400
+    assert traversal.value.status_code == 400
 
-    download_module = __import__("app.routes.download", fromlist=["OUTPUT_DIR"])
-    monkeypatch_dir = tmp_path
-    download_module.OUTPUT_DIR = monkeypatch_dir
-    with pytest.raises(Exception) as download_missing:
+    import app.routes.download as download_module
+    monkeypatch.setattr(download_module, "OUTPUT_DIR", tmp_path)
+    with pytest.raises(HTTPException) as download_missing:
         await download_output("missing.png")
-    assert getattr(download_missing.value, "status_code", None) == 404
-    output = monkeypatch_dir / "result.png"
+    assert download_missing.value.status_code == 404
+    output = tmp_path / "result.png"
     output.write_bytes(b"png")
     response = await download_output("result.png")
     assert response.media_type == "image/png"
 
 
 def test_prediction_openapi_documents_internal_error():
-    route = next(route for route in __import__("app.routes.prediction", fromlist=["router"]).router.routes if route.endpoint.__name__ == "predict_stroke")
+    import app.routes.prediction as prediction_module
+    route = next(route for route in prediction_module.router.routes if route.endpoint.__name__ == "predict_stroke")
     assert 500 in route.responses
     assert "Internal server error" in route.responses[500]["description"]
