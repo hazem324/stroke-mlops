@@ -55,7 +55,15 @@ pipeline {
                                         --browsers=ChromeHeadlessNoSandbox \
                                         --code-coverage \
                                         --progress=false \
-                                        --source-map=false
+                                        --source-map=false 
+
+                                    echo "======================================"
+                                    echo "Coverage files generated:"
+                                    echo "======================================"
+
+                                    find coverage -type f -print
+
+                                    echo "======================================"
                                 '''
                             }
                         }
