@@ -341,7 +341,11 @@ pipeline {
 
         success {
             echo 'CI pipeline completed successfully.'
-            build( job: 'stroke-mlops-cd', parameters: [ string( name: 'IMAGE_VERSION', value: IMAGE_VERSION ) ] )
+            build(
+                job: 'stroke-mlops-cd',
+                parameters: [ string( name: 'IMAGE_VERSION', value: IMAGE_VERSION ) ], 
+                propagate: false
+             )
         }
 
         failure {
