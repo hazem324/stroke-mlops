@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SONARQUBE = 'SonarQube'
-        DOCKER_NAMESPACE = "hazemhadda231"
+        DOCKER_NAMESPACE = "hazem231"
         IMAGE_VERSION = "1.${BUILD_NUMBER}"
     }
 
