@@ -308,7 +308,7 @@ pipeline {
                         usernameVariable: 'DOCKER_USER',
                         passwordVariable: 'DOCKER_PASS'
                     )
-                ])
+                ]) {
 
                 sh '''
                         set -e
@@ -330,7 +330,9 @@ pipeline {
 
                         echo "All Docker Images Pushed Successfully"
                     '''
+           
                     /* docker push ${DOCKER_NAMESPACE}/stroke-fastapi:${IMAGE_VERSION} */ 
+            }
             }
         }
     }
