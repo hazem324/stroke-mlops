@@ -19,7 +19,7 @@ describe('StudyAnalysisComponent', () => {
 
   it('loads patients and selects the requested patient', () => {
     component.ngOnInit();
-    expect(component.patients.length).toBe(1);
+    expect(component.patients).toHaveSize(1);
     component.selectedPatientId = 1;
     component.onPatientChange();
     expect(component.selectedPatient?.id).toBe(1);
