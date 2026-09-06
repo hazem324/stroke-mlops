@@ -4,7 +4,7 @@ pipeline {
     environment {
         SONARQUBE = 'SonarQube'
         DOCKER_NAMESPACE = "hazem231"
-        IMAGE_VERSION = "1.${BUILD_NUMBER}"
+        IMAGE_VERSION = "2.${BUILD_NUMBER}"
     }
 
     options {
@@ -334,7 +334,7 @@ pipeline {
                     /* docker push ${DOCKER_NAMESPACE}/stroke-fastapi:${IMAGE_VERSION} */ 
             }
             }
-        }
+        } 
     }
 
     post {
