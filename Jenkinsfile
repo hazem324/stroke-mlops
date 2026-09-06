@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         SONARQUBE = 'SonarQube'
+        DOCKER_NAMESPACE = "hazemhadda231"
+        IMAGE_VERSION = "1.${BUILD_NUMBER}"
     }
 
     options {
@@ -142,12 +144,6 @@ pipeline {
         }
 
 
-        /*
-         * ============================================
-         * BACKEND SONARQUBE
-         * ============================================
-         */
-
         stage('Backend - SonarQube') {
             steps {
                 dir('stroke_backend') {
@@ -178,13 +174,6 @@ pipeline {
                 }
             }
         }
-
-
-        /*
-         * ============================================
-         * FRONTEND SONARQUBE
-         * ============================================
-         */
 
         stage('Frontend - SonarQube') {
             steps {
@@ -240,12 +229,6 @@ pipeline {
         }
 
 
-        /*
-         * ============================================
-         * FASTAPI SONARQUBE
-         * ============================================
-         */
-
         stage('FastAPI - SonarQube') {
             steps {
                 dir('fastapi-service') {
@@ -290,12 +273,6 @@ pipeline {
         }
 
 
-        /*
-         * ============================================
-         * SINGLE QUALITY GATE
-         * ============================================
-         */
-
         stage('Quality Gate') {
             steps {
                 timeout(time: 30, unit: 'MINUTES') {
@@ -304,18 +281,56 @@ pipeline {
             }
         }
 
-
-        /*
-         * ============================================
-         * DOCKER
-         * ============================================
-         */
-
-        stage('Docker Build and Push') {
+        stage('Docker Build') {
             steps {
                 sh '''
-                    echo "Docker build and push not configured for this workspace."
+                    echo "Docker build images"
+                    echo "Building frontend Docker images version ${IMAGE_VERSION}"
+                    docker build -t  ${DOCKER_NAMESPACE}/stroke-frontend:${IMAGE_VERSION} ./stroke_frontend
+                    echo "======================================"
+                    echo "Building backend Docker images version ${IMAGE_VERSION}"
+                    docker build -t  ${DOCKER_NAMESPACE}/stroke-backend:${IMAGE_VERSION} ./stroke_backend
+                    echo "======================================"
+                    echo "Building fastapi Docker images version ${IMAGE_VERSION}"
+                     echo "FastAPI Docker image build skipped temporarily"
+                   
                 '''
+                /* docker build -t  ${DOCKER_NAMESPACE}/stroke-fastapi:${IMAGE_VERSION} ./fastapi-service*/
+            }
+        }
+
+        stage('Docker push to registry') {
+            steps {
+
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'docker',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )
+                ])
+
+                sh '''
+                        set -e
+
+                        echo "$DOCKER_PASS" | docker login  -u "$DOCKER_USER" --password-stdin
+
+                        echo "Pushing Backend Image..."
+                        docker push ${DOCKER_NAMESPACE}/stroke-backend:${IMAGE_VERSION}
+                        echo "======================================"
+
+                        echo "Pushing Frontend Image..."
+                        docker push ${DOCKER_NAMESPACE}/stroke-frontend:${IMAGE_VERSION}
+                        echo "======================================"
+
+                        echo "Pushing fastapi service Image..."
+                         echo "FastAPI image push skipped temporarily"
+
+                        docker logout
+
+                        echo "All Docker Images Pushed Successfully"
+                    '''
+                    /* docker push ${DOCKER_NAMESPACE}/stroke-fastapi:${IMAGE_VERSION} */ 
             }
         }
     }
