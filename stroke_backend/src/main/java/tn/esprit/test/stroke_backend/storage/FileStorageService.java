@@ -39,10 +39,7 @@ public class FileStorageService {
      *         S001/
      *           dwi.nii.gz
      */
-    public String storeDwiFile(
-            MultipartFile file,
-            String patientCode,
-            String studyCode) throws IOException {
+    public String storeDwiFile(MultipartFile file, String patientCode,String studyCode) throws IOException {
 
         Path studyDirectory =
                 baseStoragePath
@@ -75,8 +72,7 @@ public class FileStorageService {
     /**
      * Retourne le chemin physique d'un fichier.
      */
-    public Path getPhysicalPath(
-            String relativePath) {
+    public Path getPhysicalPath(String relativePath) {
 
         return baseStoragePath
                 .resolve(relativePath)
@@ -124,12 +120,7 @@ public class FileStorageService {
      * Sauvegarde les 3 fichiers reçus de FastAPI dans
      * storage/patients/{patientId}/studies/{studyCode}/analysis/
      */
-    public AnalysisPaths storeAnalysisFiles(
-            byte[] predictionBytes,
-            byte[] overlayBytes,
-            byte[] previewBytes,
-            String patientId,
-            String studyCode) throws IOException {
+    public AnalysisPaths storeAnalysisFiles( byte[] predictionBytes, byte[] overlayBytes, byte[] previewBytes, String patientId,String studyCode) throws IOException {
 
         Path analysisDirectory =
                 baseStoragePath
@@ -163,21 +154,52 @@ public class FileStorageService {
                 .replace("\\", "/");
     }
 
-    public record AnalysisPaths(
-            String predictionFile,
-            String overlayFile,
-            String previewFile
-    ) {}
+    public record AnalysisPaths( String predictionFile, String overlayFile,String previewFile) {}
 
     /**
      * Vérifie qu'un fichier existe.
      */
-    public boolean exists(
-            String relativePath) {
+    public boolean exists(String relativePath) {
 
-        Path path =
-                getPhysicalPath(relativePath);
+        Path path = getPhysicalPath(relativePath);
 
         return Files.exists(path);
     }
+
+    /**
+ * Sauvegarde le rapport médical généré par Gemini.
+ *
+ * Exemple :
+ * storage/
+ *   patients/
+ *     P00152/
+ *       studies/
+ *         S001/
+ *           report/
+ *             medical_report_P00152.pdf
+ */
+public String storeMedicalReport(byte[] reportBytes, String patientId,String studyCode) throws IOException {
+
+    Path reportDirectory =
+            baseStoragePath
+                .resolve("patients")
+                .resolve(patientId)
+                .resolve("studies")
+                .resolve(studyCode)
+                .resolve("report");
+
+    Files.createDirectories(reportDirectory);
+
+    Path reportPath = reportDirectory.resolve(
+            "medical_report_" + patientId + ".pdf"
+    );
+
+    Files.write(
+            reportPath,
+            reportBytes
+    );
+
+    return relativize(reportPath);
+}
+
 }

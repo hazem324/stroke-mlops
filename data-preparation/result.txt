@@ -1,0 +1,2653 @@
+============================================================
+Loading dataset
+============================================================
+
+Checking dataset structure...
+
+Dataset found.
+Root        : data/ISLES-2022
+Raw data    : data/ISLES-2022
+Derivatives : data/ISLES-2022/derivatives
+
+Patients discovered : 241
+
+Metadata analysis
+
+========== sub-strokecase0001 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0002 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0003 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0004 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0006 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0007 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0008 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0009 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0010 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0011 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0012 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0013 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0014 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0015 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0016 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0017 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0018 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0019 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0020 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0021 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0022 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0024 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0025 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0026 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0027 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0028 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0029 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0030 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0031 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0032 ==========
+[MISSING] FLAIR (fichier non trouve)
+[OK] ADC
+[OK] DWI
+[OK] MASK
+[SKIP] sub-strokecase0032
+
+========== sub-strokecase0033 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0034 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0035 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0036 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0037 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0038 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0039 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0040 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0042 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0043 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0044 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0045 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0046 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0047 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0048 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0049 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0050 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0051 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0052 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0053 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0054 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0055 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0056 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0057 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0058 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0059 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0060 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0061 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0062 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0063 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0064 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0065 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0066 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0067 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0068 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0069 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0070 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0071 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0072 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0073 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0074 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0075 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0076 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0077 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0078 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0079 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0080 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0081 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0082 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0083 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0084 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0085 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0086 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0087 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0088 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0089 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0090 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0091 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0092 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0093 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0094 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0095 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0096 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0097 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0098 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0099 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0100 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0101 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0102 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0103 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0105 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0106 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0107 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0108 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0109 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0110 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0111 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0112 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0113 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0114 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0115 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0116 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0117 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0118 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0119 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0120 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0121 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0123 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0124 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0125 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0126 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0127 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0128 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0129 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0130 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0131 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0132 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0133 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0134 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0135 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0136 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0137 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0138 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0139 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0141 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0142 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0143 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0144 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0145 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0146 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0147 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0148 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0149 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0150 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0151 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0152 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0153 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0154 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0155 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0156 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0157 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0158 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0159 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0160 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0161 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0162 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0163 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0164 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0165 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0166 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0167 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0168 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0169 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0170 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0171 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0172 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0173 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0174 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0175 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0176 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0177 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0178 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0179 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0180 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0181 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0182 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0183 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0184 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0185 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0186 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0187 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0188 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0189 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0190 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0191 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0192 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0193 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0194 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0195 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0196 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0197 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0198 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0199 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0200 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0201 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0202 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0204 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0205 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0206 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0207 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0208 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0209 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0210 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0211 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0212 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0213 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0214 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0215 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0216 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0217 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0218 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0219 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0220 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0222 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0223 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0224 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0225 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0226 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0227 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0228 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0229 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0231 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0232 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0233 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0234 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0235 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0236 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0237 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0238 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0239 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0240 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0241 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0242 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0243 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0244 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0245 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0246 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0247 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0248 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0249 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== sub-strokecase0250 ==========
+[OK] FLAIR
+[OK] ADC
+[OK] DWI
+[OK] MASK
+
+========== RESUME DU DATASET ==========
+
+Nombre de lignes (patient x modalite) : 960
+Nombre de patients uniques            : 240
+Modalites presentes                    : ['adc', 'dwi', 'flair', 'mask']
+
+--- Shapes les plus frequentes par modalite ---
+modality                 
+adc       (112, 112, 72)      91
+          (112, 112, 73)      85
+          (128, 128, 25)      27
+dwi       (112, 112, 72)      91
+          (112, 112, 73)      85
+          (128, 128, 25)      27
+flair     (281, 352, 352)    110
+          (224, 256, 24)      29
+          (512, 512, 29)      28
+mask      (112, 112, 72)      91
+          (112, 112, 73)      85
+          (128, 128, 25)      27
+Name: shape, dtype: int64
+
+--- Spacing (min / max / moyenne) par modalite ---
+
+spacing_x
+               min  max      mean
+modality                         
+adc       0.875000  2.0  1.884949
+dwi       0.875000  2.0  1.884949
+flair     0.234375  1.0  0.662102
+mask      0.875000  2.0  1.884949
+
+spacing_y
+               min  max      mean
+modality                         
+adc       0.875000  2.0  1.884949
+dwi       0.875000  2.0  1.884949
+flair     0.234375  1.0  0.662938
+mask      0.875000  2.0  1.884949
+
+spacing_z
+               min  max      mean
+modality                         
+adc       2.000000  5.0  2.617500
+dwi       2.000000  5.0  2.617500
+flair     0.681818  9.6  2.532471
+mask      2.000000  5.0  2.617500
+
+--- Dtypes rencontres ---
+modality  dtype  
+adc       float64    182
+          int16       58
+dwi       float64    182
+          int16       58
+flair     float32    182
+          int16       58
+mask      uint16     173
+          int16       46
+          float64     21
+Name: count, dtype: int64
+
+========== DISTRIBUTION DES SHAPES ==========
+
+
+ADC
+(112, 112, 72) : 91 patients
+(112, 112, 73) : 85 patients
+(128, 128, 25) : 27 patients
+(192, 192, 30) : 22 patients
+(128, 128, 72) : 2 patients
+(256, 256, 73) : 2 patients
+(115, 115, 75) : 1 patients
+(115, 115, 28) : 1 patients
+(130, 130, 65) : 1 patients
+(170, 170, 33) : 1 patients
+(112, 112, 74) : 1 patients
+(112, 112, 75) : 1 patients
+(115, 115, 70) : 1 patients
+(112, 112, 76) : 1 patients
+(128, 128, 27) : 1 patients
+(122, 122, 63) : 1 patients
+(128, 128, 30) : 1 patients
+
+DWI
+(112, 112, 72) : 91 patients
+(112, 112, 73) : 85 patients
+(128, 128, 25) : 27 patients
+(192, 192, 30) : 22 patients
+(128, 128, 72) : 2 patients
+(256, 256, 73) : 2 patients
+(115, 115, 75) : 1 patients
+(115, 115, 28) : 1 patients
+(130, 130, 65) : 1 patients
+(170, 170, 33) : 1 patients
+(112, 112, 74) : 1 patients
+(112, 112, 75) : 1 patients
+(115, 115, 70) : 1 patients
+(112, 112, 76) : 1 patients
+(128, 128, 27) : 1 patients
+(122, 122, 63) : 1 patients
+(128, 128, 30) : 1 patients
+
+FLAIR
+(281, 352, 352) : 110 patients
+(224, 256, 24) : 29 patients
+(512, 512, 29) : 28 patients
+(464, 512, 30) : 21 patients
+(352, 352, 230) : 16 patients
+(253, 336, 336) : 10 patients
+(352, 352, 29) : 6 patients
+(1024, 1024, 230) : 3 patients
+(240, 320, 31) : 2 patients
+(320, 320, 29) : 2 patients
+(192, 256, 256) : 2 patients
+(267, 336, 336) : 1 patients
+(281, 336, 336) : 1 patients
+(384, 384, 230) : 1 patients
+(560, 560, 33) : 1 patients
+(528, 528, 29) : 1 patients
+(240, 320, 33) : 1 patients
+(352, 230, 352) : 1 patients
+(400, 400, 29) : 1 patients
+(512, 512, 31) : 1 patients
+(464, 512, 15) : 1 patients
+(255, 320, 320) : 1 patients
+
+MASK
+(112, 112, 72) : 91 patients
+(112, 112, 73) : 85 patients
+(128, 128, 25) : 27 patients
+(192, 192, 30) : 22 patients
+(128, 128, 72) : 2 patients
+(256, 256, 73) : 2 patients
+(115, 115, 75) : 1 patients
+(115, 115, 28) : 1 patients
+(130, 130, 65) : 1 patients
+(170, 170, 33) : 1 patients
+(112, 112, 74) : 1 patients
+(112, 112, 75) : 1 patients
+(115, 115, 70) : 1 patients
+(112, 112, 76) : 1 patients
+(128, 128, 27) : 1 patients
+(122, 122, 63) : 1 patients
+(128, 128, 30) : 1 patients
+
+[SAVED] reports/exploration_dataset.csv
+
+Visualization
+
+Echantillon selectionne (10 patients) : ['sub-strokecase0170', 'sub-strokecase0031', 'sub-strokecase0008', 'sub-strokecase0196', 'sub-strokecase0074', 'sub-strokecase0066', 'sub-strokecase0061', 'sub-strokecase0038', 'sub-strokecase0195', 'sub-strokecase0029']
+
+sub-strokecase0170 -> masque vide, coupe centrale (36)
+[SAVED] reports/visualizations/sub-strokecase0170.png
+sub-strokecase0031 -> lesion trouvee (slice 38)
+[SAVED] reports/visualizations/sub-strokecase0031.png
+sub-strokecase0008 -> lesion trouvee (slice 44)
+[SAVED] reports/visualizations/sub-strokecase0008.png
+sub-strokecase0196 -> lesion trouvee (slice 42)
+[SAVED] reports/visualizations/sub-strokecase0196.png
+sub-strokecase0074 -> lesion trouvee (slice 24)
+[SAVED] reports/visualizations/sub-strokecase0074.png
+sub-strokecase0066 -> lesion trouvee (slice 36)
+[SAVED] reports/visualizations/sub-strokecase0066.png
+sub-strokecase0061 -> lesion trouvee (slice 53)
+[SAVED] reports/visualizations/sub-strokecase0061.png
+sub-strokecase0038 -> lesion trouvee (slice 43)
+[SAVED] reports/visualizations/sub-strokecase0038.png
+sub-strokecase0195 -> lesion trouvee (slice 13)
+[SAVED] reports/visualizations/sub-strokecase0195.png
+sub-strokecase0029 -> lesion trouvee (slice 24)
+[SAVED] reports/visualizations/sub-strokecase0029.png
+
+Quality Check
+[OK] sub-strokecase0001
+[OK] sub-strokecase0002
+[OK] sub-strokecase0003
+[OK] sub-strokecase0004
+[OK] sub-strokecase0006
+[OK] sub-strokecase0007
+[OK] sub-strokecase0008
+[OK] sub-strokecase0009
+[OK] sub-strokecase0010
+[OK] sub-strokecase0011
+[OK] sub-strokecase0012
+[OK] sub-strokecase0013
+[OK] sub-strokecase0014
+[OK] sub-strokecase0015
+[OK] sub-strokecase0016
+[OK] sub-strokecase0017
+[OK] sub-strokecase0018
+[OK] sub-strokecase0019
+[OK] sub-strokecase0020
+[OK] sub-strokecase0021
+[OK] sub-strokecase0022
+[OK] sub-strokecase0024
+[OK] sub-strokecase0025
+[OK] sub-strokecase0026
+[OK] sub-strokecase0027
+[OK] sub-strokecase0028
+[OK] sub-strokecase0029
+[OK] sub-strokecase0030
+[OK] sub-strokecase0031
+[1 probleme(s)] sub-strokecase0032
+[OK] sub-strokecase0033
+[OK] sub-strokecase0034
+[OK] sub-strokecase0035
+[OK] sub-strokecase0036
+[OK] sub-strokecase0037
+[OK] sub-strokecase0038
+[OK] sub-strokecase0039
+[OK] sub-strokecase0040
+[OK] sub-strokecase0042
+[OK] sub-strokecase0043
+[OK] sub-strokecase0044
+[OK] sub-strokecase0045
+[OK] sub-strokecase0046
+[OK] sub-strokecase0047
+[OK] sub-strokecase0048
+[OK] sub-strokecase0049
+[OK] sub-strokecase0050
+[OK] sub-strokecase0051
+[OK] sub-strokecase0052
+[OK] sub-strokecase0053
+[OK] sub-strokecase0054
+[OK] sub-strokecase0055
+[OK] sub-strokecase0056
+[OK] sub-strokecase0057
+[OK] sub-strokecase0058
+[OK] sub-strokecase0059
+[OK] sub-strokecase0060
+[OK] sub-strokecase0061
+[OK] sub-strokecase0062
+[OK] sub-strokecase0063
+[OK] sub-strokecase0064
+[OK] sub-strokecase0065
+[OK] sub-strokecase0066
+[OK] sub-strokecase0067
+[OK] sub-strokecase0068
+[OK] sub-strokecase0069
+[OK] sub-strokecase0070
+[OK] sub-strokecase0071
+[OK] sub-strokecase0072
+[OK] sub-strokecase0073
+[OK] sub-strokecase0074
+[OK] sub-strokecase0075
+[OK] sub-strokecase0076
+[OK] sub-strokecase0077
+[OK] sub-strokecase0078
+[OK] sub-strokecase0079
+[OK] sub-strokecase0080
+[OK] sub-strokecase0081
+[OK] sub-strokecase0082
+[OK] sub-strokecase0083
+[OK] sub-strokecase0084
+[OK] sub-strokecase0085
+[OK] sub-strokecase0086
+[OK] sub-strokecase0087
+[OK] sub-strokecase0088
+[OK] sub-strokecase0089
+[OK] sub-strokecase0090
+[OK] sub-strokecase0091
+[OK] sub-strokecase0092
+[OK] sub-strokecase0093
+[OK] sub-strokecase0094
+[OK] sub-strokecase0095
+[OK] sub-strokecase0096
+[OK] sub-strokecase0097
+[OK] sub-strokecase0098
+[OK] sub-strokecase0099
+[OK] sub-strokecase0100
+[OK] sub-strokecase0101
+[OK] sub-strokecase0102
+[OK] sub-strokecase0103
+[OK] sub-strokecase0105
+[OK] sub-strokecase0106
+[OK] sub-strokecase0107
+[OK] sub-strokecase0108
+[OK] sub-strokecase0109
+[OK] sub-strokecase0110
+[OK] sub-strokecase0111
+[OK] sub-strokecase0112
+[OK] sub-strokecase0113
+[OK] sub-strokecase0114
+[OK] sub-strokecase0115
+[OK] sub-strokecase0116
+[OK] sub-strokecase0117
+[OK] sub-strokecase0118
+[OK] sub-strokecase0119
+[OK] sub-strokecase0120
+[OK] sub-strokecase0121
+[OK] sub-strokecase0123
+[OK] sub-strokecase0124
+[OK] sub-strokecase0125
+[OK] sub-strokecase0126
+[OK] sub-strokecase0127
+[OK] sub-strokecase0128
+[OK] sub-strokecase0129
+[OK] sub-strokecase0130
+[OK] sub-strokecase0131
+[OK] sub-strokecase0132
+[OK] sub-strokecase0133
+[OK] sub-strokecase0134
+[OK] sub-strokecase0135
+[OK] sub-strokecase0136
+[OK] sub-strokecase0137
+[OK] sub-strokecase0138
+[OK] sub-strokecase0139
+[OK] sub-strokecase0141
+[OK] sub-strokecase0142
+[OK] sub-strokecase0143
+[OK] sub-strokecase0144
+[OK] sub-strokecase0145
+[OK] sub-strokecase0146
+[OK] sub-strokecase0147
+[OK] sub-strokecase0148
+[OK] sub-strokecase0149
+[1 probleme(s)] sub-strokecase0150
+[1 probleme(s)] sub-strokecase0151
+[OK] sub-strokecase0152
+[OK] sub-strokecase0153
+[OK] sub-strokecase0154
+[OK] sub-strokecase0155
+[OK] sub-strokecase0156
+[OK] sub-strokecase0157
+[OK] sub-strokecase0158
+[OK] sub-strokecase0159
+[OK] sub-strokecase0160
+[OK] sub-strokecase0161
+[OK] sub-strokecase0162
+[OK] sub-strokecase0163
+[OK] sub-strokecase0164
+[OK] sub-strokecase0165
+[OK] sub-strokecase0166
+[OK] sub-strokecase0167
+[OK] sub-strokecase0168
+[OK] sub-strokecase0169
+[1 probleme(s)] sub-strokecase0170
+[OK] sub-strokecase0171
+[OK] sub-strokecase0172
+[OK] sub-strokecase0173
+[OK] sub-strokecase0174
+[OK] sub-strokecase0175
+[OK] sub-strokecase0176
+[OK] sub-strokecase0177
+[OK] sub-strokecase0178
+[OK] sub-strokecase0179
+[OK] sub-strokecase0180
+[OK] sub-strokecase0181
+[OK] sub-strokecase0182
+[OK] sub-strokecase0183
+[OK] sub-strokecase0184
+[OK] sub-strokecase0185
+[OK] sub-strokecase0186
+[OK] sub-strokecase0187
+[OK] sub-strokecase0188
+[OK] sub-strokecase0189
+[OK] sub-strokecase0190
+[OK] sub-strokecase0191
+[OK] sub-strokecase0192
+[OK] sub-strokecase0193
+[OK] sub-strokecase0194
+[OK] sub-strokecase0195
+[OK] sub-strokecase0196
+[OK] sub-strokecase0197
+[OK] sub-strokecase0198
+[OK] sub-strokecase0199
+[OK] sub-strokecase0200
+[OK] sub-strokecase0201
+[OK] sub-strokecase0202
+[OK] sub-strokecase0204
+[OK] sub-strokecase0205
+[OK] sub-strokecase0206
+[OK] sub-strokecase0207
+[OK] sub-strokecase0208
+[OK] sub-strokecase0209
+[OK] sub-strokecase0210
+[OK] sub-strokecase0211
+[OK] sub-strokecase0212
+[OK] sub-strokecase0213
+[OK] sub-strokecase0214
+[OK] sub-strokecase0215
+[OK] sub-strokecase0216
+[OK] sub-strokecase0217
+[OK] sub-strokecase0218
+[OK] sub-strokecase0219
+[OK] sub-strokecase0220
+[OK] sub-strokecase0222
+[OK] sub-strokecase0223
+[OK] sub-strokecase0224
+[OK] sub-strokecase0225
+[OK] sub-strokecase0226
+[OK] sub-strokecase0227
+[OK] sub-strokecase0228
+[OK] sub-strokecase0229
+[OK] sub-strokecase0231
+[OK] sub-strokecase0232
+[OK] sub-strokecase0233
+[OK] sub-strokecase0234
+[OK] sub-strokecase0235
+[OK] sub-strokecase0236
+[OK] sub-strokecase0237
+[OK] sub-strokecase0238
+[OK] sub-strokecase0239
+[OK] sub-strokecase0240
+[OK] sub-strokecase0241
+[OK] sub-strokecase0242
+[OK] sub-strokecase0243
+[OK] sub-strokecase0244
+[OK] sub-strokecase0245
+[OK] sub-strokecase0246
+[OK] sub-strokecase0247
+[OK] sub-strokecase0248
+[OK] sub-strokecase0249
+[OK] sub-strokecase0250
+
+========== ANALYSE DES LESIONS ==========
+
+Nombre total de patients : 241
+Patients avec lesion     : 238
+Patients sans lesion     : 3
+
+Taille des lesions (voxels)
+Minimum : 5
+Maximum : 27032
+Moyenne : 2543.57
+Mediane : 773.50
+
+[SAVED] reports/qc_report.csv
+
+Resume : 237 patients OK, 4 patients avec au moins un probleme
+
+Preprocessing
+
+========== PREPROCESSING ==========
+
+
+[1/241] sub-strokecase0001
+[SAVED] data/preprocessed/sub-strokecase0001
+
+[2/241] sub-strokecase0002
+[SAVED] data/preprocessed/sub-strokecase0002
+
+[3/241] sub-strokecase0003
+[SAVED] data/preprocessed/sub-strokecase0003
+
+[4/241] sub-strokecase0004
+[SAVED] data/preprocessed/sub-strokecase0004
+
+[5/241] sub-strokecase0006
+[SAVED] data/preprocessed/sub-strokecase0006
+
+[6/241] sub-strokecase0007
+[SAVED] data/preprocessed/sub-strokecase0007
+
+[7/241] sub-strokecase0008
+[SAVED] data/preprocessed/sub-strokecase0008
+
+[8/241] sub-strokecase0009
+[SAVED] data/preprocessed/sub-strokecase0009
+
+[9/241] sub-strokecase0010
+[SAVED] data/preprocessed/sub-strokecase0010
+
+[10/241] sub-strokecase0011
+[SAVED] data/preprocessed/sub-strokecase0011
+
+[11/241] sub-strokecase0012
+[SAVED] data/preprocessed/sub-strokecase0012
+
+[12/241] sub-strokecase0013
+[SAVED] data/preprocessed/sub-strokecase0013
+
+[13/241] sub-strokecase0014
+[SAVED] data/preprocessed/sub-strokecase0014
+
+[14/241] sub-strokecase0015
+[SAVED] data/preprocessed/sub-strokecase0015
+
+[15/241] sub-strokecase0016
+[SAVED] data/preprocessed/sub-strokecase0016
+
+[16/241] sub-strokecase0017
+[SAVED] data/preprocessed/sub-strokecase0017
+
+[17/241] sub-strokecase0018
+[SAVED] data/preprocessed/sub-strokecase0018
+
+[18/241] sub-strokecase0019
+[SAVED] data/preprocessed/sub-strokecase0019
+
+[19/241] sub-strokecase0020
+[SAVED] data/preprocessed/sub-strokecase0020
+
+[20/241] sub-strokecase0021
+[SAVED] data/preprocessed/sub-strokecase0021
+
+[21/241] sub-strokecase0022
+[SAVED] data/preprocessed/sub-strokecase0022
+
+[22/241] sub-strokecase0024
+[SAVED] data/preprocessed/sub-strokecase0024
+
+[23/241] sub-strokecase0025
+[SAVED] data/preprocessed/sub-strokecase0025
+
+[24/241] sub-strokecase0026
+[SAVED] data/preprocessed/sub-strokecase0026
+
+[25/241] sub-strokecase0027
+[SAVED] data/preprocessed/sub-strokecase0027
+
+[26/241] sub-strokecase0028
+[SAVED] data/preprocessed/sub-strokecase0028
+
+[27/241] sub-strokecase0029
+[SAVED] data/preprocessed/sub-strokecase0029
+
+[28/241] sub-strokecase0030
+[SAVED] data/preprocessed/sub-strokecase0030
+
+[29/241] sub-strokecase0031
+[SAVED] data/preprocessed/sub-strokecase0031
+
+[30/241] sub-strokecase0032
+[SKIP] sub-strokecase0032 : flair manquant
+
+[31/241] sub-strokecase0033
+[SAVED] data/preprocessed/sub-strokecase0033
+
+[32/241] sub-strokecase0034
+[SAVED] data/preprocessed/sub-strokecase0034
+
+[33/241] sub-strokecase0035
+[SAVED] data/preprocessed/sub-strokecase0035
+
+[34/241] sub-strokecase0036
+[SAVED] data/preprocessed/sub-strokecase0036
+
+[35/241] sub-strokecase0037
+[SAVED] data/preprocessed/sub-strokecase0037
+
+[36/241] sub-strokecase0038
+[SAVED] data/preprocessed/sub-strokecase0038
+
+[37/241] sub-strokecase0039
+[SAVED] data/preprocessed/sub-strokecase0039
+
+[38/241] sub-strokecase0040
+[SAVED] data/preprocessed/sub-strokecase0040
+
+[39/241] sub-strokecase0042
+[SAVED] data/preprocessed/sub-strokecase0042
+
+[40/241] sub-strokecase0043
+[SAVED] data/preprocessed/sub-strokecase0043
+
+[41/241] sub-strokecase0044
+[SAVED] data/preprocessed/sub-strokecase0044
+
+[42/241] sub-strokecase0045
+[SAVED] data/preprocessed/sub-strokecase0045
+
+[43/241] sub-strokecase0046
+[SAVED] data/preprocessed/sub-strokecase0046
+
+[44/241] sub-strokecase0047
+[SAVED] data/preprocessed/sub-strokecase0047
+
+[45/241] sub-strokecase0048
+[SAVED] data/preprocessed/sub-strokecase0048
+
+[46/241] sub-strokecase0049
+[SAVED] data/preprocessed/sub-strokecase0049
+
+[47/241] sub-strokecase0050
+[SAVED] data/preprocessed/sub-strokecase0050
+
+[48/241] sub-strokecase0051
+[SAVED] data/preprocessed/sub-strokecase0051
+
+[49/241] sub-strokecase0052
+[SAVED] data/preprocessed/sub-strokecase0052
+
+[50/241] sub-strokecase0053
+[SAVED] data/preprocessed/sub-strokecase0053
+
+[51/241] sub-strokecase0054
+[SAVED] data/preprocessed/sub-strokecase0054
+
+[52/241] sub-strokecase0055
+[SAVED] data/preprocessed/sub-strokecase0055
+
+[53/241] sub-strokecase0056
+[SAVED] data/preprocessed/sub-strokecase0056
+
+[54/241] sub-strokecase0057
+[SAVED] data/preprocessed/sub-strokecase0057
+
+[55/241] sub-strokecase0058
+[SAVED] data/preprocessed/sub-strokecase0058
+
+[56/241] sub-strokecase0059
+[SAVED] data/preprocessed/sub-strokecase0059
+
+[57/241] sub-strokecase0060
+[SAVED] data/preprocessed/sub-strokecase0060
+
+[58/241] sub-strokecase0061
+[SAVED] data/preprocessed/sub-strokecase0061
+
+[59/241] sub-strokecase0062
+[SAVED] data/preprocessed/sub-strokecase0062
+
+[60/241] sub-strokecase0063
+[SAVED] data/preprocessed/sub-strokecase0063
+
+[61/241] sub-strokecase0064
+[SAVED] data/preprocessed/sub-strokecase0064
+
+[62/241] sub-strokecase0065
+[SAVED] data/preprocessed/sub-strokecase0065
+
+[63/241] sub-strokecase0066
+[SAVED] data/preprocessed/sub-strokecase0066
+
+[64/241] sub-strokecase0067
+[SAVED] data/preprocessed/sub-strokecase0067
+
+[65/241] sub-strokecase0068
+[SAVED] data/preprocessed/sub-strokecase0068
+
+[66/241] sub-strokecase0069
+[SAVED] data/preprocessed/sub-strokecase0069
+
+[67/241] sub-strokecase0070
+[SAVED] data/preprocessed/sub-strokecase0070
+
+[68/241] sub-strokecase0071
+[SAVED] data/preprocessed/sub-strokecase0071
+
+[69/241] sub-strokecase0072
+[SAVED] data/preprocessed/sub-strokecase0072
+
+[70/241] sub-strokecase0073
+[SAVED] data/preprocessed/sub-strokecase0073
+
+[71/241] sub-strokecase0074
+[SAVED] data/preprocessed/sub-strokecase0074
+
+[72/241] sub-strokecase0075
+[SAVED] data/preprocessed/sub-strokecase0075
+
+[73/241] sub-strokecase0076
+[SAVED] data/preprocessed/sub-strokecase0076
+
+[74/241] sub-strokecase0077
+[SAVED] data/preprocessed/sub-strokecase0077
+
+[75/241] sub-strokecase0078
+[SAVED] data/preprocessed/sub-strokecase0078
+
+[76/241] sub-strokecase0079
+[SAVED] data/preprocessed/sub-strokecase0079
+
+[77/241] sub-strokecase0080
+[SAVED] data/preprocessed/sub-strokecase0080
+
+[78/241] sub-strokecase0081
+[SAVED] data/preprocessed/sub-strokecase0081
+
+[79/241] sub-strokecase0082
+[SAVED] data/preprocessed/sub-strokecase0082
+
+[80/241] sub-strokecase0083
+[SAVED] data/preprocessed/sub-strokecase0083
+
+[81/241] sub-strokecase0084
+[SAVED] data/preprocessed/sub-strokecase0084
+
+[82/241] sub-strokecase0085
+[SAVED] data/preprocessed/sub-strokecase0085
+
+[83/241] sub-strokecase0086
+[SAVED] data/preprocessed/sub-strokecase0086
+
+[84/241] sub-strokecase0087
+[SAVED] data/preprocessed/sub-strokecase0087
+
+[85/241] sub-strokecase0088
+[SAVED] data/preprocessed/sub-strokecase0088
+
+[86/241] sub-strokecase0089
+[SAVED] data/preprocessed/sub-strokecase0089
+
+[87/241] sub-strokecase0090
+[SAVED] data/preprocessed/sub-strokecase0090
+
+[88/241] sub-strokecase0091
+[SAVED] data/preprocessed/sub-strokecase0091
+
+[89/241] sub-strokecase0092
+[SAVED] data/preprocessed/sub-strokecase0092
+
+[90/241] sub-strokecase0093
+[SAVED] data/preprocessed/sub-strokecase0093
+
+[91/241] sub-strokecase0094
+[SAVED] data/preprocessed/sub-strokecase0094
+
+[92/241] sub-strokecase0095
+[SAVED] data/preprocessed/sub-strokecase0095
+
+[93/241] sub-strokecase0096
+[SAVED] data/preprocessed/sub-strokecase0096
+
+[94/241] sub-strokecase0097
+[SAVED] data/preprocessed/sub-strokecase0097
+
+[95/241] sub-strokecase0098
+[SAVED] data/preprocessed/sub-strokecase0098
+
+[96/241] sub-strokecase0099
+[SAVED] data/preprocessed/sub-strokecase0099
+
+[97/241] sub-strokecase0100
+[SAVED] data/preprocessed/sub-strokecase0100
+
+[98/241] sub-strokecase0101
+[SAVED] data/preprocessed/sub-strokecase0101
+
+[99/241] sub-strokecase0102
+[SAVED] data/preprocessed/sub-strokecase0102
+
+[100/241] sub-strokecase0103
+[SAVED] data/preprocessed/sub-strokecase0103
+
+[101/241] sub-strokecase0105
+[SAVED] data/preprocessed/sub-strokecase0105
+
+[102/241] sub-strokecase0106
+[SAVED] data/preprocessed/sub-strokecase0106
+
+[103/241] sub-strokecase0107
+[SAVED] data/preprocessed/sub-strokecase0107
+
+[104/241] sub-strokecase0108
+[SAVED] data/preprocessed/sub-strokecase0108
+
+[105/241] sub-strokecase0109
+[SAVED] data/preprocessed/sub-strokecase0109
+
+[106/241] sub-strokecase0110
+[SAVED] data/preprocessed/sub-strokecase0110
+
+[107/241] sub-strokecase0111
+[SAVED] data/preprocessed/sub-strokecase0111
+
+[108/241] sub-strokecase0112
+[SAVED] data/preprocessed/sub-strokecase0112
+
+[109/241] sub-strokecase0113
+[SAVED] data/preprocessed/sub-strokecase0113
+
+[110/241] sub-strokecase0114
+[SAVED] data/preprocessed/sub-strokecase0114
+
+[111/241] sub-strokecase0115
+[SAVED] data/preprocessed/sub-strokecase0115
+
+[112/241] sub-strokecase0116
+[SAVED] data/preprocessed/sub-strokecase0116
+
+[113/241] sub-strokecase0117
+[SAVED] data/preprocessed/sub-strokecase0117
+
+[114/241] sub-strokecase0118
+[SAVED] data/preprocessed/sub-strokecase0118
+
+[115/241] sub-strokecase0119
+[SAVED] data/preprocessed/sub-strokecase0119
+
+[116/241] sub-strokecase0120
+[SAVED] data/preprocessed/sub-strokecase0120
+
+[117/241] sub-strokecase0121
+[SAVED] data/preprocessed/sub-strokecase0121
+
+[118/241] sub-strokecase0123
+[SAVED] data/preprocessed/sub-strokecase0123
+
+[119/241] sub-strokecase0124
+[SAVED] data/preprocessed/sub-strokecase0124
+
+[120/241] sub-strokecase0125
+[SAVED] data/preprocessed/sub-strokecase0125
+
+[121/241] sub-strokecase0126
+[SAVED] data/preprocessed/sub-strokecase0126
+
+[122/241] sub-strokecase0127
+[SAVED] data/preprocessed/sub-strokecase0127
+
+[123/241] sub-strokecase0128
+[SAVED] data/preprocessed/sub-strokecase0128
+
+[124/241] sub-strokecase0129
+[SAVED] data/preprocessed/sub-strokecase0129
+
+[125/241] sub-strokecase0130
+[SAVED] data/preprocessed/sub-strokecase0130
+
+[126/241] sub-strokecase0131
+[SAVED] data/preprocessed/sub-strokecase0131
+
+[127/241] sub-strokecase0132
+[SAVED] data/preprocessed/sub-strokecase0132
+
+[128/241] sub-strokecase0133
+[SAVED] data/preprocessed/sub-strokecase0133
+
+[129/241] sub-strokecase0134
+[SAVED] data/preprocessed/sub-strokecase0134
+
+[130/241] sub-strokecase0135
+[SAVED] data/preprocessed/sub-strokecase0135
+
+[131/241] sub-strokecase0136
+[SAVED] data/preprocessed/sub-strokecase0136
+
+[132/241] sub-strokecase0137
+[SAVED] data/preprocessed/sub-strokecase0137
+
+[133/241] sub-strokecase0138
+[SAVED] data/preprocessed/sub-strokecase0138
+
+[134/241] sub-strokecase0139
+[SAVED] data/preprocessed/sub-strokecase0139
+
+[135/241] sub-strokecase0141
+[SAVED] data/preprocessed/sub-strokecase0141
+
+[136/241] sub-strokecase0142
+[SAVED] data/preprocessed/sub-strokecase0142
+
+[137/241] sub-strokecase0143
+[SAVED] data/preprocessed/sub-strokecase0143
+
+[138/241] sub-strokecase0144
+[SAVED] data/preprocessed/sub-strokecase0144
+
+[139/241] sub-strokecase0145
+[SAVED] data/preprocessed/sub-strokecase0145
+
+[140/241] sub-strokecase0146
+[SAVED] data/preprocessed/sub-strokecase0146
+
+[141/241] sub-strokecase0147
+[SAVED] data/preprocessed/sub-strokecase0147
+
+[142/241] sub-strokecase0148
+[SAVED] data/preprocessed/sub-strokecase0148
+
+[143/241] sub-strokecase0149
+[SAVED] data/preprocessed/sub-strokecase0149
+
+[144/241] sub-strokecase0150
+[SAVED] data/preprocessed/sub-strokecase0150
+
+[145/241] sub-strokecase0151
+[SAVED] data/preprocessed/sub-strokecase0151
+
+[146/241] sub-strokecase0152
+[SAVED] data/preprocessed/sub-strokecase0152
+
+[147/241] sub-strokecase0153
+[SAVED] data/preprocessed/sub-strokecase0153
+
+[148/241] sub-strokecase0154
+[SAVED] data/preprocessed/sub-strokecase0154
+
+[149/241] sub-strokecase0155
+[SAVED] data/preprocessed/sub-strokecase0155
+
+[150/241] sub-strokecase0156
+[SAVED] data/preprocessed/sub-strokecase0156
+
+[151/241] sub-strokecase0157
+[SAVED] data/preprocessed/sub-strokecase0157
+
+[152/241] sub-strokecase0158
+[SAVED] data/preprocessed/sub-strokecase0158
+
+[153/241] sub-strokecase0159
+[SAVED] data/preprocessed/sub-strokecase0159
+
+[154/241] sub-strokecase0160
+[SAVED] data/preprocessed/sub-strokecase0160
+
+[155/241] sub-strokecase0161
+[SAVED] data/preprocessed/sub-strokecase0161
+
+[156/241] sub-strokecase0162
+[SAVED] data/preprocessed/sub-strokecase0162
+
+[157/241] sub-strokecase0163
+[SAVED] data/preprocessed/sub-strokecase0163
+
+[158/241] sub-strokecase0164
+[SAVED] data/preprocessed/sub-strokecase0164
+
+[159/241] sub-strokecase0165
+[SAVED] data/preprocessed/sub-strokecase0165
+
+[160/241] sub-strokecase0166
+[SAVED] data/preprocessed/sub-strokecase0166
+
+[161/241] sub-strokecase0167
+[SAVED] data/preprocessed/sub-strokecase0167
+
+[162/241] sub-strokecase0168
+[SAVED] data/preprocessed/sub-strokecase0168
+
+[163/241] sub-strokecase0169
+[SAVED] data/preprocessed/sub-strokecase0169
+
+[164/241] sub-strokecase0170
+[SAVED] data/preprocessed/sub-strokecase0170
+
+[165/241] sub-strokecase0171
+[SAVED] data/preprocessed/sub-strokecase0171
+
+[166/241] sub-strokecase0172
+[SAVED] data/preprocessed/sub-strokecase0172
+
+[167/241] sub-strokecase0173
+[SAVED] data/preprocessed/sub-strokecase0173
+
+[168/241] sub-strokecase0174
+[SAVED] data/preprocessed/sub-strokecase0174
+
+[169/241] sub-strokecase0175
+[SAVED] data/preprocessed/sub-strokecase0175
+
+[170/241] sub-strokecase0176
+[SAVED] data/preprocessed/sub-strokecase0176
+
+[171/241] sub-strokecase0177
+[SAVED] data/preprocessed/sub-strokecase0177
+
+[172/241] sub-strokecase0178
+[SAVED] data/preprocessed/sub-strokecase0178
+
+[173/241] sub-strokecase0179
+[SAVED] data/preprocessed/sub-strokecase0179
+
+[174/241] sub-strokecase0180
+[SAVED] data/preprocessed/sub-strokecase0180
+
+[175/241] sub-strokecase0181
+[SAVED] data/preprocessed/sub-strokecase0181
+
+[176/241] sub-strokecase0182
+[SAVED] data/preprocessed/sub-strokecase0182
+
+[177/241] sub-strokecase0183
+[SAVED] data/preprocessed/sub-strokecase0183
+
+[178/241] sub-strokecase0184
+[SAVED] data/preprocessed/sub-strokecase0184
+
+[179/241] sub-strokecase0185
+[SAVED] data/preprocessed/sub-strokecase0185
+
+[180/241] sub-strokecase0186
+[SAVED] data/preprocessed/sub-strokecase0186
+
+[181/241] sub-strokecase0187
+[SAVED] data/preprocessed/sub-strokecase0187
+
+[182/241] sub-strokecase0188
+[SAVED] data/preprocessed/sub-strokecase0188
+
+[183/241] sub-strokecase0189
+[SAVED] data/preprocessed/sub-strokecase0189
+
+[184/241] sub-strokecase0190
+[SAVED] data/preprocessed/sub-strokecase0190
+
+[185/241] sub-strokecase0191
+[SAVED] data/preprocessed/sub-strokecase0191
+
+[186/241] sub-strokecase0192
+[SAVED] data/preprocessed/sub-strokecase0192
+
+[187/241] sub-strokecase0193
+[SAVED] data/preprocessed/sub-strokecase0193
+
+[188/241] sub-strokecase0194
+[SAVED] data/preprocessed/sub-strokecase0194
+
+[189/241] sub-strokecase0195
+[SAVED] data/preprocessed/sub-strokecase0195
+
+[190/241] sub-strokecase0196
+[SAVED] data/preprocessed/sub-strokecase0196
+
+[191/241] sub-strokecase0197
+[SAVED] data/preprocessed/sub-strokecase0197
+
+[192/241] sub-strokecase0198
+[SAVED] data/preprocessed/sub-strokecase0198
+
+[193/241] sub-strokecase0199
+[SAVED] data/preprocessed/sub-strokecase0199
+
+[194/241] sub-strokecase0200
+[SAVED] data/preprocessed/sub-strokecase0200
+
+[195/241] sub-strokecase0201
+[SAVED] data/preprocessed/sub-strokecase0201
+
+[196/241] sub-strokecase0202
+[SAVED] data/preprocessed/sub-strokecase0202
+
+[197/241] sub-strokecase0204
+[SAVED] data/preprocessed/sub-strokecase0204
+
+[198/241] sub-strokecase0205
+[SAVED] data/preprocessed/sub-strokecase0205
+
+[199/241] sub-strokecase0206
+[SAVED] data/preprocessed/sub-strokecase0206
+
+[200/241] sub-strokecase0207
+[SAVED] data/preprocessed/sub-strokecase0207
+
+[201/241] sub-strokecase0208
+[SAVED] data/preprocessed/sub-strokecase0208
+
+[202/241] sub-strokecase0209
+[SAVED] data/preprocessed/sub-strokecase0209
+
+[203/241] sub-strokecase0210
+[SAVED] data/preprocessed/sub-strokecase0210
+
+[204/241] sub-strokecase0211
+[SAVED] data/preprocessed/sub-strokecase0211
+
+[205/241] sub-strokecase0212
+[SAVED] data/preprocessed/sub-strokecase0212
+
+[206/241] sub-strokecase0213
+[SAVED] data/preprocessed/sub-strokecase0213
+
+[207/241] sub-strokecase0214
+[SAVED] data/preprocessed/sub-strokecase0214
+
+[208/241] sub-strokecase0215
+[SAVED] data/preprocessed/sub-strokecase0215
+
+[209/241] sub-strokecase0216
+[SAVED] data/preprocessed/sub-strokecase0216
+
+[210/241] sub-strokecase0217
+[SAVED] data/preprocessed/sub-strokecase0217
+
+[211/241] sub-strokecase0218
+[SAVED] data/preprocessed/sub-strokecase0218
+
+[212/241] sub-strokecase0219
+[SAVED] data/preprocessed/sub-strokecase0219
+
+[213/241] sub-strokecase0220
+[SAVED] data/preprocessed/sub-strokecase0220
+
+[214/241] sub-strokecase0222
+[SAVED] data/preprocessed/sub-strokecase0222
+
+[215/241] sub-strokecase0223
+[SAVED] data/preprocessed/sub-strokecase0223
+
+[216/241] sub-strokecase0224
+[SAVED] data/preprocessed/sub-strokecase0224
+
+[217/241] sub-strokecase0225
+[SAVED] data/preprocessed/sub-strokecase0225
+
+[218/241] sub-strokecase0226
+[SAVED] data/preprocessed/sub-strokecase0226
+
+[219/241] sub-strokecase0227
+[SAVED] data/preprocessed/sub-strokecase0227
+
+[220/241] sub-strokecase0228
+[SAVED] data/preprocessed/sub-strokecase0228
+
+[221/241] sub-strokecase0229
+[SAVED] data/preprocessed/sub-strokecase0229
+
+[222/241] sub-strokecase0231
+[SAVED] data/preprocessed/sub-strokecase0231
+
+[223/241] sub-strokecase0232
+[SAVED] data/preprocessed/sub-strokecase0232
+
+[224/241] sub-strokecase0233
+[SAVED] data/preprocessed/sub-strokecase0233
+
+[225/241] sub-strokecase0234
+[SAVED] data/preprocessed/sub-strokecase0234
+
+[226/241] sub-strokecase0235
+[SAVED] data/preprocessed/sub-strokecase0235
+
+[227/241] sub-strokecase0236
+[SAVED] data/preprocessed/sub-strokecase0236
+
+[228/241] sub-strokecase0237
+[SAVED] data/preprocessed/sub-strokecase0237
+
+[229/241] sub-strokecase0238
+[SAVED] data/preprocessed/sub-strokecase0238
+
+[230/241] sub-strokecase0239
+[SAVED] data/preprocessed/sub-strokecase0239
+
+[231/241] sub-strokecase0240
+[SAVED] data/preprocessed/sub-strokecase0240
+
+[232/241] sub-strokecase0241
+[SAVED] data/preprocessed/sub-strokecase0241
+
+[233/241] sub-strokecase0242
+[SAVED] data/preprocessed/sub-strokecase0242
+
+[234/241] sub-strokecase0243
+[SAVED] data/preprocessed/sub-strokecase0243
+
+[235/241] sub-strokecase0244
+[SAVED] data/preprocessed/sub-strokecase0244
+
+[236/241] sub-strokecase0245
+[SAVED] data/preprocessed/sub-strokecase0245
+
+[237/241] sub-strokecase0246
+[SAVED] data/preprocessed/sub-strokecase0246
+
+[238/241] sub-strokecase0247
+[SAVED] data/preprocessed/sub-strokecase0247
+
+[239/241] sub-strokecase0248
+[SAVED] data/preprocessed/sub-strokecase0248
+
+[240/241] sub-strokecase0249
+[SAVED] data/preprocessed/sub-strokecase0249
+
+[241/241] sub-strokecase0250
+[SAVED] data/preprocessed/sub-strokecase0250
+
+
+============================================================
+PREPROCESSING TERMINE
+============================================================
+Patients totaux      : 241
+Patients traites     : 240
+Patients ignores     : 1
+
+Donnees sauvegardees dans : data/preprocessed
+============================================================
+
+Train / Validation / Test Split
+Patients trouvés : 240
+
+CSV sauvegardés.
+
+========== DATASET SPLIT ==========
+
+Train       : 168
+Validation  : 36
+Test        : 36
+
+Patients avec lésion
+Train       : 166
+Validation  : 36
+Test        : 35
+
+============================================================
+PIPELINE TERMINE
+============================================================
+Rapports disponibles dans : reports/
+Donnees pretraitees disponibles dans : data/preprocessed/

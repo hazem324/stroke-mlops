@@ -82,4 +82,7 @@ public class Studies {
 
         updatedAt = LocalDateTime.now();
     }
+
+    @OneToOne(mappedBy = "study")
+    MedicalReport medicalReport;
 }
