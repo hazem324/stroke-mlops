@@ -5,7 +5,7 @@ public record MedicalReportContent(
 
         String centerName,
         String centerAddress,
-        String centerPhone,
+        //String centerPhone,
 
         String doctorName,
         String doctorTitle,

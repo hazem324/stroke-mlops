@@ -15,25 +15,23 @@ import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
 import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
 import org.springframework.stereotype.Service;
 
+import tn.esprit.test.stroke_backend.entities.User;
+
 @Service
 public class MedicalReportPdfRenderer {
 
-    private static final PDRectangle PAGE_SIZE =
-            PDRectangle.A4;
+    private static final PDRectangle PAGE_SIZE =PDRectangle.A4;
 
-    private static final float PAGE_WIDTH =
-            PAGE_SIZE.getWidth();
+    private static final float PAGE_WIDTH =PAGE_SIZE.getWidth();
 
-    private static final float PAGE_HEIGHT =
-            PAGE_SIZE.getHeight();
+    private static final float PAGE_HEIGHT =PAGE_SIZE.getHeight();
 
     private static final float MARGIN_LEFT = 55f;
     private static final float MARGIN_RIGHT = 55f;
     private static final float MARGIN_TOP = 30f;
     private static final float MARGIN_BOTTOM = 55f;
 
-    private static final float CONTENT_WIDTH =
-            PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
+    private static final float CONTENT_WIDTH =PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
 
     private static final float LINE_HEIGHT = 13f;
 
@@ -53,14 +51,12 @@ public class MedicalReportPdfRenderer {
                     Standard14Fonts.FontName.HELVETICA_BOLD
             );
 
-    private static final PDType1Font ITALIC =
-            new PDType1Font(
-                    Standard14Fonts.FontName.HELVETICA_OBLIQUE
-            );
-
-    public byte[] render(
-            MedicalReportContent content
-    ) {
+//     private static final PDType1Font ITALIC =
+//             new PDType1Font(
+//                     Standard14Fonts.FontName.HELVETICA_OBLIQUE
+//             );
+            
+    public byte[] render(MedicalReportContent content ) {
 
         if (content == null) {
             throw new IllegalArgumentException(
@@ -74,8 +70,7 @@ public class MedicalReportPdfRenderer {
                         new ByteArrayOutputStream()
         ) {
 
-            PdfCursor cursor =
-                    new PdfCursor(document, content);
+            PdfCursor cursor = new PdfCursor(document, content);
 
             cursor.render();
 
@@ -211,11 +206,11 @@ public class MedicalReportPdfRenderer {
 
             y -= 12f;
 
-            centeredText(
-                    REGULAR,
-                    8f,
-                    content.centerPhone()
-            );
+        //     centeredText(
+        //             REGULAR,
+        //             8f,
+        //             content.centerPhone()
+        //     );
 
             y -= 25f;
 

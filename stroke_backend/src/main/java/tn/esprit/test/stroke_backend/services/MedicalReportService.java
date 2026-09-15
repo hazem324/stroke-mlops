@@ -11,6 +11,7 @@ import tn.esprit.test.stroke_backend.entities.MedicalReport;
 import tn.esprit.test.stroke_backend.entities.Patient;
 import tn.esprit.test.stroke_backend.entities.Prediction;
 import tn.esprit.test.stroke_backend.entities.Studies;
+import tn.esprit.test.stroke_backend.entities.User;
 import tn.esprit.test.stroke_backend.repositories.MedicalReportRepository;
 import tn.esprit.test.stroke_backend.repositories.PredictionRepository;
 import tn.esprit.test.stroke_backend.services.servicesInterface.IGeminiReportService;
@@ -174,14 +175,15 @@ public class MedicalReportService implements IMedicalReportService {
                         + "de diffusion pouvant être évocatrices d’une lésion "
                         + "ischémique récente.";
 
+        User doctor = patient.getDoctor();
+
         return new MedicalReportContent(
                 "RPT-" + study.getStudyCode(),
 
                 "CENTRE D’IMAGERIE MÉDICALE",
                 "Service de radiologie — Unité de neuro-imagerie",
-                "Téléphone : [à compléter]",
 
-                "Dr [Nom du médecin]",
+                 doctor !=null ? "Dr " + doctor.getFirstName() + " " + doctor.getLastName() : "Médecin non renseigné",
                 "Médecin radiologue",
 
                 safe(patient.getPatientCode()),
