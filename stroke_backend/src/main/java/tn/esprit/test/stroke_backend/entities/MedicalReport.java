@@ -30,11 +30,7 @@ public class MedicalReport {
     Long id;
 
     @OneToOne
-    @JoinColumn(
-        name = "study_id",
-        nullable = false,
-        unique = true
-    )
+    @JoinColumn(name = "study_id", nullable = false, unique = true)
     Studies study;
 
     String reportPath;
