@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.RequiredArgsConstructor;
 import tn.esprit.test.stroke_backend.entities.GeneratedSections;
 import tn.esprit.test.stroke_backend.entities.MedicalReport;
 import tn.esprit.test.stroke_backend.entities.MedicalReportContent;
@@ -15,12 +16,14 @@ import tn.esprit.test.stroke_backend.entities.Studies;
 import tn.esprit.test.stroke_backend.entities.User;
 import tn.esprit.test.stroke_backend.repositories.MedicalReportRepository;
 import tn.esprit.test.stroke_backend.repositories.PredictionRepository;
+import tn.esprit.test.stroke_backend.repositories.StudiesRepository;
 import tn.esprit.test.stroke_backend.services.servicesInterface.IGeminiReportService;
 import tn.esprit.test.stroke_backend.services.servicesInterface.IMedicalReportService;
 import tn.esprit.test.stroke_backend.storage.FileStorageService;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class MedicalReportService implements IMedicalReportService {
 
     private static final DateTimeFormatter DATE_FMT =
@@ -31,23 +34,64 @@ public class MedicalReportService implements IMedicalReportService {
     private final IGeminiReportService geminiReportService;
     private final FileStorageService fileStorageService;
     private final MedicalReportPdfRenderer pdfRenderer;
+    final StudiesRepository studyRepository;
 
-    public MedicalReportService(
-            PredictionRepository predictionRepository,
-            MedicalReportRepository medicalReportRepository,
-            IGeminiReportService geminiReportService,
-            FileStorageService fileStorageService,
-            MedicalReportPdfRenderer pdfRenderer
-    ) {
-        this.predictionRepository = predictionRepository;
-        this.medicalReportRepository = medicalReportRepository;
-        this.geminiReportService = geminiReportService;
-        this.fileStorageService = fileStorageService;
-        this.pdfRenderer = pdfRenderer;
-    }
+//     public MedicalReportService(
+//             PredictionRepository predictionRepository,
+//             MedicalReportRepository medicalReportRepository,
+//             IGeminiReportService geminiReportService,
+//             FileStorageService fileStorageService,
+//             MedicalReportPdfRenderer pdfRenderer
+//     ) {
+//         this.predictionRepository = predictionRepository;
+//         this.medicalReportRepository = medicalReportRepository;
+//         this.geminiReportService = geminiReportService;
+//         this.fileStorageService = fileStorageService;
+//         this.pdfRenderer = pdfRenderer;
+//     }
 
     @Override
-public String generateMedicalReport(Long predictionId) {
+public byte[] downloadMedicalReport(Long studyId) {
+
+    if (studyId == null) {
+        throw new IllegalArgumentException(
+                "Study id cannot be null"
+        );
+    }
+
+    Studies study = studyRepository
+            .findById(studyId)
+            .orElseThrow(() -> new IllegalArgumentException(
+                    "Study not found with id: " + studyId
+            ));
+
+    MedicalReport medicalReport = medicalReportRepository
+            .findByStudy(study)
+            .orElseThrow(() -> new IllegalStateException(
+                    "No medical report found for study id: " + studyId
+            ));
+
+    String reportPath = medicalReport.getReportPath();
+
+    if (reportPath == null || reportPath.isBlank()) {
+        throw new IllegalStateException(
+                "Medical report path is missing"
+        );
+    }
+
+    try {
+        return fileStorageService.readMedicalReport(reportPath);
+
+    } catch (IOException exception) {
+        throw new IllegalStateException(
+                "Failed to read medical report PDF",
+                exception
+        );
+    }
+}
+
+    @Override
+    public String generateMedicalReport(Long predictionId) {
 
     if (predictionId == null) {
         throw new IllegalArgumentException(
@@ -239,4 +283,6 @@ public String generateMedicalReport(Long predictionId) {
     private String safe(String value) {
         return value == null ? "" : value;
     }
+
+    
 }

@@ -1,6 +1,7 @@
 package tn.esprit.test.stroke_backend.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 import lombok.RequiredArgsConstructor;
 import tn.esprit.test.stroke_backend.services.servicesInterface.IMedicalReportService;
@@ -64,6 +67,57 @@ public class MedicalReportController {
     }
 }
 
+     @GetMapping("/{studyId}/medical-report/download")
+public ResponseEntity<?> downloadMedicalReport(
+        @PathVariable Long studyId
+) {
+    try {
+        byte[] pdfBytes =
+                medicalReportService.downloadMedicalReport(
+                        studyId
+                );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"medical-report-"
+                                + studyId
+                                + ".pdf\""
+                )
+                .contentLength(pdfBytes.length)
+                .body(pdfBytes);
+
+    } catch (IllegalArgumentException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                        "error", "Study not found",
+                        "message", exception.getMessage()
+                ));
+
+    } catch (IllegalStateException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                        "error", "Medical report not found",
+                        "message", exception.getMessage()
+                ));
+
+    } catch (Exception exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of(
+                        "error", "Failed to download medical report",
+                        "message",
+                        "An unexpected error occurred"
+                ));
+    }
+}
 
 //     public record MedicalReportResponse(
 //             String message,

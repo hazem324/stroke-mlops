@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import tn.esprit.test.stroke_backend.services.servicesInterface.IFileStorageService;
+
 @Service
-public class FileStorageService {
+public class FileStorageService  implements  IFileStorageService{
 
     private final Path baseStoragePath;
 
@@ -202,4 +204,28 @@ public String storeMedicalReport(byte[] reportBytes, String patientId,String stu
     return relativize(reportPath);
 }
 
+
+/**
+ * Lit un rapport médical PDF depuis le stockage.
+ */
+public byte[] readMedicalReport(String relativePath)
+        throws IOException {
+
+    Path reportPath = getPhysicalPath(relativePath);
+
+    if (!Files.exists(reportPath)) {
+        throw new IOException(
+                "Medical report file not found: " + relativePath
+        );
+    }
+
+    if (!Files.isRegularFile(reportPath)) {
+        throw new IOException(
+                "The report path is not a regular file: "
+                        + relativePath
+        );
+    }
+
+    return Files.readAllBytes(reportPath);
+}
 }
