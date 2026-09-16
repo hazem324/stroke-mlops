@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tn.esprit.test.stroke_backend.entities.GeneratedSections;
 import tn.esprit.test.stroke_backend.entities.MedicalReport;
+import tn.esprit.test.stroke_backend.entities.MedicalReportContent;
 import tn.esprit.test.stroke_backend.entities.Patient;
 import tn.esprit.test.stroke_backend.entities.Prediction;
 import tn.esprit.test.stroke_backend.entities.Studies;

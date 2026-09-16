@@ -16,6 +16,7 @@ import tn.esprit.test.stroke_backend.dto.study.AnalysisHistoryDTO;
 import tn.esprit.test.stroke_backend.dto.study.PredictionResponseDTO;
 import tn.esprit.test.stroke_backend.dto.study.StudyRequest;
 import tn.esprit.test.stroke_backend.dto.study.StudyResponseDTO;
+import tn.esprit.test.stroke_backend.entities.MedicalReport;
 import tn.esprit.test.stroke_backend.entities.Modality;
 import tn.esprit.test.stroke_backend.entities.Patient;
 import tn.esprit.test.stroke_backend.entities.Prediction;
@@ -600,72 +601,36 @@ public class StudiesService implements IStudiesService {
 
     // mapping 
     private StudyResponseDTO toStudyResponseDTO(Studies study) {
+        MedicalReport report = study.getMedicalReport();
 
     StudyResponseDTO dto = new StudyResponseDTO();
 
     dto.setId(study.getId());
 
-    dto.setStudyCode(
-            study.getStudyCode()
-    );
-
-    dto.setStudyDate(
-            study.getStudyDate()
-    );
-
-    dto.setModality(
-            study.getModality()
-    );
-
-    dto.setStatus(
-            study.getStatus()
-    );
+    dto.setStudyCode(study.getStudyCode() );
+    dto.setStudyDate( study.getStudyDate());
+    dto.setModality(study.getModality());
+    dto.setStatus(study.getStatus());
 
     if (study.getPatient() != null) {
 
-        dto.setPatientId(
-                study.getPatient().getId()
-        );
-
-        dto.setPatientCode(
-                study.getPatient().getPatientCode()
-        );
-
-        dto.setPatientFullName(
-                study.getPatient().getFirstName()
-                        + " "
-                        + study.getPatient().getLastName()
-        );
+        dto.setPatientId(study.getPatient().getId());
+        dto.setPatientCode(study.getPatient().getPatientCode());
+        dto.setPatientFullName(study.getPatient().getFirstName() + " " + study.getPatient().getLastName());
     }
 
-    dto.setDwiFileName(
-            study.getDwiFileName()
-    );
-
-    dto.setDwiFileSize(
-            study.getDwiFileSize()
-    );
-
-    dto.setErrorMessage(
-            study.getErrorMessage()
-    );
-
-    dto.setCreatedAt(
-            study.getCreatedAt()
-    );
-
-    dto.setUpdatedAt(
-            study.getUpdatedAt()
-    );
-
+    dto.setDwiFileName(study.getDwiFileName());
+    dto.setDwiFileSize(study.getDwiFileSize());
+    dto.setErrorMessage(study.getErrorMessage());
+    dto.setCreatedAt(study.getCreatedAt());
+    dto.setUpdatedAt(study.getUpdatedAt());
     if (study.getPrediction() != null) {
-
-        dto.setPrediction(
-                toPredictionResponseDTO(
-                        study.getPrediction()
-                )
-        );
+        dto.setPrediction(toPredictionResponseDTO(study.getPrediction()));
     }
+    if (report.getReportPath() != null){
+        dto.setReportStoragePath(report.getReportPath());
+    }
+    dto.setReportAvailable( report != null && report.getReportPath() != null);
 
     return dto;
 }

@@ -186,8 +186,7 @@ public class StudiesController {
         }
 
         @GetMapping("/study-detail/{studyId}")
-        public ResponseEntity<StudyResponseDTO> getStudyById(
-                        @PathVariable Long studyId) {
+        public ResponseEntity<StudyResponseDTO> getStudyById( @PathVariable Long studyId) {
                 return studyService.getStudyById(studyId);
         }
 

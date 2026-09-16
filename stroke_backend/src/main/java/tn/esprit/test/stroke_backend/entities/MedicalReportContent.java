@@ -1,4 +1,4 @@
-package tn.esprit.test.stroke_backend.services;
+package tn.esprit.test.stroke_backend.entities;
 
 public record MedicalReportContent(
         String reportRef,

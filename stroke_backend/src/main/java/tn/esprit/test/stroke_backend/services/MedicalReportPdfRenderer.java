@@ -15,7 +15,7 @@ import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
 import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
 import org.springframework.stereotype.Service;
 
-import tn.esprit.test.stroke_backend.entities.User;
+import tn.esprit.test.stroke_backend.entities.MedicalReportContent;
 
 @Service
 public class MedicalReportPdfRenderer {

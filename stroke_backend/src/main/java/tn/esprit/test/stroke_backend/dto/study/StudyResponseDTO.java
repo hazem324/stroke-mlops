@@ -41,6 +41,10 @@ public class StudyResponseDTO {
 
     PredictionResponseDTO prediction;
 
+    String reportStoragePath;
+
+    Boolean reportAvailable;
+
     String errorMessage;
 
     LocalDateTime createdAt;
