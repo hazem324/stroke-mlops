@@ -1,7 +1,7 @@
 package tn.esprit.test.stroke_backend.services;
 
-import static tn.esprit.test.stroke_backend.services.GeminiReportPromptBuilder.CONCLUSION_MARKER;
-import static tn.esprit.test.stroke_backend.services.GeminiReportPromptBuilder.RESULTATS_MARKER;
+import static tn.esprit.test.stroke_backend.utils.GeminiReportPromptBuilder.CONCLUSION_MARKER;
+import static tn.esprit.test.stroke_backend.utils.GeminiReportPromptBuilder.RESULTATS_MARKER;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import tn.esprit.test.stroke_backend.entities.GeneratedSections;
 import tn.esprit.test.stroke_backend.entities.Prediction;
 import tn.esprit.test.stroke_backend.services.servicesInterface.IGeminiReportService;
+import tn.esprit.test.stroke_backend.utils.GeminiReportPromptBuilder;
 
 @Service
 public class GeminiReportService implements IGeminiReportService {
@@ -48,12 +49,9 @@ public class GeminiReportService implements IGeminiReportService {
          * Désactivation des retries automatiques du client Apache.
          * Les retries sont contrôlés manuellement dans callGeminiWithRetry().
          */
-        CloseableHttpClient httpClient = HttpClients.custom()
-                .disableAutomaticRetries()
-                .build();
+        CloseableHttpClient httpClient = HttpClients.custom().disableAutomaticRetries().build();
 
-        HttpComponentsClientHttpRequestFactory requestFactory =
-                new HttpComponentsClientHttpRequestFactory(httpClient);
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
 
         this.restClient = restClientBuilder
                 .requestFactory(requestFactory)
@@ -86,10 +84,7 @@ public class GeminiReportService implements IGeminiReportService {
 
         String url = buildGeminiUrl();
 
-        String response = callGeminiWithRetry(
-                url,
-                requestBody
-        );
+        String response = callGeminiWithRetry( url,requestBody);
 
         String rawText = extractText(response);
 
@@ -135,10 +130,7 @@ public class GeminiReportService implements IGeminiReportService {
                 + ":generateContent";
     }
 
-    private String callGeminiWithRetry(
-            String url,
-            Map<String, Object> requestBody
-    ) {
+    private String callGeminiWithRetry( String url,Map<String, Object> requestBody) {
 
         final int maxAttempts = 3;
 
@@ -434,11 +426,7 @@ public class GeminiReportService implements IGeminiReportService {
         );
     }
 
-    private String between(
-            String text,
-            String startMarker,
-            String endMarker
-    ) {
+    private String between(String text,String startMarker,String endMarker) {
 
         int start = text.indexOf(startMarker);
         int end = text.indexOf(endMarker);
@@ -447,16 +435,10 @@ public class GeminiReportService implements IGeminiReportService {
             return "";
         }
 
-        return text.substring(
-                start + startMarker.length(),
-                end
-        );
+        return text.substring( start + startMarker.length(),end);
     }
 
-    private String after(
-            String text,
-            String marker
-    ) {
+    private String after(String text,String marker) {
 
         int index = text.indexOf(marker);
 

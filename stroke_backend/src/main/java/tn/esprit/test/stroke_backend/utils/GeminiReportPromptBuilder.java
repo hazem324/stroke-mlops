@@ -1,8 +1,8 @@
-package tn.esprit.test.stroke_backend.services;
+package tn.esprit.test.stroke_backend.utils;
 
 import org.springframework.stereotype.Component;
 
-import tn.esprit.test.stroke_backend.entities.Prediction;
+import tn.esprit.test.stroke_backend.entities.Prediction; 
 
 @Component
 public class GeminiReportPromptBuilder {

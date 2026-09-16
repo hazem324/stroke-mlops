@@ -47,95 +47,101 @@ public class MedicalReportService implements IMedicalReportService {
     }
 
     @Override
-    public String generateMedicalReport(Long predictionId) {
+public String generateMedicalReport(Long predictionId) {
 
-        if (predictionId == null) {
-            throw new IllegalArgumentException(
-                    "Prediction id cannot be null"
-            );
-        }
-
-        Prediction prediction = predictionRepository
-                .findById(predictionId)
-                .orElseThrow(() -> new RuntimeException(
-                        "Prediction not found with id: " + predictionId
-                ));
-
-        Studies study = prediction.getStudy();
-
-        if (study == null) {
-            throw new IllegalStateException(
-                    "No study associated with this prediction"
-            );
-        }
-
-        Patient patient = study.getPatient();
-
-        if (patient == null) {
-            throw new IllegalStateException(
-                    "No patient associated with this study"
-            );
-        }
-
-        String patientCode = patient.getPatientCode();
-        String studyCode = study.getStudyCode();
-
-        if (patientCode == null || patientCode.isBlank()) {
-            throw new IllegalStateException(
-                    "Patient code is missing"
-            );
-        }
-
-        if (studyCode == null || studyCode.isBlank()) {
-            throw new IllegalStateException(
-                    "Study code is missing"
-            );
-        }
-
-        GeneratedSections sections =
-                geminiReportService.generateReport(prediction);
-
-        validateGeneratedSections(sections);
-
-        MedicalReportContent content =
-                buildContent(patient, study, sections);
-
-        byte[] pdfBytes = pdfRenderer.render(content);
-
-        try {
-
-            String reportPath =
-                    fileStorageService.storeMedicalReport(
-                            pdfBytes,
-                            patientCode,
-                            studyCode
-                    );
-
-            MedicalReport medicalReport =
-                    medicalReportRepository
-                            .findByStudy(study)
-                            .orElse(new MedicalReport());
-
-            medicalReport.setStudy(study);
-            medicalReport.setReportPath(reportPath);
-
-            medicalReportRepository.save(medicalReport);
-
-            return reportPath;
-
-        } catch (IOException exception) {
-
-            throw new RuntimeException(
-                    "Failed to save medical report PDF: "
-                            + exception.getMessage(),
-                    exception
-            );
-        }
+    if (predictionId == null) {
+        throw new IllegalArgumentException(
+                "Prediction id cannot be null"
+        );
     }
 
-    private void validateGeneratedSections(
-            GeneratedSections sections
-    ) {
+    Prediction prediction = predictionRepository
+            .findById(predictionId)
+            .orElseThrow(() -> new IllegalArgumentException(
+                    "Prediction not found with id: " + predictionId
+            ));
+
+    Studies study = prediction.getStudy();
+
+    if (study == null) {
+        throw new IllegalStateException(
+                "No study associated with this prediction"
+        );
+    }
+
+    Patient patient = study.getPatient();
+
+    if (patient == null) {
+        throw new IllegalStateException(
+                "No patient associated with this study"
+        );
+    }
+
+    String patientCode = patient.getPatientCode();
+    String studyCode = study.getStudyCode();
+
+    if (patientCode == null || patientCode.isBlank()) {
+        throw new IllegalStateException(
+                "Patient code is missing"
+        );
+    }
+
+    if (studyCode == null || studyCode.isBlank()) {
+        throw new IllegalStateException(
+                "Study code is missing"
+        );
+    }
+
+    GeneratedSections sections = geminiReportService.generateReport(prediction);
+
+    if (sections == null) {
+        throw new IllegalStateException(
+                "Gemini returned empty generated sections"
+        );
+    }
+
+    validateGeneratedSections(sections);
+
+    MedicalReportContent content =
+            buildContent(patient, study, sections);
+
+    byte[] pdfBytes = pdfRenderer.render(content);
+
+    if (pdfBytes == null || pdfBytes.length == 0) {
+        throw new IllegalStateException(
+                "Generated medical report PDF is empty"
+        );
+    }
+
+    try {
+        String reportPath =fileStorageService.storeMedicalReport(pdfBytes, patientCode, studyCode);
+
+        if (reportPath == null || reportPath.isBlank()) {
+            throw new IllegalStateException(
+                    "Medical report path was not generated"
+            );
+        }
+
+        MedicalReport medicalReport =medicalReportRepository
+        .findByStudy(study)
+        .orElseGet(MedicalReport::new);
+
+        medicalReport.setStudy(study);
+        medicalReport.setReportPath(reportPath);
+
+        medicalReportRepository.save(medicalReport);
+
+        return reportPath;
+
+    } catch (IOException exception) {
+        throw new IllegalStateException(
+                "Failed to save medical report PDF",
+                exception
+        );
+    }
+}
+
+    private void validateGeneratedSections(GeneratedSections sections) {
 
         if (sections == null) {
             throw new IllegalStateException(
@@ -160,11 +166,7 @@ public class MedicalReportService implements IMedicalReportService {
         }
     }
 
-    private MedicalReportContent buildContent(
-            Patient patient,
-            Studies study,
-            GeneratedSections sections
-    ) {
+    private MedicalReportContent buildContent(Patient patient, Studies study, GeneratedSections sections) {
 
         String indication =
                 "Bilan d’une suspicion d’accident vasculaire "

@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 
 import lombok.RequiredArgsConstructor;
@@ -18,42 +21,60 @@ public class MedicalReportController {
     private final IMedicalReportService medicalReportService;
 
     @PostMapping("/generate/{predictionId}")
-    public ResponseEntity<?> generateMedicalReport(
-            @PathVariable Long predictionId) {
+    public ResponseEntity<?> generateMedicalReport(@PathVariable Long predictionId) {
+    try {
+        String reportPath =
+                medicalReportService.generateMedicalReport(
+                        predictionId
+                );
 
-        try {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "message", "Medical report generated successfully",
+                        "reportPath", reportPath
+                ));
 
-            String reportPath =
-                    medicalReportService.generateMedicalReport(predictionId);
+    } catch (IllegalArgumentException exception) {
 
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(new MedicalReportResponse(
-                            "Medical report generated successfully",
-                            reportPath
-                    ));
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                        "error", "Prediction not found",
+                        "message", exception.getMessage()
+                ));
 
-        } catch (RuntimeException e) {
+    } catch (IllegalStateException exception) {
 
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse(
-                            "Failed to generate medical report",
-                            e.getMessage()
-                    ));
-        }
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY)
+                .body(Map.of(
+                        "error", "Failed to generate medical report",
+                        "message", exception.getMessage()
+                ));
+
+    } catch (Exception exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of(
+                        "error", "Internal server error",
+                        "message", "An unexpected error occurred"
+                ));
     }
+}
 
-    public record MedicalReportResponse(
-            String message,
-            String reportPath
-    ) {
-    }
 
-    public record ErrorResponse(
-            String error,
-            String message
-    ) {
-    }
+//     public record MedicalReportResponse(
+//             String message,
+//             String reportPath
+//     ) {
+//     }
+
+//     public record ErrorResponse(
+//             String error,
+//             String message
+//     ) {
+//     }
     
 }
