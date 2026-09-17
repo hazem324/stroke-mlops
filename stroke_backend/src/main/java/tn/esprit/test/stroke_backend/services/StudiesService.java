@@ -627,10 +627,13 @@ public class StudiesService implements IStudiesService {
     if (study.getPrediction() != null) {
         dto.setPrediction(toPredictionResponseDTO(study.getPrediction()));
     }
-    if (report.getReportPath() != null){
-        dto.setReportStoragePath(report.getReportPath());
-    }
-    dto.setReportAvailable( report != null && report.getReportPath() != null);
+    if (report != null && report.getReportPath() != null) {
+    dto.setReportStoragePath(report.getReportPath());
+    dto.setReportAvailable(true);
+} else {
+    dto.setReportStoragePath(null);
+    dto.setReportAvailable(false);
+}
 
     return dto;
 }
