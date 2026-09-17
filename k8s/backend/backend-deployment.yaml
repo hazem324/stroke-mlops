@@ -66,6 +66,21 @@ spec:
                 configMapKeyRef:
                   name: stroke-config
                   key: APP_FASTAPI_BASE_URL
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stroke-secret
+                  key: GEMINI_API_KEY
+            - name: GEMINI_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: stroke-secret
+                  key: GEMINI_BASE_URL
+            - name: GEMINI_MODEL
+              valueFrom:
+                secretKeyRef:
+                  name: stroke-secret
+                  key: GEMINI_MODEL
 
           volumeMounts:
             - name: backend-storage
