@@ -682,6 +682,53 @@
 
 </section>
 
+<!-- RAPPORT MÉDICAL -->
+<section class="details-section">
+
+  <div class="section-header">
+    <span class="section-eyebrow">RAPPORT MÉDICAL</span>
+    <h2>Rapport généré par IA</h2>
+    <p>Génère un rapport médical basé sur les résultats de la segmentation.</p>
+  </div>
+
+  <div class="report-card">
+
+    <div class="report-actions">
+      <button
+  type="button"
+  class="generate-report-button"
+  [disabled]="study.reportAvailable || generatingReport"
+  (click)="generateReport()"
+>
+  <span *ngIf="!generatingReport">
+    {{ study.reportAvailable ? 'Rapport déjà généré' : 'Générer le rapport médical (IA)' }}
+  </span>
+  <span *ngIf="generatingReport">Génération en cours...</span>
+</button>
+
+<button
+  type="button"
+  class="download-report-button"
+  *ngIf="study.reportAvailable"
+  [disabled]="downloadingReport"
+  (click)="downloadReport()"
+>
+  {{ downloadingReport ? 'Téléchargement...' : '⬇ Télécharger le rapport' }}
+</button>
+    </div>
+
+    <div class="report-preview" *ngIf="study.reportAvailable">
+  <iframe
+  *ngIf="safeReportUrl"
+  [src]="safeReportUrl"
+  class="report-pdf-frame"
+  title="Aperçu du rapport médical"
+></iframe>
+</div>
+
+  </div>
+
+</section>
 
     <!-- PIED DE PAGE -->
     <div class="result-footer">

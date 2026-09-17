@@ -1,5 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Location } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { ActivatedRoute } from '@angular/router';
 import { Niivue } from '@niivue/niivue';
@@ -8,6 +9,7 @@ import { StudyDetail } from '../../../../models/studies/study-detail.model';
 import { StudiesService } from '../../../../services/studies.service';
 import { ToastService } from '../../../../services/toast.service';
 import { environment } from '../../../../../environments/environment';
+import { ReportService } from '../../../../services/report.service';
 
 type DisplayMode = 'dwi' | 'prediction' | 'overlay' | 'dwi_prediction';
 
@@ -22,6 +24,10 @@ export class AnalysisResultComponent implements OnInit {
 
   loading = false;
   error = '';
+
+  generatingReport = false;
+  downloadingReport = false; // NEW: separate loading state for download
+  safeReportUrl: SafeResourceUrl | null = null;
 
   displayMode: DisplayMode = 'dwi_prediction'; // valeur par défaut
 
@@ -41,7 +47,9 @@ export class AnalysisResultComponent implements OnInit {
     private route: ActivatedRoute,
     private studiesService: StudiesService,
     private toast: ToastService,
-    private location: Location
+    private location: Location,
+    private sanitizer: DomSanitizer,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -85,6 +93,10 @@ export class AnalysisResultComponent implements OnInit {
     }
   }
 
+  /**
+   * Charge (ou recharge) les détails de l'étude.
+   * Utilisé au chargement initial ET pour rafraîchir après génération du rapport.
+   */
   private loadStudy(studyId: number): void {
     this.loading = true;
     this.error = '';
@@ -96,6 +108,7 @@ export class AnalysisResultComponent implements OnInit {
           console.log('Study detail:', response);
 
           this.study = response;
+          this.updateReportUrl();
           this.loading = false;
 
           if (this.niivueReady) {
@@ -110,6 +123,89 @@ export class AnalysisResultComponent implements OnInit {
       });
   }
 
+  /**
+   * Génère le rapport médical via l'IA, puis rafraîchit l'étude
+   * pour récupérer reportAvailable / reportStoragePath à jour.
+   */
+  generateReport(): void {
+    if (!this.study || !this.study.prediction || this.study.reportAvailable || this.generatingReport) {
+      return;
+    }
+
+    this.generatingReport = true;
+
+    this.reportService
+      .generateReport(this.study.prediction.id)
+      .subscribe({
+        next: () => {
+          this.toast.success('Le rapport médical a été généré avec succès.', 'Rapport prêt');
+
+          // Refetch pour récupérer l'état à jour (reportAvailable, reportStoragePath)
+          if (this.study) {
+            this.loadStudy(this.study.id);
+          }
+
+          this.generatingReport = false;
+        },
+        error: (error) => {
+          console.error('Error generating medical report:', error);
+          this.generatingReport = false;
+          this.toast.error(
+            'Impossible de générer le rapport médical.',
+            'Erreur de génération'
+          );
+        }
+      });
+  }
+
+  /** URL brute du rapport PDF (pour téléchargement / aperçu direct, si besoin). */
+  getReportUrl(): string | null {
+    if (!this.study || !this.study.reportAvailable || !this.study.reportStoragePath) {
+      return null;
+    }
+    return `${environment.storageBaseUrl}${this.study.reportStoragePath}`;
+  }
+
+  /** URL sécurisée pour le binding [src] de l'iframe. */
+  private updateReportUrl(): void {
+    const reportUrl = this.getReportUrl();
+
+    this.safeReportUrl = reportUrl
+      ? this.sanitizer.bypassSecurityTrustResourceUrl(`${reportUrl}#toolbar=0`)
+      : null;
+  }
+
+  /**
+   * Télécharge le rapport PDF via l'endpoint dédié du backend
+   * (récupère les bytes en blob, avec le bon filename).
+   */
+  downloadReport(): void {
+    if (!this.study || !this.study.reportAvailable || this.downloadingReport) {
+      return;
+    }
+
+    this.downloadingReport = true;
+
+    this.reportService.downloadReport(this.study.id).subscribe({
+      next: (blob: Blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `medical_report_${this.study!.patientCode}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        this.downloadingReport = false;
+        this.toast.success('Le rapport a été téléchargé.', 'Téléchargement réussi');
+      },
+      error: (error) => {
+        console.error('Error downloading report:', error);
+        this.downloadingReport = false;
+        this.toast.error('Échec du téléchargement du rapport.', 'Erreur de téléchargement');
+      }
+    });
+  }
+
   /** Appelé quand l'utilisateur change le <select>. */
   async onDisplayModeChange(mode: DisplayMode): Promise<void> {
     this.displayMode = mode;
@@ -121,73 +217,73 @@ export class AnalysisResultComponent implements OnInit {
    * choisi, puis les charge.
    */
   private async loadVolumesForMode(mode: DisplayMode): Promise<void> {
-  if (!this.niivue || !this.niivueReady || !this.study) {
-    return;
-  }
-
-  const prediction = this.study.prediction;
-
-  const dwiUrl = this.buildDwiUrl();   // ← await ajouté ici
-  const predictionUrl = prediction?.predictionFile
-    ? `${environment.storageBaseUrl}${prediction.predictionFile}`
-    : null;
-  const overlayUrl = prediction?.overlayFile
-    ? `${environment.storageBaseUrl}${prediction.overlayFile}`
-    : null;
-
-  const volumes: { url: string; colormap?: string; opacity?: number }[] = [];
-
-  try {
-    switch (mode) {
-
-      case 'dwi':
-        if (!dwiUrl) {
-          this.toast.error('Fichier DWI original introuvable.', 'Erreur de visualisation');
-          return;
-        }
-        volumes.push({ url: dwiUrl, colormap: 'gray', opacity: 1 });
-        break;
-
-      case 'prediction':
-        if (!predictionUrl) {
-          this.toast.error('Fichier de prédiction introuvable.', 'Erreur de visualisation');
-          return;
-        }
-        volumes.push({ url: predictionUrl, colormap: 'gray', opacity: 1 });
-        break;
-
-      case 'overlay':
-        if (!overlayUrl) {
-          this.toast.error('Fichier de superposition introuvable.', 'Erreur de visualisation');
-          return;
-        }
-        volumes.push({ url: overlayUrl, colormap: 'gray', opacity: 1 });
-        break;
-
-      case 'dwi_prediction':
-        if (!dwiUrl || !predictionUrl) {
-          this.toast.error('Fichiers DWI ou prédiction introuvables.', 'Erreur de visualisation');
-          return;
-        }
-        volumes.push({ url: dwiUrl, colormap: 'gray', opacity: 1 });
-        volumes.push({ url: predictionUrl, colormap: 'red', opacity: 0.6 });
-        break;
+    if (!this.niivue || !this.niivueReady || !this.study) {
+      return;
     }
 
-    await this.niivue.loadVolumes(volumes);
-    this.niivue.setSliceType(this.niivue.sliceTypeMultiplanar);
+    const prediction = this.study.prediction;
 
-    console.log(`Volumes chargés pour le mode "${mode}"`);
-    this.toast.success('La visualisation a été mise à jour.', 'Visualisation prête');
+    const dwiUrl = this.buildDwiUrl();
+    const predictionUrl = prediction?.predictionFile
+      ? `${environment.storageBaseUrl}${prediction.predictionFile}`
+      : null;
+    const overlayUrl = prediction?.overlayFile
+      ? `${environment.storageBaseUrl}${prediction.overlayFile}`
+      : null;
 
-  } catch (error) {
-    console.error('Error loading NIfTI volumes:', error);
-    this.toast.error(
-      'Impossible de charger le(s) fichier(s) NIfTI.',
-      'Erreur de visualisation'
-    );
+    const volumes: { url: string; colormap?: string; opacity?: number }[] = [];
+
+    try {
+      switch (mode) {
+
+        case 'dwi':
+          if (!dwiUrl) {
+            this.toast.error('Fichier DWI original introuvable.', 'Erreur de visualisation');
+            return;
+          }
+          volumes.push({ url: dwiUrl, colormap: 'gray', opacity: 1 });
+          break;
+
+        case 'prediction':
+          if (!predictionUrl) {
+            this.toast.error('Fichier de prédiction introuvable.', 'Erreur de visualisation');
+            return;
+          }
+          volumes.push({ url: predictionUrl, colormap: 'gray', opacity: 1 });
+          break;
+
+        case 'overlay':
+          if (!overlayUrl) {
+            this.toast.error('Fichier de superposition introuvable.', 'Erreur de visualisation');
+            return;
+          }
+          volumes.push({ url: overlayUrl, colormap: 'gray', opacity: 1 });
+          break;
+
+        case 'dwi_prediction':
+          if (!dwiUrl || !predictionUrl) {
+            this.toast.error('Fichiers DWI ou prédiction introuvables.', 'Erreur de visualisation');
+            return;
+          }
+          volumes.push({ url: dwiUrl, colormap: 'gray', opacity: 1 });
+          volumes.push({ url: predictionUrl, colormap: 'red', opacity: 0.6 });
+          break;
+      }
+
+      await this.niivue.loadVolumes(volumes);
+      this.niivue.setSliceType(this.niivue.sliceTypeMultiplanar);
+
+      console.log(`Volumes chargés pour le mode "${mode}"`);
+      this.toast.success('La visualisation a été mise à jour.', 'Visualisation prête');
+
+    } catch (error) {
+      console.error('Error loading NIfTI volumes:', error);
+      this.toast.error(
+        'Impossible de charger le(s) fichier(s) NIfTI.',
+        'Erreur de visualisation'
+      );
+    }
   }
-}
 
 
   formatFileSize(bytes: number): string {
@@ -205,21 +301,21 @@ export class AnalysisResultComponent implements OnInit {
   }
 
 
-private buildDwiUrl(): string | null {
+  private buildDwiUrl(): string | null {
 
-  if (!this.study || !this.study.dwiFileName) {
-    return null;
+    if (!this.study || !this.study.dwiFileName) {
+      return null;
+    }
+
+    return `${environment.storageBaseUrl}patients/${this.study.patientId}/studies/${this.study.studyCode}/dwi.nii.gz`;
   }
 
-  return `${environment.storageBaseUrl}patients/${this.study.patientId}/studies/${this.study.studyCode}/dwi.nii.gz`;
-}
+  getPreviewUrl(): string {
+    if (!this.study) {
+      return 'assets/images/no-preview.png';
+    }
 
-getPreviewUrl(): string {
-  if (!this.study) {
-    return 'assets/images/no-preview.png';
+    return `${environment.storageBaseUrl}patients/${this.study.patientId}/studies/${this.study.studyCode}/analysis/preview.png`;
   }
-
-  return `${environment.storageBaseUrl}patients/${this.study.patientId}/studies/${this.study.studyCode}/analysis/preview.png`;
-}
 
 }

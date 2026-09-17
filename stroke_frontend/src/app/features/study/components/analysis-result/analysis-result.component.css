@@ -746,3 +746,87 @@
   }
 
 }
+
+/* =========================
+   RAPPORT MÉDICAL
+========================= */
+
+.report-card {
+  background: #ffffff;
+  border: 1px solid #e1e8f0;
+  border-radius: 15px;
+  padding: 22px;
+}
+
+.report-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.generate-report-button {
+  border: none;
+  background: #4a7cff;
+  color: #ffffff;
+  border-radius: 9px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.generate-report-button:hover:not(:disabled) {
+  background: #3a68e0;
+}
+
+.generate-report-button:disabled {
+  background: #cfd8e3;
+  color: #8a97a8;
+  cursor: not-allowed;
+}
+
+.download-report-button {
+  border: 1px solid #d9e2ee;
+  background: #ffffff;
+  color: #24405f;
+  border-radius: 9px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.download-report-button:hover {
+  background: #eef4fa;
+}
+
+.report-preview {
+  border: 1px solid #e1e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 600px;
+}
+
+.report-pdf-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+@media (max-width: 750px) {
+  .report-actions {
+    flex-direction: column;
+  }
+
+  .generate-report-button,
+  .download-report-button {
+    width: 100%;
+  }
+
+  .report-preview {
+    height: 450px;
+  }
+}

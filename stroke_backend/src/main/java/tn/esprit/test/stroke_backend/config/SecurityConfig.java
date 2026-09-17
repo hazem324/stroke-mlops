@@ -38,6 +38,8 @@ public class SecurityConfig {
         http
             .cors(cors -> {})
             .csrf(csrf -> csrf.disable())
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.disable()))
 
             .authorizeHttpRequests(auth -> auth
 

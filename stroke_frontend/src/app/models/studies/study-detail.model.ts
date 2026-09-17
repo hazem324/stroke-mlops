@@ -5,6 +5,7 @@ export interface StudyDetail {
 
   studyCode: string;
   studyDate: string;
+
   modality: string;
   status: string;
 
@@ -16,6 +17,9 @@ export interface StudyDetail {
   dwiFileSize: number;
 
   prediction: Predictiond | null;
+
+  reportStoragePath: string | null;
+  reportAvailable: boolean;
 
   errorMessage: string | null;
 

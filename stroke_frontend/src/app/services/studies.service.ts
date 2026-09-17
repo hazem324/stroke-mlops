@@ -56,4 +56,6 @@ export class StudiesService {
        `${this.baseUri}/analysis-history`
     )
   }
+
+
 }
