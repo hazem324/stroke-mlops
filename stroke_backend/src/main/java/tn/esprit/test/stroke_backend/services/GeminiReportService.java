@@ -27,7 +27,7 @@ import tn.esprit.test.stroke_backend.utils.GeminiReportPromptBuilder;
 @Service
 public class GeminiReportService implements IGeminiReportService {
 
-    @Value("${gemini.api.key}")
+    @Value("${gemini.api.key:}")
     private String apiKey;
 
     @Value("${gemini.model}")
